@@ -2,20 +2,62 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@layer base {
+ :root {
+  /* #0369a0 */
+  scroll-behavior: smooth;
+  --primary: 201 96% 32%;
+  /* #0284c5 */
+  --primary-light: 200 98% 39%;
+  /* #075783 */
+  --primary-dark: 201 90% 27%;
+  /* #fff */
+  --primary-foreground: 0 0% 100%;
+  /* #db7706 */
+  --accent: 32 95% 44%;
+  /* #fcd44f */
+  --accent-light: 46 97% 65%;
+  /* #b35309 */
+  --accent-dark: 26 90% 37%;
+  /* #fff */
+  /* #db7706 */
+  --secondary: 32 95% 44%;
+  /* #fcd44f */
+  --secondary-light: 46 97% 65%;
+  /* #b35309 */
+  --secondary-dark: 26 90% 37%;
+  /* #fff */
+  --secondary-foreground: 0 0% 100%;
+  /* #fff */
+  --background: 0 0% 100%;
+  /* #262626 */
+  --foreground: 0 0% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 3.9%;
+  --muted: 0 0% 96.1%;
+  --muted-foreground: 0 0% 45.1%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 0 0% 89.8%;
+  --input: 0 0% 89.8%;
+  --ring: 0 0% 3.9%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --radius: 0.5rem;
+ }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+ * {
+  @apply border-border;
+ }
+ body {
+  @apply bg-background text-foreground;
+ }
 }
