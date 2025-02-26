@@ -1,11 +1,12 @@
 'use client';
 import { useState, useRef } from 'react';
+import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
+import { Controller, useFormContext } from 'react-hook-form';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -26,8 +27,9 @@ const datePickerStyles = {
 };
 
 export default function RoomsFilters() {
- const fromDateRef = useRef<HTMLInputElement>(null);
- const untilDateRef = useRef<HTMLInputElement>(null);
+ const { control, watch } = useFormContext<RoomsFilterSchema>();
+ const fromDateRef = useRef<HTMLDivElement>(null);
+ const untilDateRef = useRef<HTMLDivElement>(null);
  const [fromDateAnchor, setFromDateAnchor] = useState<HTMLDivElement | null>(
   null
  );
@@ -39,6 +41,25 @@ export default function RoomsFilters() {
   useQueryToggler('show-reserve-room-from-date');
  const { isQueryTrue: showUntilDate, handleToggle: handleToggleUntilDate } =
   useQueryToggler('show-reserve-room-until-date');
+ const fromDateValue = watch('fromDate');
+ const untilDateValue = watch('untilDate');
+
+ function handleCloseFromDate() {
+  setFromDateAnchor(null);
+  handleToggleFromDate(false);
+ }
+ function handleCloseUntilDate() {
+  setUntilDateAnchor(null);
+  handleToggleUntilDate(false);
+ }
+ function handleOpenFromDate(anchor: HTMLDivElement) {
+  setFromDateAnchor(anchor);
+  handleToggleFromDate(true);
+ }
+ function handleOpenUntilDate(anchor: HTMLDivElement) {
+  setUntilDateAnchor(anchor);
+  handleToggleUntilDate(true);
+ }
 
  const fromDateContent = (
   <>
@@ -50,8 +71,7 @@ export default function RoomsFilters() {
       <IconButton
        color='error'
        onClick={() => {
-        setFromDateAnchor(null);
-        handleToggleFromDate(false);
+        handleCloseFromDate();
        }}
       >
        <CloseIcon />
@@ -60,25 +80,31 @@ export default function RoomsFilters() {
     </div>
    )}
    <div className='container max-w-[22rem] lg:max-w-[unset] lg:p-0'>
-    <StaticDatePicker
-     sx={datePickerStyles}
-     views={['year', 'month', 'day']}
-     slotProps={{
-      toolbar: {
-       hidden: isLargeDevice,
-      },
-      actionBar: {
-       actions: [],
-      },
-     }}
+    <Controller
+     name='fromDate'
+     control={control}
+     render={({ field: { onChange, ...other } }) => (
+      <StaticDatePicker
+       {...other}
+       value={other.value || null}
+       onChange={(newValue) => {
+        onChange(newValue);
+        handleCloseFromDate();
+        handleOpenUntilDate(untilDateRef.current!);
+       }}
+       sx={datePickerStyles}
+       views={['year', 'month', 'day']}
+       slotProps={{
+        toolbar: {
+         hidden: isLargeDevice,
+        },
+        actionBar: {
+         actions: [],
+        },
+       }}
+      />
+     )}
     />
-    {!isLargeDevice && (
-     <div className='flex justify-end'>
-      <Button size='large' variant='contained' className='w-[7rem]'>
-       تایید
-      </Button>
-     </div>
-    )}
    </div>
   </>
  );
@@ -93,8 +119,7 @@ export default function RoomsFilters() {
       <IconButton
        color='error'
        onClick={() => {
-        setUntilDateAnchor(null);
-        handleToggleUntilDate(false);
+        handleCloseUntilDate();
        }}
       >
        <CloseIcon />
@@ -103,25 +128,30 @@ export default function RoomsFilters() {
     </div>
    )}
    <div className='container max-w-[22rem] lg:max-w-[unset] lg:p-0'>
-    <StaticDatePicker
-     sx={datePickerStyles}
-     views={['year', 'month', 'day']}
-     slotProps={{
-      toolbar: {
-       hidden: isLargeDevice,
-      },
-      actionBar: {
-       actions: [],
-      },
-     }}
+    <Controller
+     name='untilDate'
+     control={control}
+     render={({ field: { onChange, ...other } }) => (
+      <StaticDatePicker
+       {...other}
+       value={other.value || null}
+       onChange={(newValue) => {
+        onChange(newValue);
+        handleCloseUntilDate();
+       }}
+       sx={datePickerStyles}
+       views={['year', 'month', 'day']}
+       slotProps={{
+        toolbar: {
+         hidden: isLargeDevice,
+        },
+        actionBar: {
+         actions: [],
+        },
+       }}
+      />
+     )}
     />
-    {!isLargeDevice && (
-     <div className='flex justify-end'>
-      <Button size='large' variant='contained' className='w-[7rem]'>
-       تایید
-      </Button>
-     </div>
-    )}
    </div>
   </>
  );
@@ -133,10 +163,9 @@ export default function RoomsFilters() {
      <TextField
       label='از تاریخ'
       ref={fromDateRef}
-      value={dateFormatter.format(new Date())}
+      value={fromDateValue ? dateFormatter.format(fromDateValue) : ''}
       onClick={(e) => {
-       setFromDateAnchor(e.currentTarget);
-       handleToggleFromDate(true);
+       handleOpenFromDate(e.currentTarget);
       }}
       slotProps={{
        inputLabel: {
@@ -147,10 +176,9 @@ export default function RoomsFilters() {
      <TextField
       label='تا تاریخ'
       ref={untilDateRef}
-      value={dateFormatter.format(new Date())}
+      value={untilDateValue ? dateFormatter.format(untilDateValue) : ''}
       onClick={(e) => {
-       setUntilDateAnchor(e.currentTarget);
-       handleToggleUntilDate(true);
+       handleOpenUntilDate(e.currentTarget);
       }}
       slotProps={{
        inputLabel: {

@@ -3,6 +3,9 @@ import { axios } from '@/app/services/axios/axiosBaseConfig';
 const getRoomInventoryKey = 'get-room-inventory';
 const getRoomInventoriesApi = '/CRS/OnlineReservation/GetRoomInventories';
 
+const getRoomsDailyPriceKey = '';
+const getRoomsDailyPriceKey = '';
+
 type RoomAccomodationType = {
  roomOnlineShowRate: number;
  netRoomRate: number;
