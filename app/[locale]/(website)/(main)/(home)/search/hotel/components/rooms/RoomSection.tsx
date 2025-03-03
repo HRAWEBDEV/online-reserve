@@ -1,34 +1,27 @@
 'use client';
-import {
- type RoomsFilterSchema,
- roomsFilterSchema,
- defaultValues,
-} from '../../schema/roomsFilterSchema';
-import { useForm, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import RoomsFilters from './RoomsFilters';
 import RoomsList from './RoomsList';
 import SelectedRoomsList from './SelectedRoomsList';
+import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 
 export default function RoomSection() {
- const filtersUseForm = useForm<RoomsFilterSchema>({
-  resolver: zodResolver(roomsFilterSchema),
-  defaultValues,
- });
+ const { isFetchingRooms, rooms, nights } = useRoomsInfoContext();
  return (
   <section id='rooms'>
-   <FormProvider {...filtersUseForm}>
-    <div className='container'>
-     <header className='mb-6'>
-      <h3 className='font-medium text-xl lg:text-2xl'>اتــــاق ها</h3>
-     </header>
-     <RoomsFilters />
-     <div className='grid gap-4 lg:grid-cols-[1fr_20rem] mb-8'>
-      <RoomsList />
-      <SelectedRoomsList />
-     </div>
+   <div className='container'>
+    <header className='mb-6'>
+     <h3 className='font-medium text-xl lg:text-2xl'>اتــــاق ها</h3>
+    </header>
+    <RoomsFilters />
+    <div className='grid gap-4 lg:grid-cols-[1fr_20rem] mb-8'>
+     <RoomsList
+      rooms={rooms}
+      isLoadingRooms={isFetchingRooms}
+      nights={nights}
+     />
+     <SelectedRoomsList />
     </div>
-   </FormProvider>
+   </div>
   </section>
  );
 }

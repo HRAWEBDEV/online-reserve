@@ -5,7 +5,11 @@ let reactQueryClient: QueryClient | null = null;
 function createReactQueryClient(): QueryClient {
  return new QueryClient({
   defaultOptions: {
-   queries: {},
+   queries: {
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    retry: 0,
+   },
   },
  });
 }

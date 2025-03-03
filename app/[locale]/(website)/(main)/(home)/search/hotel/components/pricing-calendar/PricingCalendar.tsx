@@ -7,9 +7,20 @@ import { PickersDay } from '@mui/x-date-pickers';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import { currencyFormatter } from '@/app/utils/currencyFormatter';
+import { useQuery } from '@tanstack/react-query';
+import {
+ type RoomInventory,
+ type RoomAccomodationType,
+ getRoomDailyPriceKey,
+ getRoomPriceDaily,
+} from '../../services/HotelApiActions';
+import { useRoomsInfoContext } from '../../services/roomsInfoContext';
+import * as dateFns from 'date-fns-jalali';
 
 type Props = {
  open: boolean;
+ selectedRoom: RoomInventory;
+ selectedRoomPlan: RoomAccomodationType;
  onCloseCalendar: () => void;
 };
 
@@ -17,9 +28,39 @@ function CustomCalendarHeader() {
  return <div></div>;
 }
 
-export default function PricingCalendar({ open, onCloseCalendar }: Props) {
+export default function PricingCalendar({
+ open,
+ onCloseCalendar,
+ selectedRoom,
+ selectedRoomPlan,
+}: Props) {
+ const { requestData, checkInDate, checkOutDate } = useRoomsInfoContext();
  const { isLargeDevice } = useAppMonitorConfig();
- const daysCellWidth = isLargeDevice ? '4.5rem' : '2.8rem';
+ const daysCellWidth = isLargeDevice ? '5rem' : '2.8rem';
+
+ const { data } = useQuery({
+  queryKey: [
+   getRoomDailyPriceKey,
+   selectedRoom.internalID!,
+   selectedRoomPlan.internalID!,
+  ],
+  async queryFn({ signal }) {
+   const res = await getRoomPriceDaily({
+    signal,
+    arzID: requestData.arzID,
+    channelID: requestData.channelID,
+    hotelID: requestData.hotelID,
+    providerID: requestData.providerID,
+    startDate: dateFns.startOfMonth(checkInDate).toISOString(),
+    endDate: dateFns.endOfMonth(checkOutDate).toISOString(),
+    beds: selectedRoomPlan?.beds,
+    roomTypeID: selectedRoom.roomTypeID,
+    ratePlanID: selectedRoomPlan.ratePlanID,
+   });
+   return res.data;
+  },
+ });
+
  return (
   <Dialog
    open={open}
@@ -78,12 +119,11 @@ export default function PricingCalendar({ open, onCloseCalendar }: Props) {
        height: daysCellWidth,
       },
       '& .MuiPickersSlideTransition-root': {
-       minHeight: '400px',
+       minHeight: '420px',
       },
      }}
      slots={{
       calendarHeader: CustomCalendarHeader,
-
       day(params) {
        return (
         <PickersDay {...params}>
@@ -95,7 +135,9 @@ export default function PricingCalendar({ open, onCloseCalendar }: Props) {
             )}
            </span>
           </div>
-          <div>{currencyFormatter.format(80000000)}</div>
+          <div className='font-medium text-[0.8rem]'>
+           {currencyFormatter.format(80000000)}
+          </div>
          </div>
         </PickersDay>
        );
@@ -111,8 +153,19 @@ export default function PricingCalendar({ open, onCloseCalendar }: Props) {
       },
      }}
     />
-    <div className='bg-neutral-200 border border-neutral-300 p-3 rounded-lg'>
-     test
+    <div className='bg-neutral-200 border border-neutral-300 p-3 rounded-lg flex flex-wrap gap-4 justify-center items-center text-[0.8rem]'>
+     <div className='flex items-center gap-1'>
+      <div className='bg-red-500 h-4 w-4 rounded-full'></div>
+      <div>محدودیت فروش</div>
+     </div>
+     <div className='flex items-center gap-1'>
+      <div className='bg-purple-500 h-4 w-4 rounded-full'></div>
+      <div>محدودیت ورود</div>
+     </div>
+     <div className='flex items-center gap-1'>
+      <div className='bg-orange-500 h-4 w-4 rounded-full'></div>
+      <div>محدودیت خروج</div>
+     </div>
     </div>
    </DialogContent>
   </Dialog>

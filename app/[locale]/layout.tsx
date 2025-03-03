@@ -12,6 +12,7 @@ import 'leaflet/dist/leaflet.css';
 import ReactQueryProvider from '../services/react-query/ReactQueryProvider';
 import { type AppParams } from '../utils/appParams';
 import { locales } from '../localization/locales';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export function generateMetadata(): Metadata {
  return {
@@ -76,7 +77,12 @@ export default async function RootLayout({
       <MuiTheme>
        <MuiLocalization>
         <AppMonitorProvider>
-         <ReactQueryProvider>{children}</ReactQueryProvider>
+         <ReactQueryProvider>
+          {children}
+          <div style={{ direction: 'ltr' }}>
+           <ReactQueryDevtools buttonPosition='bottom-left' />
+          </div>
+         </ReactQueryProvider>
         </AppMonitorProvider>
        </MuiLocalization>
       </MuiTheme>

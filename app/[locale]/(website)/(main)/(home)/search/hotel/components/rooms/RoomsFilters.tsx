@@ -1,7 +1,5 @@
 'use client';
 import { useState, useRef } from 'react';
-import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
-import { Controller, useFormContext } from 'react-hook-form';
 import Drawer from '@mui/material/Drawer';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -13,12 +11,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import { useQueryToggler } from '@/hooks/useQueryToggler';
-
-const dateFormatter = new Intl.DateTimeFormat('fa', {
- day: 'numeric',
- month: 'long',
- year: 'numeric',
-});
+import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
+import { useFormContext, Controller } from 'react-hook-form';
+import * as dateFns from 'date-fns';
 
 const datePickerStyles = {
  '& .MuiPickersArrowSwitcher-button': {
@@ -26,8 +21,16 @@ const datePickerStyles = {
  },
 };
 
+const dateFormatter = new Intl.DateTimeFormat('fa', {
+ year: 'numeric',
+ month: 'long',
+ day: '2-digit',
+});
+
 export default function RoomsFilters() {
- const { control, watch } = useFormContext<RoomsFilterSchema>();
+ const { control, watch, setValue } = useFormContext<RoomsFilterSchema>();
+ const fromDateValue = watch('fromDate');
+ const untilDateValue = watch('untilDate');
  const fromDateRef = useRef<HTMLDivElement>(null);
  const untilDateRef = useRef<HTMLDivElement>(null);
  const [fromDateAnchor, setFromDateAnchor] = useState<HTMLDivElement | null>(
@@ -41,8 +44,6 @@ export default function RoomsFilters() {
   useQueryToggler('show-reserve-room-from-date');
  const { isQueryTrue: showUntilDate, handleToggle: handleToggleUntilDate } =
   useQueryToggler('show-reserve-room-until-date');
- const fromDateValue = watch('fromDate');
- const untilDateValue = watch('untilDate');
 
  function handleCloseFromDate() {
   setFromDateAnchor(null);
@@ -81,16 +82,17 @@ export default function RoomsFilters() {
    )}
    <div className='container max-w-[22rem] lg:max-w-[unset] lg:p-0'>
     <Controller
-     name='fromDate'
      control={control}
-     render={({ field: { onChange, ...other } }) => (
+     name='fromDate'
+     render={({ field }) => (
       <StaticDatePicker
-       {...other}
-       value={other.value || null}
+       {...field}
+       disablePast
        onChange={(newValue) => {
-        onChange(newValue);
-        handleCloseFromDate();
-        handleOpenUntilDate(untilDateRef.current!);
+        field.onChange(newValue);
+        if (newValue && untilDateValue <= newValue) {
+         setValue('untilDate', dateFns.addDays(newValue, 3));
+        }
        }}
        sx={datePickerStyles}
        views={['year', 'month', 'day']}
@@ -131,12 +133,13 @@ export default function RoomsFilters() {
     <Controller
      name='untilDate'
      control={control}
-     render={({ field: { onChange, ...other } }) => (
+     render={({ field }) => (
       <StaticDatePicker
-       {...other}
-       value={other.value || null}
+       {...field}
+       disablePast
+       minDate={fromDateValue}
        onChange={(newValue) => {
-        onChange(newValue);
+        field.onChange(newValue);
         handleCloseUntilDate();
        }}
        sx={datePickerStyles}
@@ -162,8 +165,8 @@ export default function RoomsFilters() {
     <div className='grid gap-4 grid-cols-2'>
      <TextField
       label='از تاریخ'
+      value={dateFormatter.format(fromDateValue) || null}
       ref={fromDateRef}
-      value={fromDateValue ? dateFormatter.format(fromDateValue) : ''}
       onClick={(e) => {
        handleOpenFromDate(e.currentTarget);
       }}
@@ -175,8 +178,8 @@ export default function RoomsFilters() {
      />
      <TextField
       label='تا تاریخ'
+      value={dateFormatter.format(untilDateValue) || null}
       ref={untilDateRef}
-      value={untilDateValue ? dateFormatter.format(untilDateValue) : ''}
       onClick={(e) => {
        handleOpenUntilDate(e.currentTarget);
       }}

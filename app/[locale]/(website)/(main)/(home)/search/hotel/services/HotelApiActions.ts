@@ -1,4 +1,5 @@
 import { axios } from '@/app/services/axios/axiosBaseConfig';
+import { type TRowWithInternalID } from '@/utils/getGridInternalID';
 
 const getRoomInventoryKey = 'get-room-inventory';
 const getRoomInventoriesApi = '/CRS/OnlineReservation/GetRoomInventories';
@@ -10,6 +11,7 @@ type RoomAccomodationType = {
  roomOnlineShowRate: number;
  netRoomRate: number;
  beds: number;
+ ratePlanID: number;
  accomodationRatePlanModel: {
   rateTypePlan: number;
   rateTypeName: string;
@@ -26,7 +28,7 @@ type RoomAccomodationType = {
    limitedMenu: boolean;
   };
  };
-};
+} & TRowWithInternalID;
 
 type RoomInventory = {
  hoteID: number;
@@ -35,7 +37,7 @@ type RoomInventory = {
  fixBeds: number;
  roomCount: number;
  accommodationTypePrices: RoomAccomodationType[];
-};
+} & TRowWithInternalID;
 
 type RoomDailyPrice = {
  date: string;
@@ -63,7 +65,7 @@ function getRoomInventory({
   searchParams.set(key, String(val));
  });
  return axios.get<RoomInventory[]>(
-  `${getRoomInventoriesApi}${searchParams.toString()}`,
+  `${getRoomInventoriesApi}?${searchParams.toString()}`,
   { signal }
  );
 }
@@ -88,7 +90,7 @@ function getRoomPriceDaily({
   searchParams.set(key, String(val));
  });
  return axios.get<RoomDailyPrice>(
-  `${getRoomDailyPriceApi}${searchParams.toString()}`,
+  `${getRoomDailyPriceApi}?${searchParams.toString()}`,
   {
    signal,
   }
@@ -98,6 +100,7 @@ function getRoomPriceDaily({
 export {
  type RoomInventory,
  type RoomDailyPrice,
+ type RoomAccomodationType,
  getRoomInventoryKey,
  getRoomInventory,
  getRoomDailyPriceKey,
