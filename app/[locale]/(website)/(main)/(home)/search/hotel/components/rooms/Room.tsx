@@ -43,7 +43,7 @@ export default function Room({
     </div>
    </div>
    <div className='lg:flex lg:flex-grow'>
-    <div className='p-4 border-e border-neutral-300 lg:flex-grow'>
+    <div className='p-4 lg:border-e border-neutral-300 lg:flex-grow'>
      <div>
       <p className='text-primary text-base font-medium lg:text-lg mb-4'>
        {room.fName}

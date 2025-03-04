@@ -1,10 +1,10 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, Fragment } from 'react';
 import PricingCalendar from '../pricing-calendar/PricingCalendar';
 import Skeleton from '@mui/material/Skeleton';
 import Room from './Room';
-import { useInternalID } from '@/hooks/useInternalID';
 import { type RoomInventory } from '../../services/HotelApiActions';
+import { useInternalID } from '@/hooks/useInternalID';
 
 type Props = {
  isLoadingRooms: boolean;
@@ -20,13 +20,9 @@ export default function RoomsList({ isLoadingRooms, rooms, nights }: Props) {
   null
  );
 
- const selectedRoom = useMemo(
-  () =>
-   selectedRoomId
-    ? rooms.find((item) => item.internalID === selectedRoomId) || null
-    : null,
-  [rooms, selectedRoomId]
- );
+ const selectedRoom = selectedRoomId
+  ? rooms.find((item) => item.internalID === selectedRoomId) || null
+  : null;
 
  const selectedRoomPlan =
   selectedRoomPlanId && selectedRoom
@@ -46,51 +42,59 @@ export default function RoomsList({ isLoadingRooms, rooms, nights }: Props) {
   setSelectedRoomPlanId(roomPlanID);
   setShowPricingCalendar(true);
  }
- console.log(selectedRoom, selectedRoomPlan);
-
+ if (isLoadingRooms) {
+  return (
+   <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1'>
+    {[1, 2, 3, 4].map((item) => (
+     <Skeleton
+      key={item}
+      variant='rounded'
+      height={150}
+      width={'100%'}
+      sx={{ backgroundColor: (theme) => theme.palette.neutral[200] }}
+     />
+    ))}
+   </section>
+  );
+ }
+ if (!rooms.length) {
+  return (
+   <div className='grid place-content-center font-medium text-base'>
+    اتاقی یافت نشد.
+   </div>
+  );
+ }
  return (
   <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1'>
-   {isLoadingRooms ? (
-    <>
-     {[1, 2, 3, 4].map((item) => (
-      <Skeleton
-       key={item}
-       variant='rounded'
-       height={150}
-       width={'100%'}
-       sx={{ backgroundColor: (theme) => theme.palette.neutral[200] }}
-      />
-     ))}
-    </>
-   ) : (
-    <>
-     {rooms.map((room) => {
-      getID(room);
-      return (
-       <>
-        {room.accommodationTypePrices.map((roomPlan) => {
-         getID(roomPlan);
-         return (
-          <Room
-           key={roomPlan.internalID}
-           showPriceCalendar={showPriceCalendar}
-           nights={nights}
-           roomPlan={roomPlan}
-           room={room}
-          />
-         );
-        })}
-       </>
-      );
-     })}
-    </>
-   )}
-   {selectedRoom && selectedRoomPlan && (
+   {rooms.map((room) => {
+    getID(room);
+    return (
+     <Fragment key={room.internalID}>
+      {room.accommodationTypePrices.map((roomPlan) => {
+       getID(roomPlan);
+       return (
+        <Room
+         key={roomPlan.internalID}
+         showPriceCalendar={showPriceCalendar}
+         nights={nights}
+         roomPlan={roomPlan}
+         room={room}
+        />
+       );
+      })}
+     </Fragment>
+    );
+   })}
+   {showPricingCalendar && selectedRoom && selectedRoomPlan && (
     <PricingCalendar
      open={showPricingCalendar}
      selectedRoom={selectedRoom}
      selectedRoomPlan={selectedRoomPlan}
-     onCloseCalendar={() => setShowPricingCalendar(false)}
+     onCloseCalendar={() => {
+      setSelectedRoomPlanId(null);
+      setSelectedRoomId(null);
+      setShowPricingCalendar(false);
+     }}
     />
    )}
   </section>

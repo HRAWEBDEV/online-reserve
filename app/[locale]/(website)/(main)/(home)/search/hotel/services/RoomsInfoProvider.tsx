@@ -38,7 +38,7 @@ export default function RoomsInfoProvider({
  const checkOutDate = watch('untilDate');
  const nights = dataFns.differenceInDays(checkOutDate, checkInDate);
  //
- const { data: rooms, isFetching } = useQuery({
+ const { data: rooms = [], isFetching } = useQuery({
   queryKey: [
    getRoomInventoryKey,
    checkInDate.toISOString(),

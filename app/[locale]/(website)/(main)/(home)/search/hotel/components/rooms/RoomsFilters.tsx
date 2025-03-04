@@ -90,7 +90,9 @@ export default function RoomsFilters() {
        disablePast
        onChange={(newValue) => {
         field.onChange(newValue);
+        handleCloseFromDate();
         if (newValue && untilDateValue <= newValue) {
+         handleOpenUntilDate(untilDateRef.current!);
          setValue('untilDate', dateFns.addDays(newValue, 3));
         }
        }}
@@ -161,7 +163,7 @@ export default function RoomsFilters() {
 
  return (
   <>
-   <div className='bg-neutral-50 p-4 rounded-lg border border-100 md:mb-2 lg:sticky top-4 z-10'>
+   <div className='bg-neutral-50 p-4 rounded-lg border border-100 mb-6 md:mb-2 lg:sticky top-4 z-10'>
     <div className='grid gap-4 grid-cols-2'>
      <TextField
       label='از تاریخ'

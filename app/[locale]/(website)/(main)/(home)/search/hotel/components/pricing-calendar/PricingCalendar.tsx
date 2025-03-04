@@ -38,12 +38,8 @@ export default function PricingCalendar({
  const { isLargeDevice } = useAppMonitorConfig();
  const daysCellWidth = isLargeDevice ? '5rem' : '2.8rem';
 
- const { data } = useQuery({
-  queryKey: [
-   getRoomDailyPriceKey,
-   selectedRoom.internalID!,
-   selectedRoomPlan.internalID!,
-  ],
+ const { data: dailyPricing } = useQuery({
+  queryKey: [getRoomDailyPriceKey, selectedRoomPlan.internalID],
   async queryFn({ signal }) {
    const res = await getRoomPriceDaily({
     signal,
@@ -55,7 +51,7 @@ export default function PricingCalendar({
     endDate: dateFns.endOfMonth(checkOutDate).toISOString(),
     beds: selectedRoomPlan?.beds,
     roomTypeID: selectedRoom.roomTypeID,
-    ratePlanID: selectedRoomPlan.ratePlanID,
+    ratePlanID: selectedRoomPlan.accommodationRatePlanModel.ratePlanID,
    });
    return res.data;
   },
@@ -76,7 +72,7 @@ export default function PricingCalendar({
    >
     <div className='flex justify-between items-center'>
      <div>
-      <p className='text-base text-primary'>اتاق یک تخته</p>
+      <p className='text-base text-primary'>{selectedRoom.fName}</p>
      </div>
      <div>
       <IconButton color='error' onClick={onCloseCalendar}>

@@ -3,6 +3,7 @@ import { useRef } from 'react';
 
 export const useInternalID = () => {
  const counter = useRef(0);
+
  const getID = (row: TRowWithInternalID) => {
   if (!row.internalID) {
    row.internalID = Date.now() + counter.current;

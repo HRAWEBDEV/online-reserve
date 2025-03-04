@@ -11,8 +11,8 @@ type RoomAccomodationType = {
  roomOnlineShowRate: number;
  netRoomRate: number;
  beds: number;
- ratePlanID: number;
- accomodationRatePlanModel: {
+ accommodationRatePlanModel: {
+  ratePlanID: number;
   rateTypePlan: number;
   rateTypeName: string;
   boardID: number;
