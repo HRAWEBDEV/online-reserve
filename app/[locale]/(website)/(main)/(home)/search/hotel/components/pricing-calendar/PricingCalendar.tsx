@@ -181,7 +181,7 @@ export default function PricingCalendar({
             )}`}
            ></div>
            <div>
-            <span className='font-medium text-base'>
+            <span className='font-medium text-base text-primary'>
              {new Intl.DateTimeFormat('fa', { day: 'numeric' }).format(
               params.day
              )}
