@@ -73,7 +73,12 @@ export default function Room({
        </span>
        <span className='ps-1'>ریال</span>
        <span>/ {nights}شب</span>
-       <span className='bg-teal-100 ms-2 rounded-lg p-1 px-2 inline-block lg:hidden'>
+       <span
+        className={`bg-teal-100 ms-2 rounded-lg p-1 px-2 inline-block lg:hidden ${addClass(
+         discountPercentage === 0,
+         'hidden'
+        )}`}
+       >
         40%
        </span>
       </div>
