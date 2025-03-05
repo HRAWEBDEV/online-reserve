@@ -9,7 +9,11 @@ import {
  type RoomInventory,
  type RoomAccomodationType,
 } from '../../services/HotelApiActions';
+import Chip from '@mui/material/Chip';
 import { addClass } from '@/utils/addClass';
+import { ratePlanModel } from '../../utils/ratePlanModel';
+
+const chipStyles = { borderRadius: '0.2rem' };
 
 export default function Room({
  roomPlan,
@@ -43,8 +47,8 @@ export default function Room({
     </div>
    </div>
    <div className='lg:flex lg:flex-grow'>
-    <div className='p-4 lg:border-e border-neutral-300 lg:flex-grow'>
-     <div>
+    <div className='p-4 lg:border-e border-neutral-300 lg:flex-grow flex flex-col'>
+     <div className='mb-6 flex-grow'>
       <p className='text-primary text-base font-medium lg:text-lg mb-4'>
        {room.fName}
       </p>
@@ -55,6 +59,15 @@ export default function Room({
         <span>{roomPlan.beds}نفر</span>
        </div>
       </div>
+     </div>
+     <div className='flex flex-wrap gap-2'>
+      {ratePlanModel
+       .filter(
+        (item) => roomPlan.accommodationRatePlanModel.ratePlanModel[item.type]
+       )
+       .map((item) => (
+        <Chip sx={chipStyles} key={item.type} label={item.name} />
+       ))}
      </div>
     </div>
     <div className='p-4 basis-60'>
