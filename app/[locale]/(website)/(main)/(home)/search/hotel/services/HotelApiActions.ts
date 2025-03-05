@@ -89,7 +89,7 @@ function getRoomPriceDaily({
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.get<RoomDailyPrice>(
+ return axios.get<RoomDailyPrice[]>(
   `${getRoomDailyPriceApi}?${searchParams.toString()}`,
   {
    signal,
