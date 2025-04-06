@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import ta from 'tailwindcss-animate';
 
 export default {
  darkMode: ['class', '[data-app-mode="dark"]'],
@@ -75,4 +76,5 @@ export default {
    },
   },
  },
+ plugins: [ta],
 } satisfies Config;
