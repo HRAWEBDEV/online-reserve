@@ -10,13 +10,8 @@ export const infoSectionMenu = [
   href: '#rooms',
  },
  {
-  type: 'facilities',
-  title: 'امکانات',
-  href: '#',
- },
- {
   type: 'houseRules',
   title: 'قوانین و مقررات',
-  href: '#',
+  href: '#houseRules',
  },
 ] as const;

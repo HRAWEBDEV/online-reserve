@@ -5,8 +5,13 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import ShareIcon from '@mui/icons-material/Share';
-import HotelLocation from './HotelLocation';
+import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
+const HotelLocation = dynamic(() => import('./HotelLocation'), {
+ loading: () => <div></div>,
+ ssr: false,
+});
 
 export default function HotelReview() {
  return (
@@ -67,6 +72,7 @@ export default function HotelReview() {
            className='h-full w-full object-cover'
            src='/images/hotels/hotel-slider.jpg'
            alt='hotel image'
+           loading='lazy'
           />
          </div>
         </SwiperSlide>
@@ -77,6 +83,7 @@ export default function HotelReview() {
           className='h-full w-full object-cover'
           src='/images/hotels/hotel-slider-5.jpg'
           alt='hotel image'
+          loading='lazy'
          />
         </div>
         <div className='rounded-lg overflow-hidden basis-0 flex-grow'>
@@ -84,6 +91,7 @@ export default function HotelReview() {
           className='h-full w-full object-cover'
           src='/images/hotels/hotel-slider-3.jpg'
           alt='hotel image'
+          loading='lazy'
          />
         </div>
        </div>

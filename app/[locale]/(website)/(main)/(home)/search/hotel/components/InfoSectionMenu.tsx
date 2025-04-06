@@ -22,6 +22,7 @@ export default function InfoSectionMenu() {
        flexGrow: 1,
        paddingBlock: '1.5rem',
        paddingInline: '0.3rem',
+       maxWidth: 'unset',
        flexBasis: 0,
       },
      }}

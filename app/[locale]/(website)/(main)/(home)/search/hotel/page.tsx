@@ -5,6 +5,7 @@ import Description from './components/hotel-description/Description';
 import SearchBreadCrumb from './components/SearchBreadCrumb';
 import RoomSection from './components/rooms/RoomSection';
 import RoomsInfoProvider from './services/RoomsInfoProvider';
+import HouseRules from './components/house-rules/HouseRulesSection';
 import {
  type TRequestData,
  type TSearchQueries,
@@ -41,6 +42,7 @@ export default async function page({
     <HotelReview />
     <Description />
     <RoomSection />
+    <HouseRules />
    </RoomsInfoProvider>
   </div>
  );

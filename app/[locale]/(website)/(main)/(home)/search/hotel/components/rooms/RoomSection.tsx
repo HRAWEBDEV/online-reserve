@@ -6,7 +6,7 @@ import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 export default function RoomSection() {
  const { isFetchingRooms, rooms, nights } = useRoomsInfoContext();
  return (
-  <section id='rooms'>
+  <section id='rooms' className='mb-10'>
    <div>
     <header className='container mb-6'>
      <h3 className='font-medium text-xl lg:text-2xl'>اتــــاق ها</h3>
