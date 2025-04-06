@@ -27,7 +27,18 @@ export default function HotelReview() {
      </div>
     </div>
     <div className='flex gap-4 items-center flex-grow justify-end'>
-     <Button variant='contained' disableElevation>
+     <Button
+      variant='contained'
+      disableElevation
+      onClick={() => {
+       if (!navigator.share) return;
+       navigator.share({
+        title: 'آلین: رزرو آنلاین هتل',
+        text: 'رزرو آنلاین هتل',
+        url: location.href,
+       });
+      }}
+     >
       <ShareIcon fontSize='small' />
       <span className='ps-2 hidden lg:inline-block'>اشتراک گذاری</span>
      </Button>

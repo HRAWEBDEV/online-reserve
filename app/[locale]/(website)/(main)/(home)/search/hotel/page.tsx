@@ -10,7 +10,6 @@ import {
  getDefaultsRequestData,
 } from '@/app/utils/getDefaultsReuestData';
 import { redirect } from 'next/navigation';
-import * as dateFns from 'date-fns';
 
 export default async function page({
  searchParams,
