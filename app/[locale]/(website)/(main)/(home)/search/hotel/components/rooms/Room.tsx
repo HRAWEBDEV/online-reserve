@@ -80,6 +80,14 @@ export default function Room({
         <Chip sx={chipStyles} key={item.type} label={item.name} />
        ))}
      </div>
+     {!room.roomCount && (
+      <div className='mt-2'>
+       <Alert severity='error'>
+        امکان رزرو این اتاق در تاریخ انتخاب شده وجود ندارد، لطفا تاریخ را تغییر
+        دهید.
+       </Alert>
+      </div>
+     )}
     </div>
     <div className='p-4 basis-60'>
      <div className='flex items-end justify-end mb-3 gap-2 lg:flex-col lg:items-center'>
@@ -127,7 +135,12 @@ export default function Room({
       </Button>
      </div>
      <div className='lg:flex lg:justify-center lg:items-center'>
-      <Button size='large' variant='contained' className='w-full'>
+      <Button
+       size='large'
+       variant='contained'
+       className='w-full'
+       disabled={!room.roomCount}
+      >
        ثبت رزرو
       </Button>
      </div>
