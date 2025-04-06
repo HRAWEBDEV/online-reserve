@@ -1,3 +1,12 @@
+type TSearchQueries = {
+ checkinDate: string | null;
+ checkoutDate: string | null;
+ channelID: string | null;
+ providerID: string | null;
+ hotelID: string | null;
+ arzID: string | null;
+};
+
 type TDefaultRequestData = {
  channelID: number | null;
  providerID: number | null;
@@ -18,4 +27,22 @@ function getDefaultsRequestData(): TDefaultRequestData {
  };
 }
 
-export { type TDefaultRequestData, type TRequestData, getDefaultsRequestData };
+function getRequestData(searchQueries: TSearchQueries): TRequestData {
+ const defaultRequest = getDefaultsRequestData();
+ const requestData: TRequestData = {
+  arzID: Number(searchQueries.arzID) || defaultRequest.arzID || 1,
+  providerID:
+   Number(searchQueries.providerID) || defaultRequest.providerID || 1,
+  channelID: Number(searchQueries.channelID) || defaultRequest.channelID || 1,
+  hotelID: Number(searchQueries.hotelID) || defaultRequest.hotelID || 1,
+ };
+ return requestData;
+}
+
+export {
+ type TDefaultRequestData,
+ type TRequestData,
+ type TSearchQueries,
+ getDefaultsRequestData,
+ getRequestData,
+};
