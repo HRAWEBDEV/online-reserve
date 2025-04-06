@@ -15,7 +15,7 @@ export const ratePlanModel: {
  { type: 'noBreakfast', name: 'بدون صبحانه' },
  { type: 'nonRefundable', name: 'غیرقابل استرداد' },
  { type: 'freeChargeMinibar', name: 'مینی بار مجانی' },
- { type: 'withDinner', name: 'با شام' },
- { type: 'withLunch', name: 'با نهار' },
+ { type: 'withDinner', name: 'همراه با شام' },
+ { type: 'withLunch', name: 'همراه با نهار' },
  { type: 'limitedMenu', name: 'منوی محدود' },
 ];

@@ -1,9 +1,6 @@
 import Button from '@mui/material/Button';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import IconButton from '@mui/material/IconButton';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 import { currencyFormatter } from '@/app/utils/currencyFormatter';
 import {
  type RoomInventory,
@@ -12,7 +9,9 @@ import {
 import Chip from '@mui/material/Chip';
 import { addClass } from '@/utils/addClass';
 import { ratePlanModel } from '../../utils/ratePlanModel';
-import { useRoomsInfoContext } from '../../services/roomsInfoContext';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import Alert from '@mui/material/Alert';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -27,10 +26,6 @@ export default function Room({
  room: RoomInventory;
  nights: number;
 }) {
- const { selectedRooms, updateSelectedRoom } = useRoomsInfoContext();
- const foundRoom = selectedRooms.find(
-  (item) => item.internalID === roomPlan.internalID
- );
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(
      (
@@ -43,14 +38,24 @@ export default function Room({
  return (
   <article className='rounded-lg border border-neutral-300 lg:flex overflow-hidden'>
    <div className='border-b border-neutral-300 lg:border-b-0 lg:p-2'>
-    <div className='h-[16rem] lg:w-[12rem] lg:h-[12rem] lg:rounded-lg overflow-hidden'>
-     <img
-      loading='lazy'
-      className='w-full h-full'
-      src='/images/hotels/mashhad-almas.jpg'
-      alt='hotel image'
-     />
-    </div>
+    <Swiper
+     pagination
+     modules={[Pagination]}
+     className='h-[16rem] lg:w-[12rem] lg:h-[12rem] lg:rounded-lg overflow-hidden [&]:[--swiper-pagination-bullet-inactive-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-bullet-inactive-opacity:0.6]'
+    >
+     {[1, 2].map((item) => (
+      <SwiperSlide key={item}>
+       <div className='h-full'>
+        <img
+         loading='lazy'
+         className='w-full h-full'
+         src='/images/hotels/mashhad-almas.jpg'
+         alt='hotel image'
+        />
+       </div>
+      </SwiperSlide>
+     ))}
+    </Swiper>
    </div>
    <div className='lg:flex lg:flex-grow'>
     <div className='p-4 lg:border-e border-neutral-300 lg:flex-grow flex flex-col'>
@@ -122,40 +127,7 @@ export default function Room({
       </Button>
      </div>
      <div className='lg:flex lg:justify-center lg:items-center'>
-      <div className='hidden lg:flex lg:items-center'>
-       <IconButton
-        color='success'
-        onClick={() =>
-         updateSelectedRoom({
-          type: 'add',
-          newRoom: {
-           ...roomPlan,
-           fName: room.fName,
-           hoteID: room.hoteID,
-           roomTypeID: room.roomTypeID,
-           roomCount: room.roomCount,
-          },
-         })
-        }
-       >
-        <AddOutlinedIcon />
-       </IconButton>
-       <div className='bg-neutral-100 p-1 py-2 rounded-lg min-w-11 text-center'>
-        {foundRoom?.count || 0}
-       </div>
-       <IconButton
-        color='error'
-        onClick={() => {
-         updateSelectedRoom({
-          type: 'decrease',
-          roomPlanInternalID: roomPlan.internalID!,
-         });
-        }}
-       >
-        <RemoveOutlinedIcon />
-       </IconButton>
-      </div>
-      <Button size='large' variant='contained' className='w-full lg:!hidden'>
+      <Button size='large' variant='contained' className='w-full'>
        ثبت رزرو
       </Button>
      </div>

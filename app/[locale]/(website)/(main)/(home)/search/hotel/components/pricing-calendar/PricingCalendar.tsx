@@ -17,6 +17,7 @@ import {
 } from '../../services/HotelApiActions';
 import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 import { calendarStates } from '../../utils/calendarStates';
+import Skeleton from '@mui/material/Skeleton';
 import * as dateFns from 'date-fns-jalali';
 
 type Props = {
@@ -140,6 +141,14 @@ export default function PricingCalendar({
                params.day
               )}
              </span>
+            </div>
+            <div>
+             <Skeleton
+              variant='rounded'
+              width={30}
+              height={10}
+              sx={{ backgroundColor: (theme) => theme.palette.neutral[200] }}
+             />
             </div>
            </div>
           </PickersDay>
