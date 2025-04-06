@@ -27,7 +27,7 @@ export default function RoomsFilters() {
   <>
    <div className='bg-neutral-50 p-4 border-y border-100 mb-6 sticky top-0 z-10'>
     <div className='container grid gap-2 lg:gap-0 lg:grid-cols-[minmax(15rem,20rem)_1fr]'>
-     <div className='pe-3 me-3 lg:border-e border-e-neutral-300'>
+     <div className='lg:pe-3 lg:me-3 lg:border-e border-e-neutral-300'>
       <Popover>
        <PopoverTrigger asChild>
         <Button
@@ -60,6 +60,7 @@ export default function RoomsFilters() {
           setValue('fromDate', selected.from!);
           setValue('untilDate', selected.to!);
          }}
+         showOutsideDays={false}
          numberOfMonths={2}
          disabled={(date) => date < dateFns.startOfToday()}
          formatters={{
@@ -77,7 +78,7 @@ export default function RoomsFilters() {
        </PopoverContent>
       </Popover>
      </div>
-     <div className='ms-4 md:flex items-center gap-2'>
+     <div className='hidden ms-4 md:flex items-center gap-2'>
       <div className='pe-3 me-3 border-e border-e-neutral-300'>
        <FormControlLabel label='۱ نفره' control={<Radio color='success' />} />
        <FormControlLabel label='2 نفره' control={<Radio color='success' />} />

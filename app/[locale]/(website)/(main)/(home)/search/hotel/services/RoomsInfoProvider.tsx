@@ -106,7 +106,12 @@ export default function RoomsInfoProvider({
    checkOutDate.toISOString(),
   ],
   async queryFn({ signal }) {
-   if (!checkInDate || !checkOutDate) return [];
+   if (
+    !checkInDate ||
+    !checkOutDate ||
+    checkInDate.toISOString() === checkOutDate.toISOString()
+   )
+    return [];
    const res = await getRoomInventory({
     signal,
     checkinDate: checkInDate.toISOString(),
