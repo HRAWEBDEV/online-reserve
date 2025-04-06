@@ -25,9 +25,9 @@ export default function RoomsFilters() {
  const [fromDateValue, untilDateValue] = watch(['fromDate', 'untilDate']);
  return (
   <>
-   <div className='bg-neutral-50 p-4 border-y border-100 mb-6 lg:sticky top-0 z-10'>
-    <div className='container grid grid-cols-[minmax(15rem,20rem)_1fr]'>
-     <div className='pe-3 me-3 border-e border-e-neutral-300'>
+   <div className='bg-neutral-50 p-4 border-y border-100 mb-6 sticky top-0 z-10'>
+    <div className='container grid gap-2 lg:gap-0 lg:grid-cols-[minmax(15rem,20rem)_1fr]'>
+     <div className='pe-3 me-3 lg:border-e border-e-neutral-300'>
       <Popover>
        <PopoverTrigger asChild>
         <Button
