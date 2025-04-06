@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import StarIcon from '@mui/icons-material/Star';
 import IconButton from '@mui/material/IconButton';
@@ -7,6 +8,7 @@ import Button from '@mui/material/Button';
 import ShareIcon from '@mui/icons-material/Share';
 import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import MapIcon from '@mui/icons-material/Map';
 
 const HotelLocation = dynamic(() => import('./HotelLocation'), {
  loading: () => <div></div>,
@@ -14,6 +16,7 @@ const HotelLocation = dynamic(() => import('./HotelLocation'), {
 });
 
 export default function HotelReview() {
+ const [showMap, setShowMap] = useState(false);
  return (
   <section className='mb-8' id='overview'>
    <div className='container flex flex-wrap gap-4 items-start mb-4'>
@@ -47,6 +50,20 @@ export default function HotelReview() {
       <ShareIcon fontSize='small' />
       <span className='ps-2 hidden lg:inline-block'>اشتراک گذاری</span>
      </Button>
+     <IconButton
+      className='lg:!hidden'
+      size='medium'
+      color='warning'
+      onClick={() => setShowMap(true)}
+      sx={{
+       backgroundColor: (theme) => theme.palette.orange['100'],
+       '&:is(:hover,:focus)': {
+        backgroundColor: (theme) => theme.palette.orange['200'],
+       },
+      }}
+     >
+      <MapIcon fontSize='medium' />
+     </IconButton>
      <IconButton
       size='medium'
       color='default'
@@ -97,9 +114,7 @@ export default function HotelReview() {
        </div>
       </div>
      </section>
-     <section className='hidden lg:block border border-neutral-200 rounded-lg bg-neutral-100 gap-4'>
-      <HotelLocation />
-     </section>
+     <HotelLocation open={showMap} close={() => setShowMap(false)} />
     </article>
    </section>
   </section>
