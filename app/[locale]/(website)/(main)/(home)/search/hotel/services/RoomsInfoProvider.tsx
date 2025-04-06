@@ -1,4 +1,5 @@
 'use client';
+import { PropsWithChildren, useMemo, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
  type RoomsFilterSchema,
@@ -12,8 +13,12 @@ import {
  getRoomInventory,
  getRoomInventoryKey,
 } from '../services/HotelApiActions';
-import { PropsWithChildren, useMemo } from 'react';
-import { type Store, roomsInfoContext } from './roomsInfoContext';
+import {
+ type Store,
+ type StoreActions,
+ type SelectedRoom,
+ roomsInfoContext,
+} from './roomsInfoContext';
 import * as dataFns from 'date-fns';
 
 export default function RoomsInfoProvider({
@@ -22,9 +27,8 @@ export default function RoomsInfoProvider({
 }: PropsWithChildren & {
  requestData: Store['requestData'];
 }) {
- //
+ const [selectedRooms, setSelectedRooms] = useState<SelectedRoom[]>([]);
  const searchParams = useSearchParams();
- //
  const roomsFilterUseForm = useForm<RoomsFilterSchema>({
   defaultValues: {
    ...defaultValues,
@@ -37,6 +41,63 @@ export default function RoomsInfoProvider({
  const checkInDate = watch('fromDate');
  const checkOutDate = watch('untilDate');
  const nights = dataFns.differenceInDays(checkOutDate, checkInDate);
+ //
+ const updateSelectedRoom: StoreActions['updateSelectedRoom'] = useCallback(
+  (params) => {
+   if (params.type === 'add') {
+    setSelectedRooms((pre) => {
+     if (!params.newRoom.roomCount) return pre;
+     const foundRoom = pre.find(
+      (item) => item.internalID === params.newRoom.internalID
+     );
+     if (!foundRoom) return [...pre, { ...params.newRoom, count: 1 }];
+     const newCount = foundRoom.count + 1;
+     if (newCount > params.newRoom.roomCount) return pre;
+     return pre.map((item) => {
+      if (item.internalID === foundRoom.internalID) {
+       return {
+        ...item,
+        count: item.count + 1,
+       };
+      }
+      return item;
+     });
+    });
+   }
+   if (params.type === 'decrease') {
+    setSelectedRooms((pre) => {
+     const foundRoom = pre.find(
+      (item) => item.internalID === params.roomPlanInternalID
+     );
+     if (!foundRoom) return pre;
+     const newCount = foundRoom.count - 1;
+     if (!newCount)
+      return pre.filter(
+       (item) => item.internalID !== params.roomPlanInternalID
+      );
+     return pre.map((item) => {
+      if (item.internalID === foundRoom.internalID) {
+       return {
+        ...item,
+        count: item.count - 1,
+       };
+      }
+      return item;
+     });
+    });
+   }
+   if (params.type === 'deleteAll') {
+    setSelectedRooms((pre) => {
+     return pre.filter((item) => item.internalID !== params.roomPlanInternalID);
+    });
+   }
+  },
+  []
+ );
+ const deleteSelectedRooms: StoreActions['deleteSelectedRooms'] =
+  useCallback(() => {
+   setSelectedRooms([]);
+  }, []);
  //
  const { data: rooms = [], isFetching } = useQuery({
   queryKey: [
@@ -63,10 +124,23 @@ export default function RoomsInfoProvider({
     rooms,
     isFetchingRooms: isFetching,
     nights,
+    selectedRooms,
     checkInDate,
     checkOutDate,
-   } as Store),
-  [requestData, isFetching, rooms, nights, checkInDate, checkOutDate]
+    updateSelectedRoom,
+    deleteSelectedRooms,
+   } as Store & StoreActions),
+  [
+   requestData,
+   selectedRooms,
+   isFetching,
+   rooms,
+   nights,
+   checkInDate,
+   checkOutDate,
+   updateSelectedRoom,
+   deleteSelectedRooms,
+  ]
  );
 
  return (

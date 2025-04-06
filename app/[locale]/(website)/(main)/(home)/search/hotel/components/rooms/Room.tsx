@@ -12,6 +12,7 @@ import {
 import Chip from '@mui/material/Chip';
 import { addClass } from '@/utils/addClass';
 import { ratePlanModel } from '../../utils/ratePlanModel';
+import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -26,6 +27,10 @@ export default function Room({
  room: RoomInventory;
  nights: number;
 }) {
+ const { selectedRooms, updateSelectedRoom } = useRoomsInfoContext();
+ const foundRoom = selectedRooms.find(
+  (item) => item.internalID === roomPlan.internalID
+ );
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(
      (
@@ -40,6 +45,7 @@ export default function Room({
    <div className='border-b border-neutral-300 lg:border-b-0 lg:p-2'>
     <div className='h-[16rem] lg:w-[12rem] lg:h-[12rem] lg:rounded-lg overflow-hidden'>
      <img
+      loading='lazy'
       className='w-full h-full'
       src='/images/hotels/mashhad-almas.jpg'
       alt='hotel image'
@@ -92,7 +98,7 @@ export default function Room({
          'hidden'
         )}`}
        >
-        40%
+        {discountPercentage}%
        </span>
       </div>
       <div></div>
@@ -117,13 +123,35 @@ export default function Room({
      </div>
      <div className='lg:flex lg:justify-center lg:items-center'>
       <div className='hidden lg:flex lg:items-center'>
-       <IconButton color='success'>
+       <IconButton
+        color='success'
+        onClick={() =>
+         updateSelectedRoom({
+          type: 'add',
+          newRoom: {
+           ...roomPlan,
+           fName: room.fName,
+           hoteID: room.hoteID,
+           roomTypeID: room.roomTypeID,
+           roomCount: room.roomCount,
+          },
+         })
+        }
+       >
         <AddOutlinedIcon />
        </IconButton>
        <div className='bg-neutral-100 p-1 py-2 rounded-lg min-w-11 text-center'>
-        0
+        {foundRoom?.count || 0}
        </div>
-       <IconButton color='error'>
+       <IconButton
+        color='error'
+        onClick={() => {
+         updateSelectedRoom({
+          type: 'decrease',
+          roomPlanInternalID: roomPlan.internalID!,
+         });
+        }}
+       >
         <RemoveOutlinedIcon />
        </IconButton>
       </div>
