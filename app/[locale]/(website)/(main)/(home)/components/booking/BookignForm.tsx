@@ -1,19 +1,21 @@
-import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Popover from '@mui/material/Popover';
 import InputAdornemnt from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { StaticDatePicker } from '@mui/x-date-pickers';
-import Drawer from '@mui/material/Drawer';
 import { useQueryToggler } from '@/hooks/useQueryToggler';
-import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
-import CloseIcon from '@mui/icons-material/Close';
 import { Theme } from '@mui/material/styles';
 import { motion } from 'motion/react';
 import { bookingTypes } from '../../utils/bookingTypes';
 import BookingSearch from './BookingSearch';
+import { Calendar } from '@/components/ui/calendar';
+import {
+ Popover,
+ PopoverContent,
+ PopoverTrigger,
+} from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { Button as ShadButton } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 type TProps = {
  selectedBookingType: (typeof bookingTypes)[number]['type'];
@@ -21,18 +23,6 @@ type TProps = {
  onChangeSelectedBookingType: (
   type: (typeof bookingTypes)[number]['type']
  ) => void;
-};
-
-const dateFormatter = new Intl.DateTimeFormat('fa', {
- day: 'numeric',
- month: 'long',
- year: 'numeric',
-});
-
-const datePickerStyles = {
- '& .MuiPickersArrowSwitcher-button': {
-  fontSize: '2rem',
- },
 };
 
 const buttonStyles = {
@@ -50,108 +40,10 @@ export default function BookignForm({
  selectedBookingType,
  onChangeSelectedBookingType,
 }: TProps) {
- const [fromDateAnchor, setFromDateAnchor] = useState<HTMLDivElement | null>(
-  null
- );
-
- const [untilDateAnchor, setUntilDateAnchor] = useState<HTMLDivElement | null>(
-  null
- );
- const { isLargeDevice } = useAppMonitorConfig();
- const { isQueryTrue: showFromDate, handleToggle: handleToggleFromDate } =
-  useQueryToggler('show-reserve-from-date');
- const { isQueryTrue: showUntilDate, handleToggle: handleToggleUntilDate } =
-  useQueryToggler('show-reserve-until-date');
  const {
   isQueryTrue: showBookingSearch,
   handleToggle: handleToggleBookingSearch,
  } = useQueryToggler('show-booking-search');
-
- const fromDateContent = (
-  <>
-   {!isLargeDevice && (
-    <div className='flex items-center justify-between px-2 py-4 mb-4 border-b border-neutral-300 text-center'>
-     <div className='basis-20'></div>
-     <p className='font-medium text-base'>از تاریخ</p>
-     <div className='basis-20 text-end'>
-      <IconButton
-       color='error'
-       onClick={() => {
-        setFromDateAnchor(null);
-        handleToggleFromDate(false);
-       }}
-      >
-       <CloseIcon />
-      </IconButton>
-     </div>
-    </div>
-   )}
-   <div className='container max-w-[22rem] lg:max-w-[unset] lg:p-0'>
-    <StaticDatePicker
-     sx={datePickerStyles}
-     views={['year', 'month', 'day']}
-     slotProps={{
-      toolbar: {
-       hidden: isLargeDevice,
-      },
-      actionBar: {
-       actions: [],
-      },
-     }}
-    />
-    {!isLargeDevice && (
-     <div className='flex justify-end'>
-      <Button size='large' variant='contained' className='w-[7rem]'>
-       تایید
-      </Button>
-     </div>
-    )}
-   </div>
-  </>
- );
-
- const untilDateContent = (
-  <>
-   {!isLargeDevice && (
-    <div className='flex items-center justify-between px-2 py-4 mb-4 border-b border-neutral-300 text-center'>
-     <div className='basis-20'></div>
-     <p className='font-medium text-base'>تا تاریخ</p>
-     <div className='basis-20 text-end'>
-      <IconButton
-       color='error'
-       onClick={() => {
-        setUntilDateAnchor(null);
-        handleToggleUntilDate(false);
-       }}
-      >
-       <CloseIcon />
-      </IconButton>
-     </div>
-    </div>
-   )}
-   <div className='container max-w-[22rem] lg:max-w-[unset] lg:p-0'>
-    <StaticDatePicker
-     sx={datePickerStyles}
-     views={['year', 'month', 'day']}
-     slotProps={{
-      toolbar: {
-       hidden: isLargeDevice,
-      },
-      actionBar: {
-       actions: [],
-      },
-     }}
-    />
-    {!isLargeDevice && (
-     <div className='flex justify-end'>
-      <Button size='large' variant='contained' className='w-[7rem]'>
-       تایید
-      </Button>
-     </div>
-    )}
-   </div>
-  </>
- );
 
  return (
   <article className='container py-4 mb-24'>
@@ -193,117 +85,102 @@ export default function BookignForm({
         input: {
          readOnly: true,
          endAdornment: (
-          <InputAdornemnt position='end' className='-me-2'>
-           <SearchIcon fontSize='large' />
+          <InputAdornemnt position='end'>
+           <SearchIcon fontSize='medium' />
           </InputAdornemnt>
          ),
         },
        }}
       />
-      <TextField
-       label='از تاریخ'
-       value={dateFormatter.format(new Date())}
-       onClick={(e) => {
-        setFromDateAnchor(e.currentTarget);
-        handleToggleFromDate(true);
-       }}
-       slotProps={{
-        inputLabel: {
-         shrink: true,
-        },
-       }}
-      />
-      <TextField
-       label='تا تاریخ'
-       value={dateFormatter.format(new Date())}
-       onClick={(e) => {
-        setUntilDateAnchor(e.currentTarget);
-        handleToggleUntilDate(true);
-       }}
-       slotProps={{
-        inputLabel: {
-         shrink: true,
-        },
-       }}
-      />
+      <Popover>
+       <PopoverTrigger asChild>
+        <ShadButton
+         variant={'outline'}
+         className={cn(
+          'min-h-[3.5rem] rounded-sm border-neutral-300 text-foreground w-full justify-start text-left font-normal border bg-background hover:bg-neutral-100 hover:text-foreground'
+         )}
+        >
+         <CalendarIcon />
+         {false ? (
+          <>
+           {/* {dateFormatter.format(fromDateValue)} -{' '}
+           {dateFormatter.format(untilDateValue)} */}
+          </>
+         ) : (
+          <span>از تاریخ</span>
+         )}
+        </ShadButton>
+       </PopoverTrigger>
+       <PopoverContent className='w-auto p-0' align='start'>
+        <Calendar
+         mode='range'
+         autoFocus
+         showOutsideDays={false}
+         numberOfMonths={2}
+         formatters={{
+          formatWeekdayName(date, locale) {
+           const weekday =
+            new Intl.DateTimeFormat(locale?.locale?.code || 'fa', {
+             dateStyle: 'full',
+            })
+             .formatToParts(date)
+             .at(-1)?.value || '';
+           return weekday[0];
+          },
+         }}
+        />
+       </PopoverContent>
+      </Popover>
+      <Popover>
+       <PopoverTrigger asChild>
+        <ShadButton
+         variant={'outline'}
+         className={cn(
+          'min-h-[3.5rem] rounded-sm text-foreground w-full justify-start text-left font-normal border border-neutral-300 bg-background hover:bg-neutral-100 hover:text-foreground'
+         )}
+        >
+         <CalendarIcon />
+         {false ? (
+          <>
+           {/* {dateFormatter.format(fromDateValue)} -{' '}
+           {dateFormatter.format(untilDateValue)} */}
+          </>
+         ) : (
+          <span>تا تاریخ</span>
+         )}
+        </ShadButton>
+       </PopoverTrigger>
+       <PopoverContent className='w-auto p-0' align='start'>
+        <Calendar
+         mode='range'
+         numberOfMonths={2}
+         autoFocus
+         showOutsideDays={false}
+         formatters={{
+          formatWeekdayName(date, locale) {
+           const weekday =
+            new Intl.DateTimeFormat(locale?.locale?.code || 'fa', {
+             dateStyle: 'full',
+            })
+             .formatToParts(date)
+             .at(-1)?.value || '';
+           return weekday[0];
+          },
+         }}
+        />
+       </PopoverContent>
+      </Popover>
      </div>
      <Button
       disableElevation
       variant='contained'
       size='large'
-      className='min-h-[3.1rem]'
+      className='min-h-[3.5rem]'
      >
       <span className='font-medium'>جستجو هتل یا اقامتگاه</span>
      </Button>
     </div>
    </form>
-   {!isLargeDevice ? (
-    <>
-     <Drawer
-      anchor='bottom'
-      sx={{
-       '& .MuiPaper-root': {
-        height: '100%',
-       },
-      }}
-      open={showFromDate}
-      onClose={() => handleToggleFromDate(false)}
-     >
-      {fromDateContent}
-     </Drawer>
-     <Drawer
-      anchor='bottom'
-      sx={{
-       '& .MuiPaper-root': {
-        height: '100%',
-       },
-      }}
-      open={showUntilDate}
-      onClose={() => handleToggleUntilDate(false)}
-     >
-      {untilDateContent}
-     </Drawer>
-    </>
-   ) : (
-    <>
-     <Popover
-      anchorEl={fromDateAnchor}
-      open={Boolean(fromDateAnchor)}
-      onClose={() => {
-       setFromDateAnchor(null);
-       handleToggleFromDate(false);
-      }}
-      anchorOrigin={{
-       vertical: 'bottom',
-       horizontal: 'center',
-      }}
-      transformOrigin={{
-       vertical: 'top',
-       horizontal: 'center',
-      }}
-     >
-      {fromDateContent}
-     </Popover>
-     <Popover
-      anchorEl={untilDateAnchor}
-      open={Boolean(untilDateAnchor)}
-      onClose={() => {
-       setUntilDateAnchor(null);
-       handleToggleUntilDate(false);
-      }}
-      anchorOrigin={{
-       vertical: 'bottom',
-       horizontal: 'center',
-      }}
-      transformOrigin={{
-       vertical: 'top',
-       horizontal: 'center',
-      }}
-     >
-      {untilDateContent}
-     </Popover>
-    </>
-   )}
    <BookingSearch
     open={showBookingSearch}
     onClose={() => {
