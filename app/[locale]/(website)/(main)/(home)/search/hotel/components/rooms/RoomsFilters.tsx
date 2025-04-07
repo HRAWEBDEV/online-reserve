@@ -33,7 +33,7 @@ export default function RoomsFilters() {
         <Button
          variant={'outline'}
          className={cn(
-          'w-full justify-start text-left font-normal border border-neutral-300 bg-background hover:bg-neutral-100'
+          'w-full justify-start text-left font-normal border border-neutral-300 bg-background hover:bg-neutral-100 hover:text-foreground'
          )}
         >
          <CalendarIcon />

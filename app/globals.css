@@ -32,6 +32,7 @@
   --background: 0 0% 100%;
   /* #262626 */
   --foreground: 0 0% 15%;
+  --accent-foreground: 0 0% 100%;
 
   --card: 0 0% 100%;
   --card-foreground: 0 0% 3.9%;
@@ -50,7 +51,6 @@
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
   --radius: 0.5rem;
-  --accent-foreground: 0 0% 9%;
  }
 }
 

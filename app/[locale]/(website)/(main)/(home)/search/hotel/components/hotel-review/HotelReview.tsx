@@ -89,7 +89,6 @@ export default function HotelReview() {
            className='h-full w-full object-cover'
            src='/images/hotels/hotel-slider.jpg'
            alt='hotel image'
-           loading='lazy'
           />
          </div>
         </SwiperSlide>
@@ -100,7 +99,6 @@ export default function HotelReview() {
           className='h-full w-full object-cover'
           src='/images/hotels/hotel-slider-5.jpg'
           alt='hotel image'
-          loading='lazy'
          />
         </div>
         <div className='rounded-lg overflow-hidden basis-0 flex-grow'>
@@ -108,7 +106,6 @@ export default function HotelReview() {
           className='h-full w-full object-cover'
           src='/images/hotels/hotel-slider-3.jpg'
           alt='hotel image'
-          loading='lazy'
          />
         </div>
        </div>

@@ -23,8 +23,8 @@ export default async function page({
  const requestData: TRequestData = getRequestData(searchQuries);
  if (!searchQuries.checkinDate) {
   const urlSearchQuries = new URLSearchParams();
-  const checkinDate = DateFns.startOfYesterday().toISOString();
-  const checkoutDate = DateFns.startOfToday().toISOString();
+  const checkinDate = DateFns.startOfToday().toISOString();
+  const checkoutDate = DateFns.addDays(DateFns.startOfToday(), 4).toISOString();
   urlSearchQuries.set('checkinDate', checkinDate);
   urlSearchQuries.set('checkoutDate', checkoutDate);
   Object.entries(searchQuries).forEach(
