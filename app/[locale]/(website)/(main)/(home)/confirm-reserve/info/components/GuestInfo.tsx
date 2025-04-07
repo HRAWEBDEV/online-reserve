@@ -24,7 +24,7 @@ export default function GuestInfo() {
     <TextField size='medium' label='شماره همراه' required />
    </div>
    <h3 className='font-medium text-base mb-6'>مشخصات سرپرست اتاق‌ها</h3>
-   {[1, 2].map((item) => (
+   {[1, 2, 3, 4].map((item) => (
     <div key={item} className='mb-4'>
      <div className='flex gap-2 items-center mb-4'>
       <p>
@@ -47,7 +47,7 @@ export default function GuestInfo() {
    ))}
 
    <div className='flex justify-end'>
-    <Button className='w-[10rem]' size='large' variant='contained'>
+    <Button className='w-[8rem]' size='large' variant='contained'>
      تایید
     </Button>
    </div>
