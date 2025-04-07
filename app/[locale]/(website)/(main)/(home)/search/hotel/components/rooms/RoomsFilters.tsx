@@ -1,18 +1,28 @@
 import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, Controller } from 'react-hook-form';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import MuiButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { Calendar } from '@/components/ui/calendar';
 import {
  Popover,
  PopoverContent,
  PopoverTrigger,
 } from '@/components/ui/popover';
+import Drawer from '@mui/material/Drawer';
+import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import * as dateFns from 'date-fns';
 import Checkbox from '@mui/material/Checkbox';
+
+type Props = {
+ showFilters: boolean;
+ toggleFilters: () => void;
+};
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -20,9 +30,99 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
  day: '2-digit',
 });
 
-export default function RoomsFilters() {
- const { watch, setValue } = useFormContext<RoomsFilterSchema>();
+export default function RoomsFilters({ showFilters, toggleFilters }: Props) {
+ const { isLargeDevice } = useAppMonitorConfig();
+ const { watch, setValue, control } = useFormContext<RoomsFilterSchema>();
  const [fromDateValue, untilDateValue] = watch(['fromDate', 'untilDate']);
+
+ const advancedFilters = (
+  <>
+   <div className='mb-6 pe-3 me-3 lg:mb-0 lg:border-e border-e-neutral-300'>
+    <Controller
+     name='bedCount'
+     control={control}
+     render={({ field }) => (
+      <RadioGroup row={isLargeDevice} {...field}>
+       <FormControlLabel
+        label='همه'
+        control={<Radio color='success' value='all' />}
+       />
+       <FormControlLabel
+        label='۱ نفره'
+        control={<Radio color='success' value='one' />}
+       />
+       <FormControlLabel
+        label='2 نفره'
+        control={<Radio color='success' />}
+        value='two'
+       />
+       <FormControlLabel
+        label='۳ نفره یا بیشتر'
+        control={<Radio color='success' value='more' />}
+       />
+      </RadioGroup>
+     )}
+    />
+   </div>
+   <div className='flex flex-col lg:flex-row'>
+    <Controller
+     name='noBreakfast'
+     control={control}
+     render={({ field: { value, onChange, ...other } }) => (
+      <FormControlLabel
+       label='بدون صبحانه'
+       control={
+        <Checkbox
+         color='secondary'
+         {...other}
+         onChange={(_, newValue) => onChange(newValue)}
+         checked={value}
+         value={value}
+        />
+       }
+      />
+     )}
+    />
+    <Controller
+     name='noPenalty'
+     control={control}
+     render={({ field: { value, onChange, ...other } }) => (
+      <FormControlLabel
+       label='بدون جریمه'
+       control={
+        <Checkbox
+         color='secondary'
+         {...other}
+         onChange={(_, newValue) => onChange(newValue)}
+         checked={value}
+         value={value}
+        />
+       }
+      />
+     )}
+    />
+    <Controller
+     name='fullBoard'
+     control={control}
+     render={({ field: { value, onChange, ...other } }) => (
+      <FormControlLabel
+       label='فول برد'
+       control={
+        <Checkbox
+         color='secondary'
+         {...other}
+         checked={value}
+         onChange={(_, newValue) => onChange(newValue)}
+         value={value}
+        />
+       }
+      />
+     )}
+    />
+   </div>
+  </>
+ );
+
  return (
   <>
    <div className='bg-neutral-50 p-4 border-y border-100 mb-6 sticky top-0 z-10'>
@@ -78,31 +178,41 @@ export default function RoomsFilters() {
        </PopoverContent>
       </Popover>
      </div>
-     <div className='hidden ms-4 md:flex items-center gap-2'>
-      <div className='pe-3 me-3 border-e border-e-neutral-300'>
-       <FormControlLabel label='۱ نفره' control={<Radio color='success' />} />
-       <FormControlLabel label='2 نفره' control={<Radio color='success' />} />
-       <FormControlLabel
-        label='۳ نفره یا بیشتر'
-        control={<Radio color='success' />}
-       />
-      </div>
-      <div>
-       <FormControlLabel
-        label='بدون صبحانه'
-        control={<Checkbox color='secondary' />}
-       />
-       <FormControlLabel
-        label='بدون جریمه'
-        control={<Checkbox color='secondary' />}
-       />
-       <FormControlLabel
-        label='فول برد'
-        control={<Checkbox color='secondary' />}
-       />
-      </div>
+     <div className='hidden ms-4 lg:flex items-center gap-2'>
+      {advancedFilters}
      </div>
     </div>
+    {!isLargeDevice && (
+     <Drawer
+      anchor='bottom'
+      open={showFilters}
+      sx={{
+       '& .MuiPaper-root': {
+        borderTopLeftRadius: '1rem',
+        borderTopRightRadius: '1rem',
+       },
+      }}
+     >
+      <div className='flex items-center p-4 border-b border-neutral-300'>
+       <div className='text-secondary-dark font-medium basis-16'>
+        <span>نتایج: </span>
+        <span>123</span>
+       </div>
+       <div className='flex-grow text-center font-medium'>فیلترها</div>
+       <div className='basis-16 text-end'>
+        <MuiButton
+         color='error'
+         onClick={() => {
+          toggleFilters();
+         }}
+        >
+         <CloseIcon />
+        </MuiButton>
+       </div>
+      </div>
+      <div className='p-4 ps-8'>{advancedFilters}</div>
+     </Drawer>
+    )}
    </div>
   </>
  );
