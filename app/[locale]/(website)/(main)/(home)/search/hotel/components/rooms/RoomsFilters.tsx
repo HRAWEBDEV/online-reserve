@@ -22,6 +22,7 @@ import Checkbox from '@mui/material/Checkbox';
 type Props = {
  showFilters: boolean;
  toggleFilters: () => void;
+ result: number;
 };
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
@@ -30,7 +31,11 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
  day: '2-digit',
 });
 
-export default function RoomsFilters({ showFilters, toggleFilters }: Props) {
+export default function RoomsFilters({
+ showFilters,
+ toggleFilters,
+ result,
+}: Props) {
  const { isLargeDevice } = useAppMonitorConfig();
  const { watch, setValue, control } = useFormContext<RoomsFilterSchema>();
  const [fromDateValue, untilDateValue] = watch(['fromDate', 'untilDate']);
@@ -186,6 +191,7 @@ export default function RoomsFilters({ showFilters, toggleFilters }: Props) {
      <Drawer
       anchor='bottom'
       open={showFilters}
+      onClose={toggleFilters}
       sx={{
        '& .MuiPaper-root': {
         borderTopLeftRadius: '1rem',
@@ -196,7 +202,7 @@ export default function RoomsFilters({ showFilters, toggleFilters }: Props) {
       <div className='flex items-center p-4 border-b border-neutral-300'>
        <div className='text-secondary-dark font-medium basis-16'>
         <span>نتایج: </span>
-        <span>123</span>
+        <span>{result}</span>
        </div>
        <div className='flex-grow text-center font-medium'>فیلترها</div>
        <div className='basis-16 text-end'>

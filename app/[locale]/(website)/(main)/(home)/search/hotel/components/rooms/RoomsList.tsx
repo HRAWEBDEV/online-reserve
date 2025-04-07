@@ -16,6 +16,7 @@ type Props = {
  isLoadingRooms: boolean;
  rooms: RoomInventory[];
  nights: number;
+ result: number;
  toggleFilters: () => void;
 };
 
@@ -23,6 +24,7 @@ export default function RoomsList({
  isLoadingRooms,
  rooms,
  nights,
+ result,
  toggleFilters,
 }: Props) {
  const { getValues, watch } = useFormContext<RoomsFilterSchema>();
@@ -129,7 +131,7 @@ export default function RoomsList({
      />
     )}
    </section>
-   {!isLargeDevice && (
+   {!isLargeDevice && result && (
     <div className='sticky bottom-10 z-10 flex justify-center start-0 end-0'>
      <Button
       onClick={toggleFilters}
