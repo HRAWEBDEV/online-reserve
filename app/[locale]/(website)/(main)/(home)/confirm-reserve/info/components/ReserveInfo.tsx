@@ -55,10 +55,8 @@ export default function ReserveInfo() {
         </div>
         <Swiper
          spaceBetween={10}
+         slidesPerView={2}
          breakpoints={{
-          768: {
-           slidesPerView: 2,
-          },
           1024: {
            slidesPerView: 3,
           },
@@ -70,7 +68,7 @@ export default function ReserveInfo() {
             <div className='font-medium text-[0.7rem] text-center text-primary-dark border-b border-neutral-300 mb-2 pb-2'>
              {dateFormatter.format(new Date())}
             </div>
-            <div className='flex gap-2 items-center text-[0.7rem] mb-2'>
+            <div className='flex gap-2 items-center text-[0.7rem] mb-2 justify-center'>
              <span>
               <span className='line-through text-red-600'>
                {numberFormatter.format(1455566000)}
@@ -80,7 +78,7 @@ export default function ReserveInfo() {
               12%
              </div>
             </div>
-            <div className='text-[0.75rem]'>
+            <div className='text-[0.75rem] flex justify-center'>
              <span>
               <strong>{numberFormatter.format(1455566000)}</strong>
               <span className='text-[0.7rem] ps-1'>تومان</span>

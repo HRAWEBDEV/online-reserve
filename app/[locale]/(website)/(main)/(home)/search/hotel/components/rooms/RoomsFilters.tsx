@@ -191,7 +191,7 @@ export default function RoomsFilters({
      <Drawer
       anchor='bottom'
       open={showFilters}
-      onClose={toggleFilters}
+      onClose={() => toggleFilters()}
       sx={{
        '& .MuiPaper-root': {
         borderTopLeftRadius: '1rem',

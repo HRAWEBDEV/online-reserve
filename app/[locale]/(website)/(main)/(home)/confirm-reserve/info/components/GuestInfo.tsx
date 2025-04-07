@@ -1,16 +1,19 @@
 'use client';
+import { useQueryToggler } from '@/hooks/useQueryToggler';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import RoomsModal from './RoomsModal';
 
 export default function GuestInfo() {
+ const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
  return (
   <form className='p-4 order-2 md:order-1 md:flex-grow rounded-lg border border-neutral-300'>
    <div className='flex gap-4 justify-between items-center mb-4'>
     <h3 className='font-medium text-base'>مشخصات رزرو کننده</h3>
-    <Button variant='outlined' color='error'>
+    <Button variant='outlined' color='error' onClick={() => handleToggle()}>
      <div className='flex items-center gap-2'>
       <AddOutlinedIcon />
       افزودن اتاق
@@ -45,12 +48,12 @@ export default function GuestInfo() {
      </div>
     </div>
    ))}
-
    <div className='flex justify-end'>
     <Button className='w-[8rem]' size='large' variant='contained'>
      تایید
     </Button>
    </div>
+   <RoomsModal isOpen={isQueryTrue} onToggle={handleToggle} />
   </form>
  );
 }
