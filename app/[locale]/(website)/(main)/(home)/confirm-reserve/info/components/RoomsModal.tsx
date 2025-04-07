@@ -4,6 +4,7 @@ import ModalContent from '@mui/material/DialogContent';
 import ModalTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import RoomsList from './RoomsList';
 
 type Props = {
  isOpen: boolean;
@@ -22,7 +23,9 @@ export default function RoomsModal({ isOpen, onToggle }: Props) {
     </div>
    </ModalTitle>
    <ModalContent dividers>
-    <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1 relative'></section>
+    <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1 relative'>
+     <RoomsList />
+    </section>
    </ModalContent>
   </Modal>
  );
