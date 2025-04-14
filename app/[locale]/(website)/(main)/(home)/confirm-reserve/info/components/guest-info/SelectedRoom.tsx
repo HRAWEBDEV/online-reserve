@@ -1,4 +1,6 @@
 'use client';
+import { useState } from 'react';
+import { ratePlanModel } from '../../../../search/hotel/utils/ratePlanModel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -8,8 +10,6 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Chip from '@mui/material/Chip';
-import { ratePlanModel } from '../../../../search/hotel/utils/ratePlanModel';
-import { useState } from 'react';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -45,11 +45,13 @@ export default function SelectedRoom() {
       />
      ))}
     </div>
-    <div className='col-span-full'>
+    <div className='col-span-full flex flex-wrap'>
      <FormControlLabel
-      label='نام رزرو کننده با سرپرست اتاق یکی می‌باشد.'
+      label='نام رزرو کننده با سرپرست اتاق یکی می‌باشد'
       control={<Checkbox />}
      />
+     <FormControlLabel label='نیم شارژ ورود' control={<Checkbox />} />
+     <FormControlLabel label='نیم شارژ خروج' control={<Checkbox />} />
     </div>
     <div className='col-span-full'>
      <ToggleButtonGroup
@@ -62,8 +64,13 @@ export default function SelectedRoom() {
       <ToggleButton value='foreign'>مهمان خارجی</ToggleButton>
      </ToggleButtonGroup>
     </div>
-    <TextField size='medium' label='نام و نام‌خانوادگی' />
-    <TextField size='medium' label='کدملی' />
+    <TextField label='نام و نام‌خانوادگی' size='small' />
+    <TextField label='کدملی' size='small' />
+    <div className='col-span-full grid gap-4 grid-cols-3'>
+     <TextField type='number' fullWidth label='تعداد بزرگسال' size='small' />
+     <TextField type='number' fullWidth label='تعداد کودک' size='small' />
+     <TextField type='number' fullWidth label='تعداد نوزاد' size='small' />
+    </div>
    </div>
   </div>
  );

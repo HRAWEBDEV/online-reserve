@@ -1,6 +1,10 @@
 'use client';
+import { useState } from 'react';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Button from '@mui/material/Button';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -10,6 +14,7 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
 const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
+ const [showInfo, setShowInfo] = useState(false);
  return (
   <aside className='order-1 md:order-2 md:w-[25rem]'>
    <div className='rounded-lg border border-neutral-300 p-4 sticky top-4'>
@@ -36,7 +41,7 @@ export default function ReserveInfo() {
       </div>
      </div>
     </div>
-    <div>
+    <div className={`hidden ${showInfo ? '!block' : ''} lg:block`}>
      {[1, 2].map((item) => (
       <div key={item} className='mb-4'>
        <div className='flex gap-2 items-center mb-3'>
@@ -91,6 +96,15 @@ export default function ReserveInfo() {
        </div>
       </div>
      ))}
+    </div>
+    <div className='lg:hidden'>
+     <Button
+      fullWidth
+      className='!bg-neutral-300'
+      onClick={() => setShowInfo((pre) => !pre)}
+     >
+      {showInfo ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+     </Button>
     </div>
    </div>
   </aside>
