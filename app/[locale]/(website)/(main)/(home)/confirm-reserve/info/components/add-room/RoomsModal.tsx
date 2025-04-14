@@ -5,6 +5,17 @@ import ModalTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import RoomsList from './RoomsList';
+import { useQueryToggler } from '@/hooks/useQueryToggler';
+import { useSearchParams } from 'next/navigation';
+import { FormProvider, useForm } from 'react-hook-form';
+import {
+ defaultValues,
+ type RoomsFilterSchema,
+ roomsFilterSchema,
+} from '../../schema/roomsFilterSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import RoomsFilters from './RoomsFilters';
+import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 
 type Props = {
  isOpen: boolean;
@@ -12,8 +23,25 @@ type Props = {
 };
 
 export default function RoomsModal({ isOpen, onToggle }: Props) {
+ const { isLargeDevice } = useAppMonitorConfig();
+ const { isQueryTrue, handleToggle } = useQueryToggler('show-rooms-filters');
+ const searchParams = useSearchParams();
+ const roomsFilterUseForm = useForm<RoomsFilterSchema>({
+  defaultValues: {
+   ...defaultValues,
+   fromDate: new Date(searchParams.get('checkinDate') as string),
+   untilDate: new Date(searchParams.get('checkoutDate') as string),
+  },
+  resolver: zodResolver(roomsFilterSchema),
+ });
  return (
-  <Modal open={isOpen} onClose={() => onToggle()} fullWidth maxWidth='lg'>
+  <Modal
+   open={isOpen}
+   onClose={() => onToggle()}
+   fullWidth
+   maxWidth='xl'
+   fullScreen={!isLargeDevice}
+  >
    <ModalTitle>
     <div className='flex justify-between gap-4 items-center'>
      <span className='text-lg'>اتاق‌ها</span>
@@ -23,9 +51,16 @@ export default function RoomsModal({ isOpen, onToggle }: Props) {
     </div>
    </ModalTitle>
    <ModalContent dividers>
-    <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1 relative'>
-     <RoomsList />
-    </section>
+    <FormProvider {...roomsFilterUseForm}>
+     <RoomsFilters
+      toggleFilters={handleToggle}
+      showFilters={isQueryTrue}
+      result={10}
+     />
+     <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1 relative'>
+      <RoomsList result={10} toggleFilters={handleToggle} />
+     </section>
+    </FormProvider>
    </ModalContent>
   </Modal>
  );
