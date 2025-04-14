@@ -1,6 +1,7 @@
 'use client';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -21,12 +22,19 @@ export default function SelectedRoom() {
      <span className='text-neutral-600'>اتاق {1}: </span>
      <span className='font-medium text-[0.9rem]'>سوئیت دبل</span>
     </p>
-    <div className='bg-neutral-300 h-[1px] flex-grow'></div>
+    <div className='bg-neutral-600 h-[1px] flex-grow'></div>
     <IconButton color='error'>
      <DeleteOutlinedIcon />
     </IconButton>
    </div>
    <div className=' grid grid-cols-2 gap-4 mb-6'>
+    <div>
+     <div className='flex items-center gap-1 text-neutral-600 font-medium'>
+      <PersonOutlineOutlinedIcon />
+      <span>تعداد: </span>
+      <span>{1}نفر</span>
+     </div>
+    </div>
     <div className='col-span-full flex flex-wrap gap-2'>
      {ratePlanModel.map((item) => (
       <Chip

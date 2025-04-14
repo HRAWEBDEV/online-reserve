@@ -11,8 +11,8 @@ const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
  return (
-  <aside className='order-1 md:order-2 md:w-[25rem] '>
-   <div className='rounded-lg border border-neutral-300 p-4'>
+  <aside className='order-1 md:order-2 md:w-[25rem]'>
+   <div className='rounded-lg border border-neutral-300 p-4 sticky top-4'>
     <h3 className='font-medium text-base  pb-4 border-b border-neutral-300'>
      هتل الماس
     </h3>

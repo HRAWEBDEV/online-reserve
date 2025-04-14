@@ -2,7 +2,7 @@ import { ReactElement } from 'react';
 import { type RoomAccomodationType } from '../services/HotelApiActions';
 import KebabDiningIcon from '@mui/icons-material/KebabDining';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
-import NoDrinksIcon from '@mui/icons-material/NoDrinks';
+import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';
 
 export const ratePlanModel: {
  type: keyof Pick<
@@ -19,7 +19,11 @@ export const ratePlanModel: {
 }[] = [
  { type: 'noBreakfast', name: 'بدون صبحانه', icon: null },
  { type: 'nonRefundable', name: 'غیرقابل استرداد', icon: null },
- { type: 'freeChargeMinibar', name: 'مینی بار مجانی', icon: <NoDrinksIcon /> },
+ {
+  type: 'freeChargeMinibar',
+  name: 'مینی بار مجانی',
+  icon: <CoffeeMakerIcon />,
+ },
  { type: 'withDinner', name: 'همراه با شام', icon: <DinnerDiningIcon /> },
  { type: 'withLunch', name: 'همراه با نهار', icon: <KebabDiningIcon /> },
  { type: 'limitedMenu', name: 'منوی محدود', icon: null },
