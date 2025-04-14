@@ -57,9 +57,7 @@ export default function RoomsModal({ isOpen, onToggle }: Props) {
       showFilters={isQueryTrue}
       result={10}
      />
-     <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1 relative'>
-      <RoomsList result={10} toggleFilters={handleToggle} />
-     </section>
+     <RoomsList result={10} toggleFilters={handleToggle} />
     </FormProvider>
    </ModalContent>
   </Modal>
