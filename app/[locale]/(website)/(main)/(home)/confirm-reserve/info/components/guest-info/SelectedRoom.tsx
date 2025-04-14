@@ -6,7 +6,11 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import Chip from '@mui/material/Chip';
+import { ratePlanModel } from '../../../../search/hotel/utils/ratePlanModel';
 import { useState } from 'react';
+
+const chipStyles = { borderRadius: '0.2rem' };
 
 export default function SelectedRoom() {
  const [guestType, setGuestType] = useState<'normal' | 'foreign'>('normal');
@@ -22,7 +26,17 @@ export default function SelectedRoom() {
      <DeleteOutlinedIcon />
     </IconButton>
    </div>
-   <div className='grid grid-cols-2 gap-4 mb-6'>
+   <div className=' grid grid-cols-2 gap-4 mb-6'>
+    <div className='col-span-full flex flex-wrap gap-2'>
+     {ratePlanModel.map((item) => (
+      <Chip
+       sx={chipStyles}
+       key={item.type}
+       label={item.name}
+       icon={item.icon || undefined}
+      />
+     ))}
+    </div>
     <div className='col-span-full'>
      <FormControlLabel
       label='نام رزرو کننده با سرپرست اتاق یکی می‌باشد.'
