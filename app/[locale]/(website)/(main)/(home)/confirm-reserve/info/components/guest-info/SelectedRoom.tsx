@@ -4,6 +4,8 @@ import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import IconButton from '@mui/material/IconButton';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { useState } from 'react';
 
 export default function SelectedRoom() {
@@ -16,6 +18,9 @@ export default function SelectedRoom() {
      <span className='font-medium text-[0.9rem]'>سوئیت دبل</span>
     </p>
     <div className='bg-neutral-300 h-[1px] flex-grow'></div>
+    <IconButton color='error'>
+     <DeleteOutlinedIcon />
+    </IconButton>
    </div>
    <div className='grid grid-cols-2 gap-4 mb-6'>
     <div className='col-span-full'>
