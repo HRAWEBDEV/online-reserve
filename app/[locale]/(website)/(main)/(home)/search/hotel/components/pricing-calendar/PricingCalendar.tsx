@@ -89,7 +89,13 @@ export default function PricingCalendar({
      </div>
     </div>
    </DialogTitle>
-   <DialogContent dividers>
+   <DialogContent
+    dividers
+    sx={{
+     padding: 0,
+     paddingTop: '1rem',
+    }}
+   >
     <div>
      <StaticDatePicker
       value={checkInDate}
@@ -215,7 +221,7 @@ export default function PricingCalendar({
       }}
      />
     </div>
-    <div className='bg-neutral-200 border border-neutral-300 p-3 rounded-lg flex flex-wrap gap-4 justify-center items-center text-[0.8rem]'>
+    <div className='bg-neutral-200 border border-neutral-300 p-3 flex flex-col lg:flex-row flex-wrap gap-4 justify-center items-center text-[0.8rem]'>
      <div className='flex items-center gap-1'>
       <div
        className={`${calendarStates.get('stopSell')} h-4 w-4 rounded-full`}
