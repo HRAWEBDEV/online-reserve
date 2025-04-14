@@ -77,7 +77,12 @@ export default function Room({
         (item) => roomPlan.accommodationRatePlanModel.ratePlanModel[item.type]
        )
        .map((item) => (
-        <Chip sx={chipStyles} key={item.type} label={item.name} />
+        <Chip
+         sx={chipStyles}
+         key={item.type}
+         label={item.name}
+         icon={item.icon || undefined}
+        />
        ))}
      </div>
      {!room.roomCount && (
