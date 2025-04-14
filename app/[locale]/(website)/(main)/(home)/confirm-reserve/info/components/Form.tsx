@@ -1,4 +1,4 @@
-import GuestInfo from './GuestInfo';
+import GuestInfo from './guest-info/GuestInfo';
 import ReserveInfo from './ReserveInfo';
 
 export default function Form() {

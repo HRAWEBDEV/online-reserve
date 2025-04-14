@@ -2,10 +2,9 @@
 import { useQueryToggler } from '@/hooks/useQueryToggler';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import RoomsModal from './RoomsModal';
+import RoomsModal from '../add-room/RoomsModal';
+import SelectedRoom from './SelectedRoom';
 
 export default function GuestInfo() {
  const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
@@ -28,25 +27,7 @@ export default function GuestInfo() {
    </div>
    <h3 className='font-medium text-base mb-6'>مشخصات سرپرست اتاق‌ها</h3>
    {[1, 2, 3, 4].map((item) => (
-    <div key={item} className='mb-4'>
-     <div className='flex gap-2 items-center mb-4'>
-      <p>
-       <span className='text-neutral-600'>اتاق {item}: </span>
-       <span className='font-medium text-[0.9rem]'>سوئیت دبل</span>
-      </p>
-      <div className='bg-neutral-300 h-[1px] flex-grow'></div>
-     </div>
-     <div className='grid grid-cols-2 gap-4 mb-6'>
-      <div className='col-span-full'>
-       <FormControlLabel
-        label='نام رزرو کننده با سرپرست اتاق یکی می‌باشد.'
-        control={<Checkbox />}
-       />
-      </div>
-      <TextField size='medium' label='نام و نام‌خانوادگی' />
-      <TextField size='medium' label='کدملی' />
-     </div>
-    </div>
+    <SelectedRoom key={item} />
    ))}
    <div className='flex justify-end'>
     <Button className='w-[8rem]' size='large' variant='contained'>
