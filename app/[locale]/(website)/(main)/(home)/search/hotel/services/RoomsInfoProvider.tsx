@@ -40,7 +40,13 @@ export default function RoomsInfoProvider({
  const { watch } = roomsFilterUseForm;
  const checkInDate = watch('fromDate');
  const checkOutDate = watch('untilDate');
+ const bedCount = watch('bedCount');
+ const noBreakfast = watch('noBreakfast');
+ const fullBoard = watch('fullBoard');
+ const noPenalty = watch('noPenalty');
  const nights = dataFns.differenceInDays(checkOutDate, checkInDate);
+ console.log(noBreakfast);
+
  //
  const updateSelectedRoom: StoreActions['updateSelectedRoom'] = useCallback(
   (params) => {
@@ -104,18 +110,33 @@ export default function RoomsInfoProvider({
    getRoomInventoryKey,
    checkInDate.toISOString(),
    checkOutDate.toISOString(),
+   bedCount,
+   String(noBreakfast),
+   String(fullBoard),
+   String(noPenalty),
   ],
   async queryFn({ signal }) {
+   let personQuery = '0';
    if (
     !checkInDate ||
     !checkOutDate ||
     checkInDate.toISOString() === checkOutDate.toISOString()
    )
     return [];
+
+   if (bedCount === 'all') personQuery = '0';
+   if (bedCount === 'one') personQuery = '1';
+   if (bedCount === 'two') personQuery = '2';
+   if (bedCount === 'more') personQuery = '3';
+
    const res = await getRoomInventory({
     signal,
     checkinDate: checkInDate.toISOString(),
     checkoutDate: checkOutDate.toISOString(),
+    person: personQuery,
+    noBreakfast: String(noBreakfast),
+    fullBoard: String(fullBoard),
+    refundable: String(noPenalty),
     ...requestData,
    });
    return res.data;

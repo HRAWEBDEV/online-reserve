@@ -59,6 +59,10 @@ function getRoomInventory({
  checkoutDate: string;
  arzID: number;
  hotelID: number;
+ person: string;
+ noBreakfast: string;
+ fullBoard: string;
+ refundable: string;
 }) {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
