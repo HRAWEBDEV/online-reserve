@@ -130,7 +130,7 @@ export default function RoomsFilters({
 
  return (
   <>
-   <div className='bg-neutral-50 p-4 border-y border-100 mb-6 sticky top-0 z-10'>
+   <div className='bg-neutral-50 p-4 border border-100 mb-6 sticky top-0 z-10 rounded-lg'>
     <div className='container grid gap-2 lg:gap-0 lg:grid-cols-[minmax(15rem,20rem)_1fr]'>
      <div className='lg:pe-3 lg:me-3 lg:border-e border-e-neutral-300'>
       <Popover>

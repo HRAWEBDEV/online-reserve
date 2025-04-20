@@ -7,6 +7,21 @@ const getRoomInventoriesApi = '/CRS/OnlineReservation/GetRoomInventories';
 const getRoomDailyPriceKey = 'get-room-daily-price';
 const getRoomDailyPriceApi = '/CRS/OnlineReservation/GetMonthyInventory';
 
+const getRatePlanTypesKey = 'get-rate-plan-types';
+const getRatePlanTypesApi = '/CRS/OnlineReservation/GetRatePlans';
+
+type RatePlanType = {
+ ratePlanID: number;
+ ratePlanTypeName: string;
+ noBreakfast: boolean;
+ nonRefundable: boolean;
+ minNights: number;
+ freeChargeMinibar: boolean;
+ withLunch: boolean;
+ withDinner: boolean;
+ limitedMenu: boolean;
+};
+
 type RoomAccomodationType = {
  roomOnlineShowRate: number;
  netRoomRate: number;
@@ -16,17 +31,7 @@ type RoomAccomodationType = {
   rateTypePlan: number;
   rateTypeName: string;
   boardID: number;
-  ratePlanModel: {
-   ratePlanID: number;
-   ratePlanTypeName: string;
-   noBreakfast: boolean;
-   nonRefundable: boolean;
-   minNights: number;
-   freeChargeMinibar: boolean;
-   withLunch: boolean;
-   withDinner: boolean;
-   limitedMenu: boolean;
-  };
+  ratePlanModel: RatePlanType;
  };
 } & TRowWithInternalID;
 
@@ -63,6 +68,7 @@ function getRoomInventory({
  noBreakfast: string;
  fullBoard: string;
  refundable: string;
+ ratePlanID: null | string;
 }) {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
@@ -101,7 +107,29 @@ function getRoomPriceDaily({
  );
 }
 
+const getRatePlanTypes = ({
+ signal,
+ ...queries
+}: {
+ signal: AbortSignal;
+ channelID: number;
+ hotelID: number;
+ providerID: number;
+}) => {
+ const searchParams = new URLSearchParams();
+ Object.entries(queries).forEach(([key, val]) => {
+  searchParams.set(key, String(val));
+ });
+ return axios.get<RatePlanType[]>(
+  `${getRatePlanTypesApi}?${searchParams.toString()}`,
+  {
+   signal,
+  }
+ );
+};
+
 export {
+ type RatePlanType,
  type RoomInventory,
  type RoomDailyPrice,
  type RoomAccomodationType,
@@ -109,4 +137,6 @@ export {
  getRoomInventory,
  getRoomDailyPriceKey,
  getRoomPriceDaily,
+ getRatePlanTypesKey,
+ getRatePlanTypes,
 };

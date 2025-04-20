@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import { useRoomsInfoContext } from '../services/roomsInfoContext';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -15,6 +16,7 @@ const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
  const [showInfo, setShowInfo] = useState(false);
+ const { checkInDate, checkOutDate, nights } = useRoomsInfoContext();
  return (
   <aside className='order-1 md:order-2 md:w-[25rem]'>
    <div className='rounded-lg border border-neutral-300 p-4 sticky top-4'>
@@ -25,10 +27,10 @@ export default function ReserveInfo() {
      <div className='flex gap-2 items-center'>
       <div className='flex-grow text-center'>
        <div className='text-primary font-medium  mb-2'>تاریخ ورود</div>
-       <div className='font-medium'>{dateFormatter.format(new Date())}</div>
+       <div className='font-medium'>{dateFormatter.format(checkInDate)}</div>
       </div>
       <div className='flex flex-col items-center text-secondary-dark'>
-       <span className='font-medium'>2 شب</span>
+       <span className='font-medium'>{nights} شب</span>
        <div className='flex items-center'>
         <ArrowLeftIcon className='-ms-3 invisible' />
         <span className='w-[3rem] h-[1px] bg-secondary-dark'></span>
@@ -37,7 +39,7 @@ export default function ReserveInfo() {
       </div>
       <div className='flex-grow text-center'>
        <div className='text-primary font-medium  mb-2'>تاریخ خروج</div>
-       <div className='font-medium'>{dateFormatter.format(new Date())}</div>
+       <div className='font-medium'>{dateFormatter.format(checkOutDate)}</div>
       </div>
      </div>
     </div>

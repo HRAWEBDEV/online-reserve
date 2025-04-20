@@ -2,12 +2,11 @@
 import { useState } from 'react';
 import { websiteMenu } from '../../utils/websiteMenu';
 import Link from 'next/link';
-import HotelReservationMenu from './HotelReservationMenu';
+// import HotelReservationMenu from './HotelReservationMenu';
 import { addClass } from '@/utils/addClass';
 
 export default function Menu() {
- const [reserveHotelAnchorEl, setReserveHotelAnchorEl] =
-  useState<HTMLAnchorElement | null>(null);
+ const [reserveHotelAnchorEl] = useState<HTMLAnchorElement | null>(null);
  return (
   <>
    <div className='ms-8 flex-grow self-stretch hidden lg:block'>
@@ -15,13 +14,13 @@ export default function Menu() {
      {websiteMenu.map((menu) => (
       <li key={menu.type}>
        <Link
-        onMouseEnter={(e) => {
-         const targetLink = e.currentTarget;
-         if (menu.type == 'hotelReservation') {
-          setReserveHotelAnchorEl(targetLink);
-          return;
-         }
-        }}
+        // onMouseEnter={(e) => {
+        //  const targetLink = e.currentTarget;
+        //  if (menu.type == 'hotelReservation') {
+        //   setReserveHotelAnchorEl(targetLink);
+        //   return;
+        //  }
+        // }}
         href='#'
         className={`font-medium transition-colors hover:text-secondary-light focus:text-secondary-light flex items-center h-full ${addClass(
          menu.type === 'hotelReservation' && !!reserveHotelAnchorEl,
@@ -30,12 +29,12 @@ export default function Menu() {
        >
         {menu.title}
        </Link>
-       {menu.type === 'hotelReservation' && (
+       {/* {menu.type === 'hotelReservation' && (
         <HotelReservationMenu
          reserveHotelAnchorEl={reserveHotelAnchorEl}
          setReserveHotelAnchorEl={setReserveHotelAnchorEl}
         />
-       )}
+       )} */}
       </li>
      ))}
     </ul>

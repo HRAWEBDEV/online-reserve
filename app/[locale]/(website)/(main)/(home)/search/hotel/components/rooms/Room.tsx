@@ -12,6 +12,10 @@ import { ratePlanModel } from '../../utils/ratePlanModel';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import Alert from '@mui/material/Alert';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useRoomsInfoContext } from '../../services/roomsInfoContext';
+import { useFormContext } from 'react-hook-form';
+import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -26,6 +30,11 @@ export default function Room({
  room: RoomInventory;
  nights: number;
 }) {
+ const { getValues } = useFormContext<RoomsFilterSchema>();
+ const router = useRouter();
+ const searchParams = useSearchParams();
+ const { requestData } = useRoomsInfoContext();
+
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(
      (
@@ -34,6 +43,27 @@ export default function Room({
      ).toFixed(0)
     )
   : 0;
+
+ function handleReserveRoom() {
+  const { hotelID, channelID, providerID, arzID } = requestData;
+  const fromDateValue = getValues('fromDate');
+  const untilDateValue = getValues('untilDate');
+  const params = new URLSearchParams(searchParams.toString());
+  params.set('hotelID', hotelID.toString());
+  params.set('channelID', channelID.toString());
+  params.set('providerID', providerID.toString());
+  params.set('arzID', arzID.toString());
+  params.set('roomType', room.roomTypeID.toString());
+  params.set('beds', roomPlan.beds.toString());
+  params.set('checkinDate', fromDateValue.toISOString());
+  params.set('checkoutDate', untilDateValue.toISOString());
+  params.set(
+   'ratePlan',
+   roomPlan.accommodationRatePlanModel.ratePlanID.toString()
+  );
+  //
+  router.push(`/confirm-reserve/info?${params.toString()}`);
+ }
 
  return (
   <article className='rounded-lg border border-neutral-300 lg:flex overflow-hidden'>
@@ -144,7 +174,8 @@ export default function Room({
        size='large'
        variant='contained'
        className='w-full'
-       disabled={!room.roomCount}
+       onClick={handleReserveRoom}
+       //  disabled={!room.roomCount}
       >
        ثبت رزرو
       </Button>

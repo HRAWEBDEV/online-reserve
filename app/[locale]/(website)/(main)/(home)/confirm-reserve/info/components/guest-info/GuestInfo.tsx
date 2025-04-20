@@ -26,7 +26,7 @@ export default function GuestInfo() {
     <TextField size='medium' label='شماره همراه' required />
    </div>
    <h3 className='font-medium text-base mb-6'>مشخصات سرپرست اتاق‌ها</h3>
-   {[1, 2, 3, 4].map((item) => (
+   {[1].map((item) => (
     <SelectedRoom key={item} />
    ))}
    <div className='flex justify-end'>

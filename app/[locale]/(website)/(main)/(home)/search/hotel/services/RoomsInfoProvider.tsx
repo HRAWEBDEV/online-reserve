@@ -1,5 +1,5 @@
 'use client';
-import { PropsWithChildren, useMemo, useState, useCallback } from 'react';
+import { PropsWithChildren, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
  type RoomsFilterSchema,
@@ -12,10 +12,11 @@ import { useQuery } from '@tanstack/react-query';
 import {
  getRoomInventory,
  getRoomInventoryKey,
+ getRatePlanTypesKey,
+ getRatePlanTypes,
 } from '../services/HotelApiActions';
 import {
  type Store,
- type StoreActions,
  type SelectedRoom,
  roomsInfoContext,
 } from './roomsInfoContext';
@@ -27,7 +28,7 @@ export default function RoomsInfoProvider({
 }: PropsWithChildren & {
  requestData: Store['requestData'];
 }) {
- const [selectedRooms, setSelectedRooms] = useState<SelectedRoom[]>([]);
+ const [selectedRooms] = useState<SelectedRoom[]>([]);
  const searchParams = useSearchParams();
  const roomsFilterUseForm = useForm<RoomsFilterSchema>({
   defaultValues: {
@@ -38,74 +39,30 @@ export default function RoomsInfoProvider({
   resolver: zodResolver(roomsFilterSchema),
  });
  const { watch } = roomsFilterUseForm;
- const checkInDate = watch('fromDate');
- const checkOutDate = watch('untilDate');
- const bedCount = watch('bedCount');
- const noBreakfast = watch('noBreakfast');
- const fullBoard = watch('fullBoard');
- const noPenalty = watch('noPenalty');
+ const [
+  checkInDate,
+  checkOutDate,
+  bedCount,
+  noBreakfast,
+  fullBoard,
+  noPenalty,
+  ratePlanType,
+ ] = watch([
+  'fromDate',
+  'untilDate',
+  'bedCount',
+  'noBreakfast',
+  'fullBoard',
+  'noPenalty',
+  'ratePlanType',
+ ]);
  const nights = dataFns.differenceInDays(checkOutDate, checkInDate);
- console.log(noBreakfast);
-
  //
- const updateSelectedRoom: StoreActions['updateSelectedRoom'] = useCallback(
-  (params) => {
-   if (params.type === 'add') {
-    setSelectedRooms((pre) => {
-     if (!params.newRoom.roomCount) return pre;
-     const foundRoom = pre.find(
-      (item) => item.internalID === params.newRoom.internalID
-     );
-     if (!foundRoom) return [...pre, { ...params.newRoom, count: 1 }];
-     const newCount = foundRoom.count + 1;
-     if (newCount > params.newRoom.roomCount) return pre;
-     return pre.map((item) => {
-      if (item.internalID === foundRoom.internalID) {
-       return {
-        ...item,
-        count: item.count + 1,
-       };
-      }
-      return item;
-     });
-    });
-   }
-   if (params.type === 'decrease') {
-    setSelectedRooms((pre) => {
-     const foundRoom = pre.find(
-      (item) => item.internalID === params.roomPlanInternalID
-     );
-     if (!foundRoom) return pre;
-     const newCount = foundRoom.count - 1;
-     if (!newCount)
-      return pre.filter(
-       (item) => item.internalID !== params.roomPlanInternalID
-      );
-     return pre.map((item) => {
-      if (item.internalID === foundRoom.internalID) {
-       return {
-        ...item,
-        count: item.count - 1,
-       };
-      }
-      return item;
-     });
-    });
-   }
-   if (params.type === 'deleteAll') {
-    setSelectedRooms((pre) => {
-     return pre.filter((item) => item.internalID !== params.roomPlanInternalID);
-    });
-   }
-  },
-  []
- );
- const deleteSelectedRooms: StoreActions['deleteSelectedRooms'] =
-  useCallback(() => {
-   setSelectedRooms([]);
-  }, []);
- //
- const { data: rooms = [], isFetching } = useQuery({
+ const {
+  data: rooms = [],
+  isFetching,
+  isLoading,
+ } = useQuery({
   queryKey: [
    getRoomInventoryKey,
    checkInDate.toISOString(),
@@ -114,21 +71,27 @@ export default function RoomsInfoProvider({
    String(noBreakfast),
    String(fullBoard),
    String(noPenalty),
+   ratePlanType?.ratePlanID.toString(),
   ],
   async queryFn({ signal }) {
-   let personQuery = '0';
    if (
     !checkInDate ||
     !checkOutDate ||
     checkInDate.toISOString() === checkOutDate.toISOString()
    )
     return [];
-
-   if (bedCount === 'all') personQuery = '0';
-   if (bedCount === 'one') personQuery = '1';
-   if (bedCount === 'two') personQuery = '2';
-   if (bedCount === 'more') personQuery = '3';
-
+   let personQuery = '0';
+   switch (bedCount) {
+    case 'one':
+     personQuery = '1';
+     break;
+    case 'two':
+     personQuery = '2';
+     break;
+    case 'more':
+     personQuery = '3';
+     break;
+   }
    const res = await getRoomInventory({
     signal,
     checkinDate: checkInDate.toISOString(),
@@ -137,6 +100,7 @@ export default function RoomsInfoProvider({
     noBreakfast: String(noBreakfast),
     fullBoard: String(fullBoard),
     refundable: String(noPenalty),
+    ratePlanID: ratePlanType?.ratePlanID.toString() || null,
     ...requestData,
    });
    return res.data;
@@ -148,24 +112,21 @@ export default function RoomsInfoProvider({
    ({
     requestData,
     rooms,
-    isFetchingRooms: isFetching,
+    isFetchingRooms: isFetching || isLoading,
     nights,
     selectedRooms,
     checkInDate,
     checkOutDate,
-    updateSelectedRoom,
-    deleteSelectedRooms,
-   } as Store & StoreActions),
+   } as Store),
   [
    requestData,
    selectedRooms,
    isFetching,
+   isLoading,
    rooms,
    nights,
    checkInDate,
    checkOutDate,
-   updateSelectedRoom,
-   deleteSelectedRooms,
   ]
  );
 

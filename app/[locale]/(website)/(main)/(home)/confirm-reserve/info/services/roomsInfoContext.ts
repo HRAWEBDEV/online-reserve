@@ -2,9 +2,9 @@ import { OutOfContext } from '@/app/utils/OutOfContext';
 import { use, createContext } from 'react';
 import { type TRequestData } from '@/app/utils/getDefaultsReuestData';
 import {
- type RoomInventory,
- type RoomAccomodationType,
-} from '../services/HotelApiActions';
+ RoomInventory,
+ RoomAccomodationType,
+} from '../../../search/hotel/services/HotelApiActions';
 
 type SelectedRoom = RoomAccomodationType &
  Pick<RoomInventory, 'fName' | 'hoteID' | 'roomTypeID' | 'roomCount'> & {
@@ -13,12 +13,9 @@ type SelectedRoom = RoomAccomodationType &
 
 type Store = {
  requestData: TRequestData;
- isFetchingRooms: boolean;
- selectedRooms: SelectedRoom[];
- rooms: RoomInventory[];
- nights: number;
  checkInDate: Date;
  checkOutDate: Date;
+ nights: number;
 };
 
 const roomsInfoContext = createContext<Store | null>(null);

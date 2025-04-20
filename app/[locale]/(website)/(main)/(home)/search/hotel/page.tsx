@@ -32,7 +32,6 @@ export default async function page({
   );
   redirect(`/search/hotel?${urlSearchQuries.toString()}`);
  }
-
  return (
   <div>
    <RoomsInfoProvider requestData={requestData}>

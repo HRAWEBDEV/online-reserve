@@ -34,6 +34,7 @@ export default function RoomsModal({ isOpen, onToggle }: Props) {
   },
   resolver: zodResolver(roomsFilterSchema),
  });
+
  return (
   <Modal
    open={isOpen}
