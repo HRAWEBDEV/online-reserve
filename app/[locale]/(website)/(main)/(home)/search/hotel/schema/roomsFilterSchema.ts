@@ -22,6 +22,7 @@ const roomsFilterSchema = z.object({
  noPenalty: z.boolean(),
  ratePlanType: z
   .object({
+   fName: z.string(),
    ratePlanID: z.number(),
    ratePlanTypeName: z.string(),
    noBreakfast: z.boolean(),

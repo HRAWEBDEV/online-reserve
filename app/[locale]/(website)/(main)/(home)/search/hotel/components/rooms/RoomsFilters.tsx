@@ -1,4 +1,5 @@
 import Radio from '@mui/material/Radio';
+import Autocomplete from '@mui/material/Autocomplete';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
@@ -17,7 +18,9 @@ import {
 import Drawer from '@mui/material/Drawer';
 import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import * as dateFns from 'date-fns';
-import Checkbox from '@mui/material/Checkbox';
+import { useRoomsInfoContext } from '../../services/roomsInfoContext';
+import TextField from '@mui/material/TextField';
+// import Checkbox from '@mui/material/Checkbox';
 
 type Props = {
  showFilters: boolean;
@@ -36,6 +39,7 @@ export default function RoomsFilters({
  toggleFilters,
  result,
 }: Props) {
+ const { ratePlanTypes, isFetchingRatePlanTypes } = useRoomsInfoContext();
  const { isLargeDevice } = useAppMonitorConfig();
  const { watch, setValue, control } = useFormContext<RoomsFilterSchema>();
  const [fromDateValue, untilDateValue] = watch(['fromDate', 'untilDate']);
@@ -69,8 +73,26 @@ export default function RoomsFilters({
      )}
     />
    </div>
-   <div className='flex flex-col lg:flex-row'>
+   <div>
     <Controller
+     control={control}
+     name='ratePlanType'
+     render={({ field }) => (
+      <Autocomplete
+       fullWidth={!isLargeDevice}
+       className='w-[15rem] !bg-background'
+       size='small'
+       disableClearable={false}
+       {...field}
+       onChange={(_, newValue) => field.onChange(newValue)}
+       options={ratePlanTypes}
+       getOptionLabel={(option) => option.fName}
+       loading={isFetchingRatePlanTypes}
+       renderInput={(params) => <TextField {...params} label='نام طرح' />}
+      />
+     )}
+    />
+    {/* <Controller
      name='noBreakfast'
      control={control}
      render={({ field: { value, onChange, ...other } }) => (
@@ -123,7 +145,7 @@ export default function RoomsFilters({
        }
       />
      )}
-    />
+    /> */}
    </div>
   </>
  );

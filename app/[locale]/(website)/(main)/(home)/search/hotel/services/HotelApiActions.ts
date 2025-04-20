@@ -11,6 +11,7 @@ const getRatePlanTypesKey = 'get-rate-plan-types';
 const getRatePlanTypesApi = '/CRS/OnlineReservation/GetRatePlans';
 
 type RatePlanType = {
+ fName: string;
  ratePlanID: number;
  ratePlanTypeName: string;
  noBreakfast: boolean;

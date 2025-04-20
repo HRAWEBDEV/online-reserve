@@ -57,11 +57,25 @@ export default function RoomsInfoProvider({
   'ratePlanType',
  ]);
  const nights = dataFns.differenceInDays(checkOutDate, checkInDate);
+ // rate plan types
+ const {
+  data: ratePlanTypes = [],
+  isLoading: isLoadingRatePlanTypes,
+  isFetching: isFetchingRatePlanTypes,
+  isError: isErrorRatePlanTypes,
+ } = useQuery({
+  queryKey: [getRatePlanTypesKey],
+  async queryFn({ signal }) {
+   const { data } = await getRatePlanTypes({ signal, ...requestData });
+   return data;
+  },
+ });
  //
  const {
   data: rooms = [],
   isFetching,
   isLoading,
+  isError,
  } = useQuery({
   queryKey: [
    getRoomInventoryKey,
@@ -113,10 +127,14 @@ export default function RoomsInfoProvider({
     requestData,
     rooms,
     isFetchingRooms: isFetching || isLoading,
+    isErrorRooms: isError,
     nights,
     selectedRooms,
     checkInDate,
     checkOutDate,
+    ratePlanTypes,
+    isFetchingRatePlanTypes: isFetchingRatePlanTypes || isLoadingRatePlanTypes,
+    isRatePlanTypesError: isErrorRatePlanTypes,
    } as Store),
   [
    requestData,
@@ -125,8 +143,13 @@ export default function RoomsInfoProvider({
    isLoading,
    rooms,
    nights,
+   isError,
    checkInDate,
    checkOutDate,
+   ratePlanTypes,
+   isFetchingRatePlanTypes,
+   isLoadingRatePlanTypes,
+   isErrorRatePlanTypes,
   ]
  );
 

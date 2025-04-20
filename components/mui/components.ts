@@ -3,6 +3,15 @@ import { Theme } from '@mui/material/styles/createTheme';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
 
 export const components: Components<Omit<Theme, 'components'>> = {
+ MuiAutocomplete: {
+  styleOverrides: {
+   paper: {
+    fontSize: 'inherit',
+    color: 'inherit',
+    fontWeight: 'inherit',
+   },
+  },
+ },
  MuiInputLabel: {
   styleOverrides: {
    root: {

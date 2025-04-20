@@ -4,6 +4,7 @@ import { type TRequestData } from '@/app/utils/getDefaultsReuestData';
 import {
  type RoomInventory,
  type RoomAccomodationType,
+ type RatePlanType,
 } from '../services/HotelApiActions';
 
 type SelectedRoom = RoomAccomodationType &
@@ -14,8 +15,12 @@ type SelectedRoom = RoomAccomodationType &
 type Store = {
  requestData: TRequestData;
  isFetchingRooms: boolean;
+ isErrorRooms: boolean;
  selectedRooms: SelectedRoom[];
  rooms: RoomInventory[];
+ ratePlanTypes: RatePlanType[];
+ isFetchingRatePlanTypes: boolean;
+ isRatePlanTypesError: boolean;
  nights: number;
  checkInDate: Date;
  checkOutDate: Date;
