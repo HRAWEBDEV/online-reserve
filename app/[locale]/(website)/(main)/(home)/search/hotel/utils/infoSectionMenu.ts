@@ -12,6 +12,6 @@ export const infoSectionMenu = [
  {
   type: 'houseRules',
   title: 'قوانین و مقررات',
-  href: '#house-rules',
+  href: '#rules',
  },
 ] as const;

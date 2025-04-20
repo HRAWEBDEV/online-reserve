@@ -1,6 +1,6 @@
 export default function HouseRules() {
  return (
-  <section id='house-rules' className='mb-8 container'>
+  <section id='rules' className='mb-8 container'>
    <div>
     <header className='mb-6'>
      <h3 className='font-medium text-xl lg:text-2xl'>قوانین و مقررات</h3>
