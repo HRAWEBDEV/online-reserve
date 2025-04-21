@@ -1,5 +1,4 @@
 'use client';
-import { useState } from 'react';
 import { ratePlanModel } from '../../../../search/hotel/utils/ratePlanModel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -12,11 +11,36 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Chip from '@mui/material/Chip';
+import { useFormContext, Controller } from 'react-hook-form';
+import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
-export default function SelectedRoom() {
- const [guestType, setGuestType] = useState<'normal' | 'foreign'>('normal');
+type Props = {
+ itemIndex: number;
+};
+
+export default function SelectedRoom({ itemIndex }: Props) {
+ const {
+  control,
+  register,
+  watch,
+  setValue,
+  getValues,
+  formState: { errors },
+ } = useFormContext<ReserveInfoSchema>();
+
+ function handleChangeGuestNumber(
+  name: 'adult' | 'child' | 'baby',
+  action: 'increment' | 'decrement'
+ ) {
+  const currentValue =
+   Number(getValues(`guestInfo.${itemIndex}.${name}Count`)) || 0;
+  if (currentValue === 0 && action === 'decrement') return;
+  const newValue = currentValue + (action === 'increment' ? 1 : -1);
+  setValue(`guestInfo.${itemIndex}.${name}Count`, newValue || '');
+ }
+
  return (
   <div className='mb-4'>
    <div className='flex gap-2 items-center mb-4'>
@@ -48,67 +72,154 @@ export default function SelectedRoom() {
      ))}
     </div>
     <div className='col-span-full flex flex-wrap'>
-     <FormControlLabel
-      label='نام رزرو کننده با سرپرست اتاق یکی می‌باشد'
-      control={<Checkbox />}
+     <Controller
+      control={control}
+      name={`guestInfo.${itemIndex}.sameAsReserveInfo`}
+      render={({ field }) => (
+       <FormControlLabel
+        label='نام رزرو کننده با سرپرست اتاق یکی می‌باشد'
+        control={
+         <Checkbox
+          {...field}
+          checked={field.value || false}
+          value={field.value || false}
+         />
+        }
+       />
+      )}
      />
-     <FormControlLabel label='نیم شارژ ورود' control={<Checkbox />} />
-     <FormControlLabel label='نیم شارژ خروج' control={<Checkbox />} />
+     <Controller
+      control={control}
+      name={`guestInfo.${itemIndex}.halfCheckin`}
+      render={({ field }) => (
+       <FormControlLabel
+        label='نیم شارژ ورود'
+        control={
+         <Checkbox
+          {...field}
+          checked={field.value || false}
+          value={field.value || false}
+         />
+        }
+       />
+      )}
+     />
+     <Controller
+      control={control}
+      name={`guestInfo.${itemIndex}.halfCheckout`}
+      render={({ field }) => (
+       <FormControlLabel
+        label='نیم شارژ خروج'
+        control={
+         <Checkbox
+          {...field}
+          checked={field.value || false}
+          value={field.value || false}
+         />
+        }
+       />
+      )}
+     />
     </div>
     <div className='col-span-full'>
-     <ToggleButtonGroup
-      color='error'
-      exclusive
-      value={guestType}
-      onChange={(_, value) => setGuestType(value)}
-     >
-      <ToggleButton value='normal'>مهمان داخلی</ToggleButton>
-      <ToggleButton value='foreign'>مهمان خارجی</ToggleButton>
-     </ToggleButtonGroup>
+     <Controller
+      control={control}
+      name={`guestInfo.${itemIndex}.guestType`}
+      render={({ field }) => (
+       <ToggleButtonGroup
+        {...field}
+        color='error'
+        exclusive
+        value={field.value || 'normal'}
+        onChange={(_, value) => field.onChange(value)}
+       >
+        <ToggleButton value='normal'>مهمان داخلی</ToggleButton>
+        <ToggleButton value='foreign'>مهمان خارجی</ToggleButton>
+       </ToggleButtonGroup>
+      )}
+     />
     </div>
-    <TextField label='نام و نام‌خانوادگی' size='small' />
-    <TextField label='کدملی' size='small' />
+    <TextField
+     label='نام و نام‌خانوادگی'
+     size='small'
+     error={!!errors?.guestInfo?.[itemIndex]?.guestFullName}
+     {...register(`guestInfo.${itemIndex}.guestFullName`)}
+     required
+    />
+    <TextField
+     label='کدملی'
+     size='small'
+     {...register(`guestInfo.${itemIndex}.guestNationalCode`)}
+     required
+    />
     <div></div>
     <div className='col-span-full grid gap-8 lg:grid-cols-3 grid-cols-1'>
      <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
-      <IconButton color='error' className='!bg-red-50'>
+      <IconButton
+       color='error'
+       className='!bg-red-50'
+       onClick={() => handleChangeGuestNumber('adult', 'decrement')}
+      >
        <RemoveCircleOutlineIcon />
       </IconButton>
       <TextField
        fullWidth
        label='بزرگسال'
        size='small'
-       slotProps={{ input: { readOnly: true } }}
+       slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
+       {...register(`guestInfo.${itemIndex}.adultCount`)}
       />
-      <IconButton color='success' className='!bg-teal-50'>
+      <IconButton
+       color='success'
+       className='!bg-teal-50'
+       onClick={() => handleChangeGuestNumber('adult', 'increment')}
+      >
        <ControlPointIcon />
       </IconButton>
      </div>
      <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
-      <IconButton color='error' className='!bg-red-50'>
+      <IconButton
+       color='error'
+       className='!bg-red-50'
+       onClick={() => handleChangeGuestNumber('baby', 'decrement')}
+      >
        <RemoveCircleOutlineIcon />
       </IconButton>
       <TextField
        fullWidth
        label='کودک'
        size='small'
-       slotProps={{ input: { readOnly: true } }}
+       slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
+       {...register(`guestInfo.${itemIndex}.babyCount`)}
       />
-      <IconButton color='success' className='!bg-teal-50'>
+      <IconButton
+       color='success'
+       className='!bg-teal-50'
+       onClick={() => handleChangeGuestNumber('baby', 'increment')}
+      >
        <ControlPointIcon />
       </IconButton>
      </div>
      <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
-      <IconButton color='error' className='!bg-red-50'>
+      <IconButton
+       color='error'
+       className='!bg-red-50'
+       onClick={() => handleChangeGuestNumber('child', 'decrement')}
+      >
        <RemoveCircleOutlineIcon />
       </IconButton>
       <TextField
        fullWidth
        label='نوزاد'
        size='small'
-       slotProps={{ input: { readOnly: true } }}
+       slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
+       {...register(`guestInfo.${itemIndex}.childCount`)}
       />
-      <IconButton color='success' className='!bg-teal-50'>
+      <IconButton
+       color='success'
+       className='!bg-teal-50'
+       onClick={() => handleChangeGuestNumber('child', 'increment')}
+      >
        <ControlPointIcon />
       </IconButton>
      </div>

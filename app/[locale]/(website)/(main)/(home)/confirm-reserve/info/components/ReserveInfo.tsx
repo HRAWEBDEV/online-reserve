@@ -47,7 +47,7 @@ export default function ReserveInfo() {
      </div>
     </div>
     <div className={`hidden ${showInfo ? '!block' : ''} lg:block`}>
-     {[1, 2].map((item) => (
+     {[1].map((item) => (
       <div key={item} className='mb-1'>
        <div className='flex gap-2 items-center mb-3'>
         <p>

@@ -5,9 +5,15 @@ import Button from '@mui/material/Button';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import RoomsModal from '../add-room/RoomsModal';
 import SelectedRoom from './SelectedRoom';
+import { useFormContext } from 'react-hook-form';
+import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
 
 export default function GuestInfo() {
  const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
+ const {
+  register,
+  formState: { errors },
+ } = useFormContext<ReserveInfoSchema>();
  return (
   <form className='p-4 order-2 md:order-1 md:flex-grow rounded-lg border border-neutral-300'>
    <div className='flex gap-4 justify-between items-center mb-4'>
@@ -20,14 +26,37 @@ export default function GuestInfo() {
     </Button>
    </div>
    <div className='grid grid-cols-2 gap-4 mb-6'>
-    <TextField size='medium' label='نام و نام‌خانوادگی' required />
-    <TextField size='medium' label='کدملی' required />
-    <TextField size='medium' label='پست الکترونیکی' />
-    <TextField size='medium' label='شماره همراه' required />
+    <TextField
+     size='medium'
+     label='نام و نام‌خانوادگی'
+     error={!!errors.reserveFullName}
+     required
+     {...register('reserveFullName')}
+    />
+    <TextField
+     size='medium'
+     label='کدملی'
+     error={!!errors.reserveNationalCode}
+     required
+     {...register('reserveNationalCode')}
+    />
+    <TextField
+     size='medium'
+     label='پست الکترونیکی'
+     error={!!errors.reserveEmail}
+     {...register('reserveEmail')}
+    />
+    <TextField
+     size='medium'
+     label='شماره همراه'
+     required
+     error={!!errors.reservePhoneNumber}
+     {...register('reservePhoneNumber')}
+    />
    </div>
    <h3 className='font-medium text-base mb-6'>مشخصات سرپرست اتاق‌ها</h3>
-   {[1].map((item) => (
-    <SelectedRoom key={item} />
+   {[1].map((item, index) => (
+    <SelectedRoom key={item} itemIndex={index} />
    ))}
    <div className='flex justify-end'>
     <Button className='w-[8rem]' size='large' variant='contained'>
