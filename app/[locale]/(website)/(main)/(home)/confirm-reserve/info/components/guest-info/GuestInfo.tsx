@@ -26,14 +26,24 @@ export default function GuestInfo() {
     </Button>
    </div>
    <div className='grid grid-cols-2 gap-4 mb-6'>
+    <div className='grid col-span-full lg:col-auto grid-cols-2 gap-4'>
+     <TextField
+      size='medium'
+      label='نام'
+      error={!!errors.reserveFirstName}
+      required
+      {...register('reserveFirstName')}
+     />
+     <TextField
+      size='medium'
+      label='نام‌خانوادگی'
+      error={!!errors.reserveLastName}
+      required
+      {...register('reserveLastName')}
+     />
+    </div>
     <TextField
-     size='medium'
-     label='نام و نام‌خانوادگی'
-     error={!!errors.reserveFullName}
-     required
-     {...register('reserveFullName')}
-    />
-    <TextField
+     className='col-span-full lg:col-auto'
      size='medium'
      label='کدملی'
      error={!!errors.reserveNationalCode}

@@ -3,6 +3,7 @@ import GuestInfo from './guest-info/GuestInfo';
 import ReserveInfo from './ReserveInfo';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ConfirmReserveProvider from '../services/ConfirmReserveProvider';
 import {
  type ReserveInfoSchema,
  reserveInfoSchema,
@@ -17,10 +18,12 @@ export default function Form() {
  });
  return (
   <section className='container flex flex-col md:flex-row gap-4 mb-10'>
-   <FormProvider {...reserveInfoUseForm}>
-    <GuestInfo />
-    <ReserveInfo />
-   </FormProvider>
+   <ConfirmReserveProvider>
+    <FormProvider {...reserveInfoUseForm}>
+     <GuestInfo />
+     <ReserveInfo />
+    </FormProvider>
+   </ConfirmReserveProvider>
   </section>
  );
 }

@@ -11,8 +11,6 @@ import Button from '@mui/material/Button';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Chip from '@mui/material/Chip';
 import { useFormContext, Controller } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
@@ -142,20 +140,30 @@ export default function SelectedRoom({ itemIndex }: Props) {
       )}
      />
     </div>
-    <TextField
-     label='نام و نام‌خانوادگی'
-     size='small'
-     error={!!errors?.guestInfo?.[itemIndex]?.guestFullName}
-     {...register(`guestInfo.${itemIndex}.guestFullName`)}
-     required
-    />
+    <div className='grid col-span-full lg:col-auto grid-cols-2 gap-4'>
+     <TextField
+      label='نام'
+      size='small'
+      error={!!errors?.guestInfo?.[itemIndex]?.guestFirstName}
+      {...register(`guestInfo.${itemIndex}.guestFirstName`)}
+      required
+     />
+     <TextField
+      label='نام خانوادگی'
+      size='small'
+      error={!!errors?.guestInfo?.[itemIndex]?.guestLastName}
+      {...register(`guestInfo.${itemIndex}.guestLastName`)}
+      required
+     />
+    </div>
     <TextField
      label='کدملی'
      size='small'
+     className='col-span-full lg:col-auto'
      {...register(`guestInfo.${itemIndex}.guestNationalCode`)}
      required
     />
-    <div className='col-span-full flex gap-6 bg-neutral-100 p-3 rounded-lg justify-center lg:flex-row flex-col flex-wrap'>
+    <div className='col-span-full flex gap-6 bg-neutral-100 p-3 justify-center rounded-lg  lg:flex-row flex-col flex-wrap'>
      <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
       <Button
        sx={buttonStyles}

@@ -1,14 +1,16 @@
 import { z } from 'zod';
 
 const defaultValues: Partial<ReserveInfoSchema> = {
- reserveFullName: '',
+ reserveFirstName: '',
+ reserveLastName: '',
  reserveEmail: '',
  reserveNationalCode: '',
  reservePhoneNumber: '',
 };
 
 const reserveInfoSchema = z.object({
- reserveFullName: z.string().min(1, 'این فیلد الزامی است'),
+ reserveFirstName: z.string().min(1, 'این فیلد الزامی است'),
+ reserveLastName: z.string().min(1, 'این فیلد الزامی است'),
  reserveNationalCode: z.string(),
  reservePhoneNumber: z.string(),
  reserveEmail: z.string().email('ایمیل معتبر نیست').or(z.literal('')),
@@ -17,7 +19,8 @@ const reserveInfoSchema = z.object({
    sameAsReserveInfo: z.boolean().default(false),
    halfCheckin: z.boolean().default(false),
    halfCheckout: z.boolean().default(false),
-   guestFullName: z.string().min(1, 'این فیلد الزامی است'),
+   guestFirstName: z.string().min(1, 'این فیلد الزامی است'),
+   guestLastName: z.string().min(1, 'این فیلد الزامی است'),
    guestNationalCode: z.string(),
    guestType: z.enum(['normal', 'foreign']),
    adultCount: z.literal('').or(z.coerce.number()).default(''),
