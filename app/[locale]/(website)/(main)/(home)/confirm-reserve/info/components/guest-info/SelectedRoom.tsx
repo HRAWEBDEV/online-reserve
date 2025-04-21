@@ -9,6 +9,8 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Chip from '@mui/material/Chip';
 
 const chipStyles = { borderRadius: '0.2rem' };
@@ -66,10 +68,50 @@ export default function SelectedRoom() {
     </div>
     <TextField label='نام و نام‌خانوادگی' size='small' />
     <TextField label='کدملی' size='small' />
-    <div className='col-span-full grid gap-4 grid-cols-3'>
-     <TextField type='number' fullWidth label='تعداد بزرگسال' size='small' />
-     <TextField type='number' fullWidth label='تعداد کودک' size='small' />
-     <TextField type='number' fullWidth label='تعداد نوزاد' size='small' />
+    <div></div>
+    <div className='col-span-full grid gap-8 lg:grid-cols-3 grid-cols-1'>
+     <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
+      <IconButton color='error' className='!bg-red-50'>
+       <RemoveCircleOutlineIcon />
+      </IconButton>
+      <TextField
+       fullWidth
+       label='بزرگسال'
+       size='small'
+       slotProps={{ input: { readOnly: true } }}
+      />
+      <IconButton color='success' className='!bg-teal-50'>
+       <ControlPointIcon />
+      </IconButton>
+     </div>
+     <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
+      <IconButton color='error' className='!bg-red-50'>
+       <RemoveCircleOutlineIcon />
+      </IconButton>
+      <TextField
+       fullWidth
+       label='کودک'
+       size='small'
+       slotProps={{ input: { readOnly: true } }}
+      />
+      <IconButton color='success' className='!bg-teal-50'>
+       <ControlPointIcon />
+      </IconButton>
+     </div>
+     <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
+      <IconButton color='error' className='!bg-red-50'>
+       <RemoveCircleOutlineIcon />
+      </IconButton>
+      <TextField
+       fullWidth
+       label='نوزاد'
+       size='small'
+       slotProps={{ input: { readOnly: true } }}
+      />
+      <IconButton color='success' className='!bg-teal-50'>
+       <ControlPointIcon />
+      </IconButton>
+     </div>
     </div>
    </div>
   </div>

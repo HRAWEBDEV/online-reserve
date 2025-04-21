@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
 import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -47,7 +48,7 @@ export default function ReserveInfo() {
     </div>
     <div className={`hidden ${showInfo ? '!block' : ''} lg:block`}>
      {[1, 2].map((item) => (
-      <div key={item} className='mb-4'>
+      <div key={item} className='mb-1'>
        <div className='flex gap-2 items-center mb-3'>
         <p>
          <span className='text-neutral-600'>اتاق {item}: </span>
@@ -63,6 +64,9 @@ export default function ReserveInfo() {
          </span>
         </div>
         <Swiper
+         className='!pb-6 [&]:[--swiper-pagination-bottom:2px]'
+         pagination={{ clickable: true }}
+         modules={[Pagination]}
          spaceBetween={10}
          slidesPerView={2}
          breakpoints={{
