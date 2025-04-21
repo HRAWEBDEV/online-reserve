@@ -1,14 +1,23 @@
 'use client';
 import { PropsWithChildren, useMemo } from 'react';
 import { type Store, roomsInfoContext } from './roomsInfoContext';
-import * as dataFns from 'date-fns';
+import { useSearchParams } from 'next/navigation';
 
 export default function RoomsInfoProvider({
  children,
  ...props
-}: PropsWithChildren & Omit<Store, 'nights'>) {
- const nights = dataFns.differenceInDays(props.checkOutDate, props.checkInDate);
- const ctx = useMemo(() => ({ ...props, nights }), [props, nights]);
+}: PropsWithChildren &
+ Pick<Store, 'requestData' | 'checkInDate' | 'checkOutDate' | 'ratePlanType'>) {
+ const searchParams = useSearchParams();
+ const ctx = useMemo(
+  () =>
+   ({
+    ...props,
+    beds: searchParams.get('beds')?.split(',').map(Number) || [],
+    roomType: searchParams.get('roomType')?.split(',').map(Number) || [],
+   } as Store),
+  [props, searchParams]
+ );
  return (
   <roomsInfoContext.Provider value={ctx}>{children}</roomsInfoContext.Provider>
  );

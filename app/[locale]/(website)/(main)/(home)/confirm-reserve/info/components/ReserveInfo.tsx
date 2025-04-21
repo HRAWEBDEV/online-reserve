@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useRoomsInfoContext } from '../services/roomsInfoContext';
+import * as dateFns from 'date-fns';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -15,8 +16,9 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
 const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
+ const { checkInDate, checkOutDate } = useRoomsInfoContext();
+ const nights = dateFns.differenceInDays(checkOutDate, checkInDate);
  const [showInfo, setShowInfo] = useState(false);
- const { checkInDate, checkOutDate, nights } = useRoomsInfoContext();
  return (
   <aside className='order-1 md:order-2 md:w-[25rem]'>
    <div className='rounded-lg border border-neutral-300 p-4 sticky top-4'>

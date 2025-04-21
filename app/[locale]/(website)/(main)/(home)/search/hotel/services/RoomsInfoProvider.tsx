@@ -1,5 +1,5 @@
 'use client';
-import { PropsWithChildren, useMemo, useState } from 'react';
+import { PropsWithChildren, useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import {
  type RoomsFilterSchema,
@@ -21,6 +21,7 @@ import {
  roomsInfoContext,
 } from './roomsInfoContext';
 import * as dataFns from 'date-fns';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function RoomsInfoProvider({
  requestData,
@@ -28,32 +29,35 @@ export default function RoomsInfoProvider({
 }: PropsWithChildren & {
  requestData: Store['requestData'];
 }) {
+ function getQueryBedCount(): RoomsFilterSchema['bedCount'] {
+  const bedCount = searchParams.get('beds') as RoomsFilterSchema['bedCount'];
+  const parsed = roomsFilterSchema
+   .pick({ bedCount: true })
+   .safeParse({ bedCount });
+  return parsed.success ? bedCount : 'all';
+ }
  const [selectedRooms] = useState<SelectedRoom[]>([]);
+ const router = useRouter();
+ const pathname = usePathname();
  const searchParams = useSearchParams();
+ const fromDateQuery = new Date(searchParams.get('checkinDate') as string);
+ const untilDateQuery = new Date(searchParams.get('checkoutDate') as string);
+ const ratePlanQueryID = Number(searchParams.get('ratePlanID'));
+ const bedCountQuery = getQueryBedCount();
  const roomsFilterUseForm = useForm<RoomsFilterSchema>({
   defaultValues: {
    ...defaultValues,
-   fromDate: new Date(searchParams.get('checkinDate') as string),
-   untilDate: new Date(searchParams.get('checkoutDate') as string),
+   fromDate: fromDateQuery,
+   untilDate: untilDateQuery,
+   bedCount: bedCountQuery,
   },
   resolver: zodResolver(roomsFilterSchema),
  });
- const { watch } = roomsFilterUseForm;
- const [
-  checkInDate,
-  checkOutDate,
-  bedCount,
-  noBreakfast,
-  fullBoard,
-  noPenalty,
-  ratePlanType,
- ] = watch([
+ const { watch, setValue } = roomsFilterUseForm;
+ const [checkInDate, checkOutDate, bedCount, ratePlanType] = watch([
   'fromDate',
   'untilDate',
   'bedCount',
-  'noBreakfast',
-  'fullBoard',
-  'noPenalty',
   'ratePlanType',
  ]);
  const nights = dataFns.differenceInDays(checkOutDate, checkInDate);
@@ -67,6 +71,12 @@ export default function RoomsInfoProvider({
   queryKey: [getRatePlanTypesKey],
   async queryFn({ signal }) {
    const { data } = await getRatePlanTypes({ signal, ...requestData });
+   if (ratePlanQueryID) {
+    const activeRatePlan = data.find(
+     (ratePlan) => ratePlan.ratePlanID === ratePlanQueryID
+    );
+    if (activeRatePlan) setValue('ratePlanType', activeRatePlan);
+   }
    return data;
   },
  });
@@ -79,13 +89,10 @@ export default function RoomsInfoProvider({
  } = useQuery({
   queryKey: [
    getRoomInventoryKey,
-   checkInDate.toISOString(),
-   checkOutDate.toISOString(),
-   bedCount,
-   String(noBreakfast),
-   String(fullBoard),
-   String(noPenalty),
-   ratePlanType?.ratePlanID.toString(),
+   fromDateQuery.toISOString(),
+   untilDateQuery.toISOString(),
+   bedCountQuery,
+   ratePlanQueryID,
   ],
   async queryFn({ signal }) {
    if (
@@ -95,7 +102,7 @@ export default function RoomsInfoProvider({
    )
     return [];
    let personQuery = '0';
-   switch (bedCount) {
+   switch (bedCountQuery) {
     case 'one':
      personQuery = '1';
      break;
@@ -108,13 +115,13 @@ export default function RoomsInfoProvider({
    }
    const res = await getRoomInventory({
     signal,
-    checkinDate: checkInDate.toISOString(),
-    checkoutDate: checkOutDate.toISOString(),
+    checkinDate: fromDateQuery.toISOString(),
+    checkoutDate: untilDateQuery.toISOString(),
     person: personQuery,
-    noBreakfast: String(noBreakfast),
-    fullBoard: String(fullBoard),
-    refundable: String(noPenalty),
-    ratePlanID: ratePlanType?.ratePlanID.toString() || null,
+    noBreakfast: 'false',
+    fullBoard: 'false',
+    refundable: 'false',
+    ratePlanID: ratePlanQueryID ? ratePlanQueryID.toString() : '',
     ...requestData,
    });
    return res.data;
@@ -152,6 +159,26 @@ export default function RoomsInfoProvider({
    isErrorRatePlanTypes,
   ]
  );
+
+ useEffect(() => {
+  const queryParams = new URLSearchParams(searchParams.toString());
+  queryParams.set('checkinDate', checkInDate.toISOString());
+  queryParams.set('checkoutDate', checkOutDate.toISOString());
+  queryParams.set('beds', bedCount);
+  queryParams.set(
+   'ratePlanID',
+   ratePlanType ? ratePlanType.ratePlanID.toString() : ''
+  );
+  router.push(`${pathname}?${queryParams.toString()}`, { scroll: false });
+ }, [
+  checkInDate,
+  checkOutDate,
+  bedCount,
+  ratePlanType,
+  router,
+  searchParams,
+  pathname,
+ ]);
 
  return (
   <roomsInfoContext.Provider value={ctx}>

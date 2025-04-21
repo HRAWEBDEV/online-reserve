@@ -1,7 +1,9 @@
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
+import { type RoomsFilterSchema } from '../../../../search/hotel/schema/roomsFilterSchema';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { useFormContext, Controller } from 'react-hook-form';
 import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -17,12 +19,13 @@ import {
 import Drawer from '@mui/material/Drawer';
 import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import * as dateFns from 'date-fns';
-import Checkbox from '@mui/material/Checkbox';
+import { type RatePlanType } from '../../../../search/hotel/services/HotelApiActions';
 
 type Props = {
  showFilters: boolean;
- toggleFilters: () => void;
  result: number;
+ ratePlanTypes: RatePlanType[];
+ toggleFilters: () => void;
 };
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
@@ -35,6 +38,7 @@ export default function RoomsFilters({
  showFilters,
  toggleFilters,
  result,
+ ratePlanTypes,
 }: Props) {
  const { isLargeDevice } = useAppMonitorConfig();
  const { watch, setValue, control } = useFormContext<RoomsFilterSchema>();
@@ -69,58 +73,23 @@ export default function RoomsFilters({
      )}
     />
    </div>
-   <div className='flex flex-col lg:flex-row'>
+   <div>
     <Controller
-     name='noBreakfast'
      control={control}
-     render={({ field: { value, onChange, ...other } }) => (
-      <FormControlLabel
-       label='بدون صبحانه'
-       control={
-        <Checkbox
-         color='secondary'
-         {...other}
-         onChange={(_, newValue) => onChange(newValue)}
-         checked={value}
-         value={value}
-        />
-       }
-      />
-     )}
-    />
-    <Controller
-     name='noPenalty'
-     control={control}
-     render={({ field: { value, onChange, ...other } }) => (
-      <FormControlLabel
-       label='بدون جریمه'
-       control={
-        <Checkbox
-         color='secondary'
-         {...other}
-         onChange={(_, newValue) => onChange(newValue)}
-         checked={value}
-         value={value}
-        />
-       }
-      />
-     )}
-    />
-    <Controller
-     name='fullBoard'
-     control={control}
-     render={({ field: { value, onChange, ...other } }) => (
-      <FormControlLabel
-       label='فول برد'
-       control={
-        <Checkbox
-         color='secondary'
-         {...other}
-         checked={value}
-         onChange={(_, newValue) => onChange(newValue)}
-         value={value}
-        />
-       }
+     name='ratePlanType'
+     render={({ field }) => (
+      <Autocomplete
+       disabled
+       fullWidth={!isLargeDevice}
+       className='w-[15rem] !bg-background'
+       size='small'
+       disableClearable={false}
+       {...field}
+       onChange={(_, newValue) => field.onChange(newValue)}
+       options={ratePlanTypes}
+       getOptionLabel={(option) => option.fName}
+       loading={false}
+       renderInput={(params) => <TextField {...params} label='نام طرح' />}
       />
      )}
     />

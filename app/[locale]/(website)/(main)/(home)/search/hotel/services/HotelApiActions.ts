@@ -73,7 +73,7 @@ function getRoomInventory({
 }) {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
-  searchParams.set(key, String(val));
+  if (val) searchParams.set(key, String(val));
  });
  return axios.get<RoomInventory[]>(
   `${getRoomInventoriesApi}?${searchParams.toString()}`,

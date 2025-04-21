@@ -51,7 +51,7 @@ export default function RoomsFilters({
      name='bedCount'
      control={control}
      render={({ field }) => (
-      <RadioGroup row={isLargeDevice} {...field}>
+      <RadioGroup {...field} className='!flex-col lg:!flex-row'>
        <FormControlLabel
         label='همه'
         control={<Radio color='success' value='all' />}
@@ -79,8 +79,7 @@ export default function RoomsFilters({
      name='ratePlanType'
      render={({ field }) => (
       <Autocomplete
-       fullWidth={!isLargeDevice}
-       className='w-[15rem] !bg-background'
+       className='w-full lg:w-[15rem] !bg-background '
        size='small'
        disableClearable={false}
        {...field}

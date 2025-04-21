@@ -34,7 +34,7 @@ export default function GuestInfo() {
      تایید
     </Button>
    </div>
-   <RoomsModal isOpen={isQueryTrue} onToggle={handleToggle} />
+   {isQueryTrue && <RoomsModal isOpen={isQueryTrue} onToggle={handleToggle} />}
   </form>
  );
 }
