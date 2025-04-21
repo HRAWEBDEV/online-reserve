@@ -39,6 +39,8 @@ export default function RoomsModal({ isOpen, onToggle }: Props) {
  const roomsFilterUseForm = useForm<RoomsFilterSchema>({
   defaultValues: {
    ...defaultValues,
+   fromDate: checkInDate,
+   untilDate: checkOutDate,
   },
   resolver: zodResolver(roomsFilterSchema),
  });
