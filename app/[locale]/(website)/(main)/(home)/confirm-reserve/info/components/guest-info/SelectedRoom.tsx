@@ -7,7 +7,10 @@ import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Chip from '@mui/material/Chip';
@@ -15,6 +18,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
 
 const chipStyles = { borderRadius: '0.2rem' };
+const buttonStyles = { paddingInline: '0.5rem', minWidth: 'unset' };
 
 type Props = {
  itemIndex: number;
@@ -24,7 +28,6 @@ export default function SelectedRoom({ itemIndex }: Props) {
  const {
   control,
   register,
-  watch,
   setValue,
   getValues,
   formState: { errors },
@@ -152,76 +155,90 @@ export default function SelectedRoom({ itemIndex }: Props) {
      {...register(`guestInfo.${itemIndex}.guestNationalCode`)}
      required
     />
-    <div></div>
-    <div className='col-span-full grid gap-8 lg:grid-cols-3 grid-cols-1'>
-     <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
-      <IconButton
+    <div className='col-span-full flex gap-6 bg-neutral-100 p-3 rounded-lg justify-center lg:flex-row flex-col flex-wrap'>
+     <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
+      <Button
+       sx={buttonStyles}
        color='error'
-       className='!bg-red-50'
+       variant='outlined'
+       className='!bg-background'
        onClick={() => handleChangeGuestNumber('adult', 'decrement')}
       >
-       <RemoveCircleOutlineIcon />
-      </IconButton>
+       <RemoveIcon />
+      </Button>
       <TextField
        fullWidth
        label='بزرگسال'
        size='small'
+       className='!bg-background'
        slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
        {...register(`guestInfo.${itemIndex}.adultCount`)}
       />
-      <IconButton
+      <Button
+       sx={buttonStyles}
+       variant='outlined'
        color='success'
-       className='!bg-teal-50'
+       className='!bg-background'
        onClick={() => handleChangeGuestNumber('adult', 'increment')}
       >
-       <ControlPointIcon />
-      </IconButton>
+       <AddIcon />
+      </Button>
      </div>
-     <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
-      <IconButton
+     <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
+      <Button
+       sx={buttonStyles}
        color='error'
-       className='!bg-red-50'
+       variant='outlined'
+       className='!bg-background'
        onClick={() => handleChangeGuestNumber('baby', 'decrement')}
       >
-       <RemoveCircleOutlineIcon />
-      </IconButton>
+       <RemoveIcon />
+      </Button>
       <TextField
        fullWidth
        label='کودک'
        size='small'
+       className='!bg-background'
        slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
        {...register(`guestInfo.${itemIndex}.babyCount`)}
       />
-      <IconButton
+      <Button
+       sx={buttonStyles}
        color='success'
-       className='!bg-teal-50'
+       variant='outlined'
+       className='!bg-background'
        onClick={() => handleChangeGuestNumber('baby', 'increment')}
       >
-       <ControlPointIcon />
-      </IconButton>
+       <AddIcon />
+      </Button>
      </div>
-     <div className='grid gap-1 grid-cols-[max-content_1fr_max-content]'>
-      <IconButton
+     <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
+      <Button
+       sx={buttonStyles}
        color='error'
-       className='!bg-red-50'
+       variant='outlined'
+       className='!bg-background'
        onClick={() => handleChangeGuestNumber('child', 'decrement')}
       >
-       <RemoveCircleOutlineIcon />
-      </IconButton>
+       <RemoveIcon />
+      </Button>
       <TextField
        fullWidth
        label='نوزاد'
        size='small'
+       className='!bg-background'
        slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
        {...register(`guestInfo.${itemIndex}.childCount`)}
       />
-      <IconButton
+      <Button
+       sx={buttonStyles}
        color='success'
-       className='!bg-teal-50'
+       variant='outlined'
+       className='!bg-background'
        onClick={() => handleChangeGuestNumber('child', 'increment')}
       >
-       <ControlPointIcon />
-      </IconButton>
+       <AddIcon />
+      </Button>
      </div>
     </div>
    </div>
