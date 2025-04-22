@@ -28,6 +28,7 @@ export default function ConfirmReserveProvider({
   checkInDate,
   checkOutDate,
  } = useRoomsInfoContext();
+ const [loadingAddRoom, setLoadingAddRoom] = useState(false);
  const [selectedRooms, setSelectedRooms] = useState<RoomInventory[]>([]);
  const [roomsInfo, setRoomInfo] = useState<RoomInfo[]>(() => {
   const roomInfoCount = Math.min(roomType.length, beds.length);
@@ -43,7 +44,7 @@ export default function ConfirmReserveProvider({
   return roomInfo;
  });
 
- const {} = useQuery({
+ const { isLoading, isFetching } = useQuery({
   enabled: !selectedRooms.length,
   queryKey: [getSelectedRoomsKey],
   async queryFn({ signal }) {
@@ -68,6 +69,7 @@ export default function ConfirmReserveProvider({
      item.roomTypeID === newRoomInfo.roomTypeID
    );
    if (doesExist) return;
+   setLoadingAddRoom(true);
    try {
     const { data } = await getSelectedRoom({
      ratePlanID: ratePlanType,
@@ -80,6 +82,7 @@ export default function ConfirmReserveProvider({
     setSelectedRooms((pre) => [...pre, data]);
     setRoomInfo((pre) => [...pre, newRoomInfo]);
    } finally {
+    setLoadingAddRoom(false);
    }
   },
   [roomsInfo, checkInDate, checkOutDate, ratePlanType, requestData]
@@ -100,8 +103,18 @@ export default function ConfirmReserveProvider({
    removeRoom,
    roomsInfo,
    selectedRooms,
+   loadingAddRoom,
+   isLoadingRooms: isLoading || isFetching,
   }),
-  [addRoom, removeRoom, roomsInfo, selectedRooms]
+  [
+   addRoom,
+   removeRoom,
+   roomsInfo,
+   selectedRooms,
+   loadingAddRoom,
+   isLoading,
+   isFetching,
+  ]
  );
 
  useEffect(() => {
