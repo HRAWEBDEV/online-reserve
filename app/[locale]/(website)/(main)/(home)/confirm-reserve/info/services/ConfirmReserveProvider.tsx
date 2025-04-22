@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { PropsWithChildren } from 'react';
 import { type Store, confirmReserveContext } from './confirmReserveContext';
 import { type RoomInfo } from './addRoomsApiActions';
@@ -10,10 +10,14 @@ import {
  getSelectedRooms,
 } from './addRoomsApiActions';
 import { useRoomsInfoContext } from './roomsInfoContext';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export default function ConfirmReserveProvider({
  children,
 }: PropsWithChildren) {
+ const router = useRouter();
+ const pathname = usePathname();
+ const searchParams = useSearchParams();
  const {
   ratePlanType,
   beds,
@@ -22,8 +26,8 @@ export default function ConfirmReserveProvider({
   checkInDate,
   checkOutDate,
  } = useRoomsInfoContext();
- const [selectedRooms] = useState<RoomInventory[]>([]);
- const [roomsInfo] = useState<RoomInfo[]>(() => {
+ const [selectedRooms, setSelectedRooms] = useState<RoomInventory[]>([]);
+ const [roomsInfo, setRoomInfo] = useState<RoomInfo[]>(() => {
   const roomInfoCount = Math.min(roomType.length, beds.length);
   const roomInfo: RoomInfo[] = [];
   for (let i = 0; i <= roomInfoCount - 1; i++) {
@@ -49,12 +53,31 @@ export default function ConfirmReserveProvider({
     roomInfo: roomsInfo,
     ...requestData,
    });
+   setSelectedRooms(data);
    return data;
   },
  });
 
- const addRoom: Store['addRoom'] = useCallback(() => {}, []);
- const removeRoom: Store['removeRoom'] = useCallback(() => {}, []);
+ const addRoom: Store['addRoom'] = useCallback((newRoomInfo) => {
+  setRoomInfo((pre) => {
+   const doesExist = pre.find(
+    (item) =>
+     item.bedCount === newRoomInfo.bedCount &&
+     item.roomTypeID === newRoomInfo.roomTypeID
+   );
+   if (doesExist) return pre;
+   return [...pre, { ...newRoomInfo }];
+  });
+ }, []);
+ const removeRoom: Store['removeRoom'] = useCallback((newRoomInfo) => {
+  setRoomInfo((pre) => {
+   return pre.filter(
+    (item) =>
+     item.bedCount !== newRoomInfo.bedCount &&
+     item.roomTypeID !== newRoomInfo.roomTypeID
+   );
+  });
+ }, []);
 
  const ctx: Store = useMemo(
   () => ({
@@ -65,6 +88,16 @@ export default function ConfirmReserveProvider({
   }),
   [addRoom, removeRoom, roomsInfo, selectedRooms]
  );
+
+ useEffect(() => {
+  const newQueries = new URLSearchParams(searchParams.toString());
+  newQueries.set('beds', roomsInfo.map((item) => item.bedCount).toString());
+  newQueries.set(
+   'roomType',
+   roomsInfo.map((item) => item.roomTypeID).toString()
+  );
+  router.push(`${pathname}?${newQueries.toString()}`);
+ }, [roomsInfo, searchParams, pathname, router]);
 
  return (
   <confirmReserveContext.Provider value={ctx}>
