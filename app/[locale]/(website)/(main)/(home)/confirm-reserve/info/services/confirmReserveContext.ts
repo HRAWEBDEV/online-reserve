@@ -6,7 +6,7 @@ import { type RoomInfo } from './addRoomsApiActions';
 type Store = {
  selectedRooms: RoomInventory[];
  roomsInfo: RoomInfo[];
- addRoom: (roomInfo: RoomInfo) => void;
+ addRoom: (roomInfo: RoomInfo) => Promise<void>;
  removeRoom: (roomInfo: RoomInfo) => void;
 };
 

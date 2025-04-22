@@ -13,8 +13,8 @@ type RoomInfo = {
 };
 
 const getSelectedRooms = ({
- signal,
  roomInfo,
+ signal,
  ...queries
 }: {
  signal: AbortSignal;
@@ -39,11 +39,10 @@ const getSelectedRooms = ({
   }
  );
 };
+let getSelectedRoomAbortController: AbortController | null = null;
 const getSelectedRoom = ({
- signal,
  ...queries
 }: {
- signal: AbortSignal;
  channelID: number;
  hotelID: number;
  providerID: number;
@@ -54,6 +53,8 @@ const getSelectedRoom = ({
  bedCount: number;
  roomTypeID: number;
 }) => {
+ getSelectedRoomAbortController?.abort();
+ getSelectedRoomAbortController = new AbortController();
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
@@ -61,7 +62,7 @@ const getSelectedRoom = ({
  return axios.get<RoomInventory>(
   `${getSelectedRoomApi}?${searchParams.toString()}`,
   {
-   signal,
+   signal: getSelectedRoomAbortController.signal,
   }
  );
 };
@@ -74,4 +75,5 @@ export {
  getSelectedRooms,
  getSelectedRoomKey,
  getSelectedRoom,
+ getSelectedRoomAbortController,
 };

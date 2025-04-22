@@ -8,6 +8,8 @@ import {
  type RoomInventory,
  getSelectedRoomsKey,
  getSelectedRooms,
+ getSelectedRoomAbortController,
+ getSelectedRoom,
 } from './addRoomsApiActions';
 import { useRoomsInfoContext } from './roomsInfoContext';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -58,17 +60,30 @@ export default function ConfirmReserveProvider({
   },
  });
 
- const addRoom: Store['addRoom'] = useCallback((newRoomInfo) => {
-  setRoomInfo((pre) => {
-   const doesExist = pre.find(
+ const addRoom: Store['addRoom'] = useCallback(
+  async (newRoomInfo) => {
+   const doesExist = roomsInfo.find(
     (item) =>
      item.bedCount === newRoomInfo.bedCount &&
      item.roomTypeID === newRoomInfo.roomTypeID
    );
-   if (doesExist) return pre;
-   return [...pre, { ...newRoomInfo }];
-  });
- }, []);
+   if (doesExist) return;
+   try {
+    const { data } = await getSelectedRoom({
+     ratePlanID: ratePlanType,
+     startDate: checkInDate.toISOString(),
+     endDate: checkOutDate.toISOString(),
+     bedCount: newRoomInfo.bedCount,
+     roomTypeID: newRoomInfo.roomTypeID,
+     ...requestData,
+    });
+    setSelectedRooms((pre) => [...pre, data]);
+    setRoomInfo((pre) => [...pre, newRoomInfo]);
+   } finally {
+   }
+  },
+  [roomsInfo, checkInDate, checkOutDate, ratePlanType, requestData]
+ );
  const removeRoom: Store['removeRoom'] = useCallback((newRoomInfo) => {
   setRoomInfo((pre) => {
    return pre.filter(
@@ -98,6 +113,10 @@ export default function ConfirmReserveProvider({
   );
   router.push(`${pathname}?${newQueries.toString()}`);
  }, [roomsInfo, searchParams, pathname, router]);
+
+ useEffect(() => {
+  return () => getSelectedRoomAbortController?.abort();
+ });
 
  return (
   <confirmReserveContext.Provider value={ctx}>
