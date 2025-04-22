@@ -33,7 +33,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
   getValues,
   formState: { errors },
  } = useFormContext<ReserveInfoSchema>();
- const { removeRoom } = useConfirmReserveContext();
+ const { removeRoom, selectedRooms } = useConfirmReserveContext();
 
  function handleChangeGuestNumber(
   name: 'adult' | 'child' | 'baby',
@@ -61,7 +61,11 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
      <span className='font-medium text-[0.9rem]'>{room.fName}</span>
     </p>
     <div className='bg-neutral-600 h-[1px] flex-grow'></div>
-    <IconButton color='error' onClick={handleRemoveRoom}>
+    <IconButton
+     color='error'
+     onClick={handleRemoveRoom}
+     disabled={selectedRooms.length < 2}
+    >
      <DeleteOutlinedIcon />
     </IconButton>
    </div>

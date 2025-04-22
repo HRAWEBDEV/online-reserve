@@ -27,7 +27,6 @@ export default function Room({
  closeModal: () => void;
 }) {
  const { addRoom } = useConfirmReserveContext();
-
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(
      (

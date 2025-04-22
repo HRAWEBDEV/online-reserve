@@ -91,14 +91,14 @@ export default function ConfirmReserveProvider({
   setSelectedRooms((pre) =>
    pre.filter(
     (item) =>
-     item.roomTypeID !== newRoomInfo.roomTypeID &&
+     item.roomTypeID !== newRoomInfo.roomTypeID ||
      item.accommodationTypePrice.beds !== newRoomInfo.bedCount
    )
   );
   setRoomInfo((pre) => {
    return pre.filter(
     (item) =>
-     item.bedCount !== newRoomInfo.bedCount &&
+     item.bedCount !== newRoomInfo.bedCount ||
      item.roomTypeID !== newRoomInfo.roomTypeID
    );
   });
