@@ -88,6 +88,13 @@ export default function ConfirmReserveProvider({
   [roomsInfo, checkInDate, checkOutDate, ratePlanType, requestData]
  );
  const removeRoom: Store['removeRoom'] = useCallback((newRoomInfo) => {
+  setSelectedRooms((pre) =>
+   pre.filter(
+    (item) =>
+     item.roomTypeID !== newRoomInfo.roomTypeID &&
+     item.accommodationTypePrice.beds !== newRoomInfo.bedCount
+   )
+  );
   setRoomInfo((pre) => {
    return pre.filter(
     (item) =>
@@ -124,12 +131,12 @@ export default function ConfirmReserveProvider({
    'roomType',
    roomsInfo.map((item) => item.roomTypeID).toString()
   );
-  router.push(`${pathname}?${newQueries.toString()}`);
+  router.replace(`${pathname}?${newQueries.toString()}`, { scroll: false });
  }, [roomsInfo, searchParams, pathname, router]);
 
  useEffect(() => {
   return () => getSelectedRoomAbortController?.abort();
- });
+ }, []);
 
  return (
   <confirmReserveContext.Provider value={ctx}>

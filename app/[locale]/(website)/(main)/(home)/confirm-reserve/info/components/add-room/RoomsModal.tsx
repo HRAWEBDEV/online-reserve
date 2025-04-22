@@ -136,6 +136,7 @@ export default function RoomsModal({ isOpen, onToggle }: Props) {
       isLoadingRooms={isFetching || isLoading}
       rooms={rooms}
       nights={nights}
+      closeModal={() => onToggle()}
      />
     </FormProvider>
    </ModalContent>

@@ -17,6 +17,7 @@ type Props = {
  rooms: RoomInventory[];
  nights: number;
  toggleFilters: () => void;
+ closeModal: () => void;
 };
 
 export default function RoomsList({
@@ -25,6 +26,7 @@ export default function RoomsList({
  isLoadingRooms,
  nights,
  rooms,
+ closeModal,
 }: Props) {
  const { isLargeDevice } = useAppMonitorConfig();
  const { getID } = useInternalID();
@@ -82,6 +84,7 @@ export default function RoomsList({
           nights={nights}
           roomPlan={roomPlan}
           room={room}
+          closeModal={closeModal}
          />
         );
        })}

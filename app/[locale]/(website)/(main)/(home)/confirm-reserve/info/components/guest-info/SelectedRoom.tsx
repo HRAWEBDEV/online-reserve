@@ -15,6 +15,7 @@ import Chip from '@mui/material/Chip';
 import { useFormContext, Controller } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
 import { type RoomInventory } from '../../services/addRoomsApiActions';
+import { useConfirmReserveContext } from '../../services/confirmReserveContext';
 
 const chipStyles = { borderRadius: '0.2rem' };
 const buttonStyles = { paddingInline: '0.5rem', minWidth: 'unset' };
@@ -32,6 +33,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
   getValues,
   formState: { errors },
  } = useFormContext<ReserveInfoSchema>();
+ const { removeRoom } = useConfirmReserveContext();
 
  function handleChangeGuestNumber(
   name: 'adult' | 'child' | 'baby',
@@ -44,6 +46,13 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
   setValue(`guestInfo.${itemIndex}.${name}Count`, newValue || '');
  }
 
+ function handleRemoveRoom() {
+  removeRoom({
+   bedCount: room.accommodationTypePrice.beds,
+   roomTypeID: room.roomTypeID,
+  });
+ }
+
  return (
   <div className='mb-4'>
    <div className='flex gap-2 items-center mb-4'>
@@ -52,7 +61,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
      <span className='font-medium text-[0.9rem]'>{room.fName}</span>
     </p>
     <div className='bg-neutral-600 h-[1px] flex-grow'></div>
-    <IconButton color='error'>
+    <IconButton color='error' onClick={handleRemoveRoom}>
      <DeleteOutlinedIcon />
     </IconButton>
    </div>

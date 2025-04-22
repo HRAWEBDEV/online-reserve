@@ -53,7 +53,7 @@ export default function ReserveInfo() {
       <div key={room.internalID} className='mb-1'>
        <div className='flex gap-2 items-center mb-3'>
         <p>
-         <span className='text-neutral-600'>اتاق {i+1}: </span>
+         <span className='text-neutral-600'>اتاق {i + 1}: </span>
          <span className='font-medium text-[0.9rem]'>{room.fName}</span>
         </p>
         <div className='bg-neutral-300 h-[1px] flex-grow'></div>
@@ -64,7 +64,7 @@ export default function ReserveInfo() {
          <span>
           <strong>
            {numberFormatter.format(room.accommodationTypePrice.netRoomRate)}
-          </strong>
+          </strong>{' '}
           تومان
          </span>
         </div>
@@ -80,8 +80,8 @@ export default function ReserveInfo() {
           },
          }}
         >
-         {room.accommodationTypePrice.dailyPrices.map((daily, i) => (
-          <SwiperSlide key={daily.date}>
+         {Array.from({ length: nights }, (_, i) => i).map((i) => (
+          <SwiperSlide key={i}>
            <div className='border border-neutral-300 rounded-lg p-2'>
             <div className='font-medium text-[0.7rem] text-center text-primary-dark border-b border-neutral-300 mb-2 pb-2'>
              {dateFormatter.format(dateFns.addDays(checkInDate, i))}
@@ -98,7 +98,11 @@ export default function ReserveInfo() {
             </div> */}
             <div className='text-[0.75rem] flex justify-center'>
              <span>
-              <strong>{numberFormatter.format(daily.price)}</strong>
+              <strong>
+               {numberFormatter.format(
+                room.accommodationTypePrice.dailyPrices[i].price
+               )}
+              </strong>
               <span className='text-[0.7rem] ps-1'>تومان</span>
              </span>
             </div>

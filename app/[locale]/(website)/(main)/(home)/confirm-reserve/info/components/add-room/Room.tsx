@@ -11,10 +11,7 @@ import { ratePlanModel } from '../../../../search/hotel/utils/ratePlanModel';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import Alert from '@mui/material/Alert';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useRoomsInfoContext } from '../../services/roomsInfoContext';
-import { useFormContext } from 'react-hook-form';
-import { type RoomsFilterSchema } from '../../../../search/hotel/schema/roomsFilterSchema';
+import { useConfirmReserveContext } from '../../services/confirmReserveContext';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -22,15 +19,14 @@ export default function Room({
  roomPlan,
  room,
  nights,
+ closeModal,
 }: {
  roomPlan: RoomAccomodationType;
  room: RoomInventory;
  nights: number;
+ closeModal: () => void;
 }) {
- const { getValues } = useFormContext<RoomsFilterSchema>();
- const router = useRouter();
- const searchParams = useSearchParams();
- const { requestData } = useRoomsInfoContext();
+ const { addRoom } = useConfirmReserveContext();
 
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(
@@ -42,24 +38,11 @@ export default function Room({
   : 0;
 
  function handleReserveRoom() {
-  const { hotelID, channelID, providerID, arzID } = requestData;
-  const fromDateValue = getValues('fromDate');
-  const untilDateValue = getValues('untilDate');
-  const params = new URLSearchParams(searchParams.toString());
-  params.set('hotelID', hotelID.toString());
-  params.set('channelID', channelID.toString());
-  params.set('providerID', providerID.toString());
-  params.set('arzID', arzID.toString());
-  params.set('roomType', room.roomTypeID.toString());
-  params.set('beds', roomPlan.beds.toString());
-  params.set('checkinDate', fromDateValue.toISOString());
-  params.set('checkoutDate', untilDateValue.toISOString());
-  params.set(
-   'ratePlan',
-   roomPlan.accommodationRatePlanModel.ratePlanID.toString()
-  );
-  //
-  router.push(`/confirm-reserve/info?${params.toString()}`);
+  addRoom({
+   bedCount: roomPlan.beds,
+   roomTypeID: room.roomTypeID,
+  });
+  closeModal();
  }
 
  return (
@@ -154,7 +137,6 @@ export default function Room({
        variant='contained'
        className='w-full'
        onClick={handleReserveRoom}
-       disabled={!room.roomCount}
       >
        ثبت رزرو
       </Button>
