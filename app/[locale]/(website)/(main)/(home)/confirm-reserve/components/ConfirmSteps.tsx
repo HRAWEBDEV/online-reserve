@@ -5,7 +5,7 @@ import Step from '@mui/material/Step';
 
 export default function ConfirmSteps() {
  return (
-  <div className='container'>
+  <div className='container bg-background sticky top-0 z-10'>
    <div className='py-6 w-[min(100%,40rem)] mx-auto'>
     <Stepper>
      <Step completed={false}>

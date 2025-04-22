@@ -57,10 +57,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
  }
 
  function handleRemoveRoom() {
-  removeRoom({
-   bedCount: room.accommodationTypePrice.beds,
-   roomTypeID: room.roomTypeID,
-  });
+  removeRoom(room.internalID!, itemIndex);
  }
 
  return (

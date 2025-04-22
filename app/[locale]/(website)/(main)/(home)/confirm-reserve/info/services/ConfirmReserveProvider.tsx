@@ -63,12 +63,6 @@ export default function ConfirmReserveProvider({
 
  const addRoom: Store['addRoom'] = useCallback(
   async (newRoomInfo) => {
-   const doesExist = roomsInfo.find(
-    (item) =>
-     item.bedCount === newRoomInfo.bedCount &&
-     item.roomTypeID === newRoomInfo.roomTypeID
-   );
-   if (doesExist) return;
    setLoadingAddRoom(true);
    try {
     const { data } = await getSelectedRoom({
@@ -85,22 +79,13 @@ export default function ConfirmReserveProvider({
     setLoadingAddRoom(false);
    }
   },
-  [roomsInfo, checkInDate, checkOutDate, ratePlanType, requestData]
+  [checkInDate, checkOutDate, ratePlanType, requestData]
  );
- const removeRoom: Store['removeRoom'] = useCallback((newRoomInfo) => {
-  setSelectedRooms((pre) =>
-   pre.filter(
-    (item) =>
-     item.roomTypeID !== newRoomInfo.roomTypeID ||
-     item.accommodationTypePrice.beds !== newRoomInfo.bedCount
-   )
-  );
+
+ const removeRoom: Store['removeRoom'] = useCallback((id, itemIndex) => {
+  setSelectedRooms((pre) => pre.filter((item) => item.internalID !== id));
   setRoomInfo((pre) => {
-   return pre.filter(
-    (item) =>
-     item.bedCount !== newRoomInfo.bedCount ||
-     item.roomTypeID !== newRoomInfo.roomTypeID
-   );
+   return pre.filter((_, i) => i !== itemIndex);
   });
  }, []);
 

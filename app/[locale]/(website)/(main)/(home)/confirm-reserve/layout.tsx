@@ -1,11 +1,14 @@
 import { PropsWithChildren } from 'react';
 import ConfirmSteps from './components/ConfirmSteps';
+import ConfirmationUseForm from './components/ConfirmationUseForm';
 
 export default function layout({ children }: PropsWithChildren) {
  return (
   <div>
-   <ConfirmSteps />
-   {children}
+   <ConfirmationUseForm>
+    <ConfirmSteps />
+    {children}
+   </ConfirmationUseForm>
   </div>
  );
 }

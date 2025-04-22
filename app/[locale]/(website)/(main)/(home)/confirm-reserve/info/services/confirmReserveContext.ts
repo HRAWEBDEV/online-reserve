@@ -11,7 +11,7 @@ type Store = {
  loadingAddRoom: boolean;
  handleConfirmReserve: (reserveSchema: ReserveInfoSchema) => Promise<void>;
  addRoom: (roomInfo: RoomInfo) => Promise<void>;
- removeRoom: (roomInfo: RoomInfo) => void;
+ removeRoom: (id: number,i:number) => void;
 };
 
 const confirmReserveContext = createContext<Store | null>(null);
