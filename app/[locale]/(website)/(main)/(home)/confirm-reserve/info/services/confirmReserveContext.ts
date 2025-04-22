@@ -1,8 +1,13 @@
 import { OutOfContext } from '@/app/utils/OutOfContext';
 import { createContext, useContext } from 'react';
+import { type RoomInventory } from '../../../search/hotel/services/HotelApiActions';
+import { type RoomInfo } from './addRoomsApiActions';
 
 type Store = {
- test: string;
+ selectedRooms: RoomInventory[];
+ roomsInfo: RoomInfo[];
+ addRoom: (roomInfo: RoomInfo) => void;
+ removeRoom: (roomInfo: RoomInfo) => void;
 };
 
 const confirmReserveContext = createContext<Store | null>(null);
