@@ -27,6 +27,10 @@ type RoomAccomodationType = {
  roomOnlineShowRate: number;
  netRoomRate: number;
  beds: number;
+ dailyPrices: {
+  price: number;
+  date: string;
+ }[];
  accommodationRatePlanModel: {
   ratePlanID: number;
   rateTypePlan: number;
@@ -43,6 +47,7 @@ type RoomInventory = {
  fixBeds: number;
  roomCount: number;
  accommodationTypePrices: RoomAccomodationType[];
+ accommodationTypePrice: RoomAccomodationType;
 } & TRowWithInternalID;
 
 type RoomDailyPrice = {

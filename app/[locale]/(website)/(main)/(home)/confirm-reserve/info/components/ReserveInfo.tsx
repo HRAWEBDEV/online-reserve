@@ -8,6 +8,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useRoomsInfoContext } from '../services/roomsInfoContext';
 import * as dateFns from 'date-fns';
+import { useConfirmReserveContext } from '../services/confirmReserveContext';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -17,6 +18,7 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
 const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
+ const { selectedRooms } = useConfirmReserveContext();
  const { checkInDate, checkOutDate } = useRoomsInfoContext();
  const nights = dateFns.differenceInDays(checkOutDate, checkInDate);
  const [showInfo, setShowInfo] = useState(false);
@@ -47,12 +49,12 @@ export default function ReserveInfo() {
      </div>
     </div>
     <div className={`hidden ${showInfo ? '!block' : ''} lg:block`}>
-     {[1].map((item) => (
-      <div key={item} className='mb-1'>
+     {selectedRooms.map((room, i) => (
+      <div key={room.internalID} className='mb-1'>
        <div className='flex gap-2 items-center mb-3'>
         <p>
-         <span className='text-neutral-600'>اتاق {item}: </span>
-         <span className='font-medium text-[0.9rem]'>سوئیت دبل</span>
+         <span className='text-neutral-600'>اتاق {i+1}: </span>
+         <span className='font-medium text-[0.9rem]'>{room.fName}</span>
         </p>
         <div className='bg-neutral-300 h-[1px] flex-grow'></div>
        </div>
@@ -60,7 +62,10 @@ export default function ReserveInfo() {
         <div className='px-4 flex justify-between gap-2 mb-3'>
          <span className='font-medium'>قیمت: </span>
          <span>
-          <strong>{numberFormatter.format(1456000)}</strong> تومان
+          <strong>
+           {numberFormatter.format(room.accommodationTypePrice.netRoomRate)}
+          </strong>
+          تومان
          </span>
         </div>
         <Swiper
@@ -75,13 +80,13 @@ export default function ReserveInfo() {
           },
          }}
         >
-         {[1, 2, 3, 4, 5].map((item) => (
-          <SwiperSlide key={item}>
+         {room.accommodationTypePrice.dailyPrices.map((daily, i) => (
+          <SwiperSlide key={daily.date}>
            <div className='border border-neutral-300 rounded-lg p-2'>
             <div className='font-medium text-[0.7rem] text-center text-primary-dark border-b border-neutral-300 mb-2 pb-2'>
-             {dateFormatter.format(new Date())}
+             {dateFormatter.format(dateFns.addDays(checkInDate, i))}
             </div>
-            <div className='flex gap-2 items-center text-[0.7rem] mb-2 justify-center'>
+            {/* <div className='flex gap-2 items-center text-[0.7rem] mb-2 justify-center'>
              <span>
               <span className='line-through text-red-600'>
                {numberFormatter.format(1455566000)}
@@ -90,10 +95,10 @@ export default function ReserveInfo() {
              <div className='bg-teal-500 text-primary-foreground flex items-center justify-center rounded-full w-[1.5rem] h-[1.5rem] text-[0.75rem] font-medium'>
               12%
              </div>
-            </div>
+            </div> */}
             <div className='text-[0.75rem] flex justify-center'>
              <span>
-              <strong>{numberFormatter.format(1455566000)}</strong>
+              <strong>{numberFormatter.format(daily.price)}</strong>
               <span className='text-[0.7rem] ps-1'>تومان</span>
              </span>
             </div>

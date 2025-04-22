@@ -14,15 +14,17 @@ import AddIcon from '@mui/icons-material/Add';
 import Chip from '@mui/material/Chip';
 import { useFormContext, Controller } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
+import { type RoomInventory } from '../../services/addRoomsApiActions';
 
 const chipStyles = { borderRadius: '0.2rem' };
 const buttonStyles = { paddingInline: '0.5rem', minWidth: 'unset' };
 
 type Props = {
  itemIndex: number;
+ room: RoomInventory;
 };
 
-export default function SelectedRoom({ itemIndex }: Props) {
+export default function SelectedRoom({ itemIndex, room }: Props) {
  const {
   control,
   register,
@@ -47,7 +49,7 @@ export default function SelectedRoom({ itemIndex }: Props) {
    <div className='flex gap-2 items-center mb-4'>
     <p>
      <span className='text-neutral-600'>اتاق {1}: </span>
-     <span className='font-medium text-[0.9rem]'>سوئیت دبل</span>
+     <span className='font-medium text-[0.9rem]'>{room.fName}</span>
     </p>
     <div className='bg-neutral-600 h-[1px] flex-grow'></div>
     <IconButton color='error'>
@@ -59,18 +61,25 @@ export default function SelectedRoom({ itemIndex }: Props) {
      <div className='flex items-center gap-1 text-neutral-600 font-medium'>
       <PersonOutlineOutlinedIcon />
       <span>تعداد: </span>
-      <span>{1}نفر</span>
+      <span>{room.accommodationTypePrice.beds}نفر</span>
      </div>
     </div>
     <div className='col-span-full flex flex-wrap gap-2'>
-     {ratePlanModel.map((item) => (
-      <Chip
-       sx={chipStyles}
-       key={item.type}
-       label={item.name}
-       icon={item.icon || undefined}
-      />
-     ))}
+     {ratePlanModel
+      .filter(
+       (item) =>
+        room.accommodationTypePrice.accommodationRatePlanModel.ratePlanModel[
+         item.type
+        ]
+      )
+      .map((item) => (
+       <Chip
+        sx={chipStyles}
+        key={item.type}
+        label={item.name}
+        icon={item.icon || undefined}
+       />
+      ))}
     </div>
     <div className='col-span-full flex flex-wrap'>
      <Controller

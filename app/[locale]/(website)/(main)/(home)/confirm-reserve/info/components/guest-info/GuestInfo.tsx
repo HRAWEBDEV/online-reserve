@@ -7,9 +7,13 @@ import RoomsModal from '../add-room/RoomsModal';
 import SelectedRoom from './SelectedRoom';
 import { useFormContext } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
+import { useConfirmReserveContext } from '../../services/confirmReserveContext';
+import { useInternalID } from '@/hooks/useInternalID';
 
 export default function GuestInfo() {
  const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
+ const { getID } = useInternalID();
+ const { selectedRooms } = useConfirmReserveContext();
  const {
   register,
   formState: { errors },
@@ -65,9 +69,10 @@ export default function GuestInfo() {
     />
    </div>
    <h3 className='font-medium text-base mb-6'>مشخصات سرپرست اتاق‌ها</h3>
-   {[1].map((item, index) => (
-    <SelectedRoom key={item} itemIndex={index} />
-   ))}
+   {selectedRooms.map((room, i) => {
+    getID(room);
+    return <SelectedRoom key={room.internalID} room={room} itemIndex={i} />;
+   })}
    <div className='flex justify-end'>
     <Button className='w-[8rem]' size='large' variant='contained'>
      تایید
