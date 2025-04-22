@@ -65,7 +65,7 @@ export default function ReserveInfo() {
           <strong>
            {numberFormatter.format(room.accommodationTypePrice.netRoomRate)}
           </strong>{' '}
-          تومان
+          ریال
          </span>
         </div>
         <Swiper
@@ -103,7 +103,7 @@ export default function ReserveInfo() {
                 room.accommodationTypePrice.dailyPrices[i].price
                )}
               </strong>
-              <span className='text-[0.7rem] ps-1'>تومان</span>
+              <span className='text-[0.7rem] ps-1'>ریال</span>
              </span>
             </div>
            </div>

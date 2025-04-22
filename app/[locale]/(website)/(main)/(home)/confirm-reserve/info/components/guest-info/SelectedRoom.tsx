@@ -32,8 +32,18 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
   setValue,
   getValues,
   formState: { errors },
+  watch,
  } = useFormContext<ReserveInfoSchema>();
  const { removeRoom, selectedRooms } = useConfirmReserveContext();
+
+ const [guestsInfo, reserveFirstName, reserveLastName, reserveNationalCode] =
+  watch([
+   'guestInfo',
+   'reserveFirstName',
+   'reserveLastName',
+   'reserveNationalCode',
+  ]);
+ const guestInfo = guestsInfo[itemIndex];
 
  function handleChangeGuestNumber(
   name: 'adult' | 'child' | 'baby',
@@ -106,6 +116,18 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
           {...field}
           checked={field.value || false}
           value={field.value || false}
+          onChange={(_, newValue) => {
+           if (newValue) {
+            guestsInfo.forEach((guest, i) => {
+             if (guest.sameAsReserveInfo) {
+              setValue(`guestInfo.${i}.guestFirstName`, '');
+              setValue(`guestInfo.${i}.guestLastName`, '');
+              setValue(`guestInfo.${i}.guestNationalCode`, '');
+             }
+            });
+           }
+           field.onChange(newValue);
+          }}
          />
         }
        />
@@ -166,24 +188,88 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
      <TextField
       label='نام'
       size='small'
-      error={!!errors?.guestInfo?.[itemIndex]?.guestFirstName}
-      {...register(`guestInfo.${itemIndex}.guestFirstName`)}
-      required
+      {...(() => {
+       const rg = register(`guestInfo.${itemIndex}.guestFirstName`);
+       if (!!guestInfo?.sameAsReserveInfo) {
+        return { ...rg, value: reserveFirstName || '' };
+       } else {
+        return { ...rg };
+       }
+      })()}
+      disabled={!!guestInfo?.sameAsReserveInfo}
+      error={
+       !guestInfo?.sameAsReserveInfo &&
+       !!errors?.guestInfo?.[itemIndex]?.guestFirstName
+      }
+      helperText={
+       guestInfo?.sameAsReserveInfo
+        ? ''
+        : errors?.guestInfo?.[itemIndex]?.guestFirstName?.message || ''
+      }
+      slotProps={{
+       inputLabel: {
+        shrink: true,
+       },
+      }}
+      required={!guestInfo?.sameAsReserveInfo}
      />
      <TextField
       label='نام خانوادگی'
       size='small'
-      error={!!errors?.guestInfo?.[itemIndex]?.guestLastName}
-      {...register(`guestInfo.${itemIndex}.guestLastName`)}
-      required
+      {...(() => {
+       const rg = register(`guestInfo.${itemIndex}.guestLastName`);
+       if (!!guestInfo?.sameAsReserveInfo) {
+        return { ...rg, value: reserveLastName || '' };
+       } else {
+        return { ...rg };
+       }
+      })()}
+      disabled={!!guestInfo?.sameAsReserveInfo}
+      error={
+       !guestInfo?.sameAsReserveInfo &&
+       !!errors?.guestInfo?.[itemIndex]?.guestLastName
+      }
+      helperText={
+       guestInfo?.sameAsReserveInfo
+        ? ''
+        : errors?.guestInfo?.[itemIndex]?.guestLastName?.message || ''
+      }
+      slotProps={{
+       inputLabel: {
+        shrink: true,
+       },
+      }}
+      required={!guestInfo?.sameAsReserveInfo}
      />
     </div>
     <TextField
      label='کدملی'
      size='small'
      className='col-span-full lg:col-auto'
-     {...register(`guestInfo.${itemIndex}.guestNationalCode`)}
-     required
+     {...(() => {
+      const rg = register(`guestInfo.${itemIndex}.guestNationalCode`);
+      if (!!guestInfo?.sameAsReserveInfo) {
+       return { ...rg, value: reserveNationalCode || '' };
+      } else {
+       return { ...rg };
+      }
+     })()}
+     disabled={!!guestInfo?.sameAsReserveInfo}
+     error={
+      !guestInfo?.sameAsReserveInfo &&
+      !!errors?.guestInfo?.[itemIndex]?.guestNationalCode
+     }
+     helperText={
+      guestInfo?.sameAsReserveInfo
+       ? ''
+       : errors?.guestInfo?.[itemIndex]?.guestNationalCode?.message || ''
+     }
+     slotProps={{
+      inputLabel: {
+       shrink: true,
+      },
+     }}
+     required={!guestInfo?.sameAsReserveInfo}
     />
     <div className='col-span-full flex gap-6 bg-neutral-100 p-3 justify-center rounded-lg  lg:flex-row flex-col flex-wrap'>
      <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>

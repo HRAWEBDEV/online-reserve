@@ -108,7 +108,7 @@ export default function Hotel({ listViewMode }: TProps) {
       <span className='font-light'>از</span>
       <div className='font-bold text-base'>
        <span>{new Intl.NumberFormat('fa').format(25000000)}</span>
-       <span>تومان</span>
+       <span>ریال</span>
       </div>
       <span className='font-light'>/ شبی</span>
      </div>
@@ -158,7 +158,7 @@ export default function Hotel({ listViewMode }: TProps) {
              <div className='flex items-center gap-1 mb-4 text-[0.8rem]'>
               <div className='font-bold'>
                <span>{new Intl.NumberFormat('fa').format(25000000)}</span>
-               <span>تومان</span>
+               <span>ریال</span>
               </div>
               <span className='font-light'>/ شبی</span>
              </div>

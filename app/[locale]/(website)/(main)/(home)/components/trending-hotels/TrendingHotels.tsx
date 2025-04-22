@@ -58,7 +58,7 @@ export default function TrendingHotels() {
         <p className='mb-2 text-base'>هتل پیروزی اصفهان</p>
         <div>
          <span className='text-base'>3,423,000</span>
-         <span className='ps-2'>تومان</span>
+         <span className='ps-2'>ریال</span>
         </div>
        </div>
       </div>

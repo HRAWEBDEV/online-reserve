@@ -104,6 +104,9 @@ export default function ConfirmReserveProvider({
   });
  }, []);
 
+ const handleConfirmReserve: Store['handleConfirmReserve'] =
+  useCallback(async () => {}, []);
+
  const ctx: Store = useMemo(
   () => ({
    addRoom,
@@ -111,6 +114,7 @@ export default function ConfirmReserveProvider({
    roomsInfo,
    selectedRooms,
    loadingAddRoom,
+   handleConfirmReserve,
    isLoadingRooms: isLoading || isFetching,
   }),
   [
@@ -121,6 +125,7 @@ export default function ConfirmReserveProvider({
    loadingAddRoom,
    isLoading,
    isFetching,
+   handleConfirmReserve,
   ]
  );
 

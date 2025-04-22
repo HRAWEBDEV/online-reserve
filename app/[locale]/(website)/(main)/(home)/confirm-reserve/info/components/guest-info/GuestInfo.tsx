@@ -13,11 +13,14 @@ import { useInternalID } from '@/hooks/useInternalID';
 export default function GuestInfo() {
  const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
  const { getID } = useInternalID();
- const { selectedRooms } = useConfirmReserveContext();
+ const { selectedRooms, handleConfirmReserve } = useConfirmReserveContext();
  const {
   register,
+  handleSubmit,
   formState: { errors },
  } = useFormContext<ReserveInfoSchema>();
+ console.log(errors);
+
  return (
   <form className='p-4 order-2 md:order-1 md:flex-grow rounded-lg border border-neutral-300'>
    <div className='flex gap-4 justify-between items-center mb-4'>
@@ -35,6 +38,7 @@ export default function GuestInfo() {
       size='medium'
       label='نام'
       error={!!errors.reserveFirstName}
+      helperText={errors.reserveFirstName?.message || ''}
       required
       {...register('reserveFirstName')}
      />
@@ -42,6 +46,7 @@ export default function GuestInfo() {
       size='medium'
       label='نام‌خانوادگی'
       error={!!errors.reserveLastName}
+      helperText={errors.reserveLastName?.message || ''}
       required
       {...register('reserveLastName')}
      />
@@ -51,6 +56,7 @@ export default function GuestInfo() {
      size='medium'
      label='کدملی'
      error={!!errors.reserveNationalCode}
+     helperText={errors.reserveNationalCode?.message || ''}
      required
      {...register('reserveNationalCode')}
     />
@@ -58,6 +64,7 @@ export default function GuestInfo() {
      size='medium'
      label='پست الکترونیکی'
      error={!!errors.reserveEmail}
+     helperText={errors.reserveEmail?.message || ''}
      {...register('reserveEmail')}
     />
     <TextField
@@ -65,6 +72,7 @@ export default function GuestInfo() {
      label='شماره همراه'
      required
      error={!!errors.reservePhoneNumber}
+     helperText={errors.reservePhoneNumber?.message || ''}
      {...register('reservePhoneNumber')}
     />
    </div>
@@ -74,7 +82,12 @@ export default function GuestInfo() {
     return <SelectedRoom key={room.internalID} room={room} itemIndex={i} />;
    })}
    <div className='flex justify-end'>
-    <Button className='w-[8rem]' size='large' variant='contained'>
+    <Button
+     className='w-[8rem]'
+     size='large'
+     variant='contained'
+     onClick={handleSubmit(handleConfirmReserve)}
+    >
      تایید
     </Button>
    </div>
