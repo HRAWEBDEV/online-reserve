@@ -1,4 +1,7 @@
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import IconButton from '@mui/material/IconButton';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
  month: 'long',
@@ -12,7 +15,26 @@ const timeFormatter = new Intl.DateTimeFormat('fa', {
 export default function InvoiceDetails() {
  return (
   <section className='order-1 lg:order-2 lg:w-[25rem]'>
-   <div className='rounded-lg border border-neutral-300 p-4 sticky'>
+   <div className='p-4 bg-neutral-200 border border-neutral-300 rounded-lg mb-4 flex items-center justify-between gap-4 flex-wrap'>
+    <span className='font-medium'>شماره پیگیری: </span>
+    <div className='flex items-center gap-2'>
+     <span className='text-base font-medium'>1022121354</span>
+     <IconButton size='small'>
+      <ContentCopyIcon />
+     </IconButton>
+    </div>
+   </div>
+   <div className='border border-neutral-300 rounded-lg p-4 mb-4'>
+    <div className='flex items-center justify-between gap-4'>
+     <span className='font-medium'>مهلت پرداخت:</span>
+     <div className='text-lg font-medium flex items-center text-red-800'>
+      <span className='inline-block min-w-[1.5rem] text-center'>00</span>
+      <span>:</span>
+      <span className='inline-block min-w-[1.5rem] text-center'>05</span>
+     </div>
+    </div>
+   </div>
+   <div className='rounded-lg border border-neutral-300 p-4'>
     <h3 className='font-medium text-base  pb-4 border-b border-neutral-300'>
      هتل الماس
     </h3>
