@@ -14,7 +14,7 @@ const timeFormatter = new Intl.DateTimeFormat('fa', {
 
 export default function InvoiceDetails() {
  return (
-  <section className='order-1 lg:order-2 lg:w-[25rem]'>
+  <section className='order-1 lg:order-2 lg:w-[25rem] shrink-0'>
    <div className='p-4 bg-neutral-200 border border-neutral-300 rounded-lg mb-4 flex items-center justify-between gap-4 flex-wrap'>
     <span className='font-medium'>شماره پیگیری: </span>
     <div className='flex items-center gap-2'>
