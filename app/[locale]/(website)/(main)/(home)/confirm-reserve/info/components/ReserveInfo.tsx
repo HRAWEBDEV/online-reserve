@@ -17,6 +17,10 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
  month: 'long',
  day: '2-digit',
 });
+const timeFormatter = new Intl.DateTimeFormat('fa', {
+ hour: '2-digit',
+ minute: '2-digit',
+});
 const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
@@ -47,7 +51,10 @@ export default function ReserveInfo() {
      <div className='flex gap-2 items-center'>
       <div className='flex-grow text-center'>
        <div className='text-primary font-medium  mb-2'>تاریخ ورود</div>
-       <div className='font-medium'>{dateFormatter.format(checkInDate)}</div>
+       <div className='font-medium mb-1'>
+        {dateFormatter.format(checkInDate)}
+       </div>
+       <div>{timeFormatter.format(new Date())}</div>
       </div>
       <div className='flex flex-col items-center text-secondary-dark'>
        <span className='font-medium'>{nights} شب</span>
@@ -60,6 +67,7 @@ export default function ReserveInfo() {
       <div className='flex-grow text-center'>
        <div className='text-primary font-medium  mb-2'>تاریخ خروج</div>
        <div className='font-medium'>{dateFormatter.format(checkOutDate)}</div>
+       <div>{timeFormatter.format(new Date())}</div>
       </div>
      </div>
     </div>
@@ -86,12 +94,23 @@ export default function ReserveInfo() {
        <div>
         <div className='px-4 flex justify-between gap-2 mb-3'>
          <span className='font-medium'>قیمت: </span>
-         <span>
-          <strong>
-           {numberFormatter.format(room.accommodationTypePrice.netRoomRate)}
-          </strong>{' '}
-          ریال
-         </span>
+         <div className='flex items-center'>
+          <span className='me-1 font-light text-[0.7rem] text-red-700 line-through'>
+           <strong>
+            {numberFormatter.format(room.accommodationTypePrice.netRoomRate)}
+           </strong>{' '}
+           ریال
+          </span>
+          <div className='inline-grid place-items-center bg-teal-700 h-[1.5rem] aspect-square rounded-full me-4 text-primary-foreground text-[0.7rem]'>
+           12%
+          </div>
+          <span>
+           <strong>
+            {numberFormatter.format(room.accommodationTypePrice.netRoomRate)}
+           </strong>{' '}
+           ریال
+          </span>
+         </div>
         </div>
         <Swiper
          className='!pb-6 [&]:[--swiper-pagination-bottom:2px]'
@@ -122,14 +141,14 @@ export default function ReserveInfo() {
              </div>
             </div> */}
             <div className='text-[0.75rem] flex justify-center'>
-             <span>
+             <div>
               <strong>
                {numberFormatter.format(
                 room.accommodationTypePrice.dailyPrices[i].price
                )}
               </strong>
               <span className='text-[0.7rem] ps-1'>ریال</span>
-             </span>
+             </div>
             </div>
            </div>
           </SwiperSlide>
