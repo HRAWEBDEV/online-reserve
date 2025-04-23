@@ -6,10 +6,11 @@ import { type ReserveInfoSchema } from '../schema/reserveInfoSchema';
 
 type Store = {
  selectedRooms: RoomInventory[];
+ selectedRoomsInfo: RoomInfo[];
  isLoadingRooms: boolean;
  loadingAddRoom: boolean;
  handleConfirmReserve: (reserveSchema: ReserveInfoSchema) => Promise<void>;
- addRoom: (roomInfo: RoomInfo) => Promise<void>;
+ addRoom: (roomInfo: Omit<RoomInfo, 'count'>) => Promise<void>;
  removeRoom: (id: number, i: number) => void;
 };
 

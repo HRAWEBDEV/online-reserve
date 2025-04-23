@@ -5,6 +5,7 @@ import { type Store, confirmReserveContext } from './confirmReserveContext';
 import { useQuery } from '@tanstack/react-query';
 import {
  type RoomInventory,
+ type RoomInfo,
  getSelectedRoomsKey,
  getSelectedRooms,
  getSelectedRoomAbortController,
@@ -32,32 +33,24 @@ export default function ConfirmReserveProvider({
 
  // selectedRooms info
  const selectedRoomsInfo = useMemo(() => {
-  return selectedRooms.reduce(
-   (acc, cur) => {
-    const roomInfo = acc.find(
-     (item) =>
-      item.roomTypeID === cur.roomTypeID &&
-      item.bedCount === cur.accommodationTypePrice.beds
-    );
-    if (roomInfo) {
-     roomInfo.count = roomInfo.count + 1;
-    } else {
-     acc.push({
-      roomTypeID: cur.roomTypeID,
-      bedCount: cur.accommodationTypePrice.beds,
-      count: 1,
-     });
-    }
-    return acc;
-   },
-   [] as {
-    roomTypeID: number;
-    bedCount: number;
-    count: number;
-   }[]
-  );
+  return selectedRooms.reduce((acc, cur) => {
+   const roomInfo = acc.find(
+    (item) =>
+     item.roomTypeID === cur.roomTypeID &&
+     item.bedCount === cur.accommodationTypePrice.beds
+   );
+   if (roomInfo) {
+    roomInfo.count = roomInfo.count + 1;
+   } else {
+    acc.push({
+     roomTypeID: cur.roomTypeID,
+     bedCount: cur.accommodationTypePrice.beds,
+     count: 1,
+    });
+   }
+   return acc;
+  }, [] as RoomInfo[]);
  }, [selectedRooms]);
- console.log(selectedRoomsInfo);
 
  const { isLoading, isFetching } = useQuery({
   enabled: !selectedRooms.length,
@@ -121,6 +114,7 @@ export default function ConfirmReserveProvider({
    addRoom,
    removeRoom,
    selectedRooms,
+   selectedRoomsInfo,
    loadingAddRoom,
    handleConfirmReserve,
    isLoadingRooms: isLoading || isFetching,
@@ -132,6 +126,7 @@ export default function ConfirmReserveProvider({
    loadingAddRoom,
    isLoading,
    isFetching,
+   selectedRoomsInfo,
    handleConfirmReserve,
   ]
  );

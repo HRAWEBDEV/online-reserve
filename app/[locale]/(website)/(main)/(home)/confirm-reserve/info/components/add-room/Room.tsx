@@ -26,6 +26,7 @@ export default function Room({
  nights: number;
  closeModal: () => void;
 }) {
+ // check count later
  const { addRoom } = useConfirmReserveContext();
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(

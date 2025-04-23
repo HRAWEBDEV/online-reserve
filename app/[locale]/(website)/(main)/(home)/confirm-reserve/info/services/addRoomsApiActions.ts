@@ -10,6 +10,7 @@ const getSelectedRoomsApi = '/CRS/OnlineReservation/GetAccommodationTypes';
 type RoomInfo = {
  roomTypeID: number;
  bedCount: number;
+ count: number;
 };
 
 const getSelectedRooms = ({
@@ -18,7 +19,7 @@ const getSelectedRooms = ({
  ...queries
 }: {
  signal: AbortSignal;
- roomInfo: RoomInfo[];
+ roomInfo: Omit<RoomInfo, 'count'>[];
  channelID: number;
  hotelID: number;
  providerID: number;
