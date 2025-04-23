@@ -1,3 +1,5 @@
+import PaymentWrapper from './components/PaymentWrapper';
+
 export default function page() {
- return <div>payment</div>;
+ return <PaymentWrapper />;
 }
