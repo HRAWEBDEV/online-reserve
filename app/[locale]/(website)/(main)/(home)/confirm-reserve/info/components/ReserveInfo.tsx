@@ -10,6 +10,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { useRoomsInfoContext } from '../services/roomsInfoContext';
 import * as dateFns from 'date-fns';
 import { useConfirmReserveContext } from '../services/confirmReserveContext';
+import Skeleton from '@mui/material/Skeleton';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -19,7 +20,8 @@ const dateFormatter = new Intl.DateTimeFormat('fa', {
 const numberFormatter = new Intl.NumberFormat('fa');
 
 export default function ReserveInfo() {
- const { selectedRooms } = useConfirmReserveContext();
+ const { selectedRooms, isLoadingRooms, loadingAddRoom } =
+  useConfirmReserveContext();
  const { checkInDate, checkOutDate } = useRoomsInfoContext();
  const nights = dateFns.differenceInDays(checkOutDate, checkInDate);
  const [showInfo, setShowInfo] = useState(false);
@@ -40,6 +42,7 @@ export default function ReserveInfo() {
     <h3 className='font-medium text-base  pb-4 border-b border-neutral-300'>
      هتل الماس
     </h3>
+
     <div className='p-4 mb-2'>
      <div className='flex gap-2 items-center'>
       <div className='flex-grow text-center'>
@@ -60,6 +63,16 @@ export default function ReserveInfo() {
       </div>
      </div>
     </div>
+    {(isLoadingRooms || loadingAddRoom) && (
+     <div className='p-4 mb-2'>
+      <Skeleton
+       variant='rounded'
+       height={80}
+       width='100%'
+       sx={{ backgroundColor: (theme) => theme.palette.neutral[200] }}
+      />
+     </div>
+    )}
     <div className={`hidden ${showInfo ? '!block' : ''} lg:block`}>
      {selectedRooms.map((room, i) => (
       <div key={room.internalID} className='mb-1'>

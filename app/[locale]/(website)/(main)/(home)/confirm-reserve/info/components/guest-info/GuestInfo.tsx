@@ -9,11 +9,13 @@ import { useFormContext } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
 import { useConfirmReserveContext } from '../../services/confirmReserveContext';
 import { useInternalID } from '@/hooks/useInternalID';
+import Skeleton from '@mui/material/Skeleton';
 
 export default function GuestInfo() {
  const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
  const { getID } = useInternalID();
- const { selectedRooms, handleConfirmReserve } = useConfirmReserveContext();
+ const { selectedRooms, handleConfirmReserve, isLoadingRooms, loadingAddRoom } =
+  useConfirmReserveContext();
  const {
   register,
   handleSubmit,
@@ -24,7 +26,12 @@ export default function GuestInfo() {
   <form className='p-4 order-2 lg:order-1 lg:flex-grow rounded-lg border border-neutral-300'>
    <div className='flex gap-4 justify-between items-center mb-4'>
     <h3 className='font-medium text-base'>مشخصات رزرو کننده</h3>
-    <Button variant='outlined' color='error' onClick={() => handleToggle()}>
+    <Button
+     variant='outlined'
+     color='error'
+     onClick={() => handleToggle()}
+     loading={isLoadingRooms || loadingAddRoom}
+    >
      <div className='flex items-center gap-2'>
       <AddOutlinedIcon />
       افزودن اتاق
@@ -76,6 +83,17 @@ export default function GuestInfo() {
     />
    </div>
    <h3 className='font-medium text-base mb-6'>مشخصات سرپرست اتاق‌ها</h3>
+
+   {(isLoadingRooms || loadingAddRoom) && (
+    <div className='mb-6'>
+     <Skeleton
+      variant='rounded'
+      height={100}
+      width={'100%'}
+      sx={{ backgroundColor: (theme) => theme.palette.neutral[200] }}
+     />
+    </div>
+   )}
    {selectedRooms.map((room, i) => {
     getID(room);
     return <SelectedRoom key={room.internalID} room={room} itemIndex={i} />;
@@ -86,6 +104,7 @@ export default function GuestInfo() {
      size='large'
      variant='contained'
      onClick={handleSubmit(handleConfirmReserve)}
+     loading={isLoadingRooms || loadingAddRoom}
     >
      تایید
     </Button>
