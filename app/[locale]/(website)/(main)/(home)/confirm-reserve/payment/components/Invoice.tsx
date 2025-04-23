@@ -22,7 +22,7 @@ export default function Invoice() {
    </section>
    <section className='mb-12'>
     <h3 className='font-medium text-base mb-10'>روش پرداخت:</h3>
-    <div className='grid grid-cols-2 gap-4'>
+    <div className='grid lg:grid-cols-2 gap-4'>
      <Button
       variant='outlined'
       className='!rounded-lg !border-neutral-400 min-h-[8rem] !bg-neutral-100'
