@@ -81,7 +81,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
      <div className='flex items-center gap-1 text-neutral-600 font-medium'>
       <PersonOutlineOutlinedIcon />
       <span>تعداد: </span>
-      <span>{room.accommodationTypePrice.beds}نفر</span>
+      <span>{room.accommodationTypePrice.beds} نفر</span>
      </div>
     </div>
     <div className='col-span-full flex flex-wrap gap-2'>

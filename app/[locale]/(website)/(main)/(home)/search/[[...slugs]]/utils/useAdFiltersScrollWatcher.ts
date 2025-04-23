@@ -4,9 +4,11 @@ import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 export function useAdFiltersScrollWatcher({
  formContainterRef,
  formWrapperRef,
+ topPadding = 0,
 }: {
- formContainterRef: RefObject<HTMLFormElement | null>;
- formWrapperRef: RefObject<HTMLDivElement | null>;
+ formContainterRef: RefObject<HTMLElement | null>;
+ formWrapperRef: RefObject<HTMLElement | null>;
+ topPadding?: number;
 }) {
  const { isLargeDevice } = useAppMonitorConfig();
 
@@ -30,7 +32,7 @@ export function useAdFiltersScrollWatcher({
      if (topOffset <= 0) {
       topOffset += scrollOffset - windowScroll;
      } else {
-      topOffset = 16;
+      topOffset = 16 + topPadding;
      }
     } else if (scrollDirection == 'down') {
      if (topOffset > windowHeight - containerHeight) {
@@ -45,5 +47,5 @@ export function useAdFiltersScrollWatcher({
   }
   window.addEventListener('scroll', scrollWatcher);
   return () => window.removeEventListener('scroll', scrollWatcher);
- }, [formContainterRef, formWrapperRef, isLargeDevice]);
+ }, [formContainterRef, formWrapperRef, isLargeDevice, topPadding]);
 }

@@ -1,5 +1,6 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useAdFiltersScrollWatcher } from '../../../search/[[...slugs]]/utils/useAdFiltersScrollWatcher';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
@@ -22,9 +23,20 @@ export default function ReserveInfo() {
  const { checkInDate, checkOutDate } = useRoomsInfoContext();
  const nights = dateFns.differenceInDays(checkOutDate, checkInDate);
  const [showInfo, setShowInfo] = useState(false);
+ const formWrapperRef = useRef<HTMLDivElement>(null);
+ const formContainterRef = useRef<HTMLDivElement>(null);
+ useAdFiltersScrollWatcher({
+  formWrapperRef,
+  formContainterRef,
+  topPadding: 60,
+ });
+
  return (
-  <aside className='order-1 md:order-2 md:w-[25rem]'>
-   <div className='rounded-lg border border-neutral-300 p-4 sticky top-20'>
+  <aside ref={formWrapperRef} className='order-1 lg:order-2 lg:w-[25rem]'>
+   <div
+    ref={formContainterRef}
+    className='rounded-lg border border-neutral-300 p-4 sticky'
+   >
     <h3 className='font-medium text-base  pb-4 border-b border-neutral-300'>
      هتل الماس
     </h3>

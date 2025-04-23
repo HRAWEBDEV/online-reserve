@@ -19,10 +19,9 @@ export default function GuestInfo() {
   handleSubmit,
   formState: { errors },
  } = useFormContext<ReserveInfoSchema>();
- console.log(errors);
 
  return (
-  <form className='p-4 order-2 md:order-1 md:flex-grow rounded-lg border border-neutral-300'>
+  <form className='p-4 order-2 lg:order-1 lg:flex-grow rounded-lg border border-neutral-300'>
    <div className='flex gap-4 justify-between items-center mb-4'>
     <h3 className='font-medium text-base'>مشخصات رزرو کننده</h3>
     <Button variant='outlined' color='error' onClick={() => handleToggle()}>

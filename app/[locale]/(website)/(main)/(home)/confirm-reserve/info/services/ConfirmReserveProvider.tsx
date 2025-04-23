@@ -2,7 +2,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { PropsWithChildren } from 'react';
 import { type Store, confirmReserveContext } from './confirmReserveContext';
-import { type RoomInfo } from './addRoomsApiActions';
 import { useQuery } from '@tanstack/react-query';
 import {
  type RoomInventory,
@@ -30,30 +29,59 @@ export default function ConfirmReserveProvider({
  } = useRoomsInfoContext();
  const [loadingAddRoom, setLoadingAddRoom] = useState(false);
  const [selectedRooms, setSelectedRooms] = useState<RoomInventory[]>([]);
- const [roomsInfo, setRoomInfo] = useState<RoomInfo[]>(() => {
-  const roomInfoCount = Math.min(roomType.length, beds.length);
-  const roomInfo: RoomInfo[] = [];
-  for (let i = 0; i <= roomInfoCount - 1; i++) {
-   if (roomType[i] && beds[i]) {
-    roomInfo.push({
-     roomTypeID: roomType[i],
-     bedCount: beds[i],
-    });
-   }
-  }
-  return roomInfo;
- });
+
+ // selectedRooms info
+ const selectedRoomsInfo = useMemo(() => {
+  return selectedRooms.reduce(
+   (acc, cur) => {
+    const roomInfo = acc.find(
+     (item) =>
+      item.roomTypeID === cur.roomTypeID &&
+      item.bedCount === cur.accommodationTypePrice.beds
+    );
+    if (roomInfo) {
+     roomInfo.count = roomInfo.count + 1;
+    } else {
+     acc.push({
+      roomTypeID: cur.roomTypeID,
+      bedCount: cur.accommodationTypePrice.beds,
+      count: 1,
+     });
+    }
+    return acc;
+   },
+   [] as {
+    roomTypeID: number;
+    bedCount: number;
+    count: number;
+   }[]
+  );
+ }, [selectedRooms]);
+ console.log(selectedRoomsInfo);
 
  const { isLoading, isFetching } = useQuery({
   enabled: !selectedRooms.length,
   queryKey: [getSelectedRoomsKey],
   async queryFn({ signal }) {
+   function getRoomInfo() {
+    const roomInfoCount = Math.min(roomType.length, beds.length);
+    const roomInfo = [];
+    for (let i = 0; i <= roomInfoCount - 1; i++) {
+     if (roomType[i] && beds[i]) {
+      roomInfo.push({
+       roomTypeID: roomType[i],
+       bedCount: beds[i],
+      });
+     }
+    }
+    return roomInfo;
+   }
    const { data } = await getSelectedRooms({
     signal,
     ratePlanID: ratePlanType,
     startDate: checkInDate.toISOString(),
     endDate: checkOutDate.toISOString(),
-    roomInfo: roomsInfo,
+    roomInfo: getRoomInfo(),
     ...requestData,
    });
    setSelectedRooms(data);
@@ -74,7 +102,6 @@ export default function ConfirmReserveProvider({
      ...requestData,
     });
     setSelectedRooms((pre) => [...pre, data]);
-    setRoomInfo((pre) => [...pre, newRoomInfo]);
    } finally {
     setLoadingAddRoom(false);
    }
@@ -82,11 +109,8 @@ export default function ConfirmReserveProvider({
   [checkInDate, checkOutDate, ratePlanType, requestData]
  );
 
- const removeRoom: Store['removeRoom'] = useCallback((id, itemIndex) => {
+ const removeRoom: Store['removeRoom'] = useCallback((id) => {
   setSelectedRooms((pre) => pre.filter((item) => item.internalID !== id));
-  setRoomInfo((pre) => {
-   return pre.filter((_, i) => i !== itemIndex);
-  });
  }, []);
 
  const handleConfirmReserve: Store['handleConfirmReserve'] =
@@ -96,7 +120,6 @@ export default function ConfirmReserveProvider({
   () => ({
    addRoom,
    removeRoom,
-   roomsInfo,
    selectedRooms,
    loadingAddRoom,
    handleConfirmReserve,
@@ -105,7 +128,6 @@ export default function ConfirmReserveProvider({
   [
    addRoom,
    removeRoom,
-   roomsInfo,
    selectedRooms,
    loadingAddRoom,
    isLoading,
@@ -116,13 +138,21 @@ export default function ConfirmReserveProvider({
 
  useEffect(() => {
   const newQueries = new URLSearchParams(searchParams.toString());
-  newQueries.set('beds', roomsInfo.map((item) => item.bedCount).toString());
-  newQueries.set(
-   'roomType',
-   roomsInfo.map((item) => item.roomTypeID).toString()
-  );
+  const queriesInfo: {
+   beds: number[];
+   roomTypes: number[];
+  } = {
+   beds: [],
+   roomTypes: [],
+  };
+  selectedRooms.forEach((room) => {
+   queriesInfo.beds.push(room.accommodationTypePrice.beds);
+   queriesInfo.roomTypes.push(room.roomTypeID);
+  });
+  newQueries.set('beds', queriesInfo.beds.toString());
+  newQueries.set('roomType', queriesInfo.roomTypes.toString());
   router.replace(`${pathname}?${newQueries.toString()}`, { scroll: false });
- }, [roomsInfo, searchParams, pathname, router]);
+ }, [selectedRooms, searchParams, pathname, router]);
 
  useEffect(() => {
   return () => getSelectedRoomAbortController?.abort();

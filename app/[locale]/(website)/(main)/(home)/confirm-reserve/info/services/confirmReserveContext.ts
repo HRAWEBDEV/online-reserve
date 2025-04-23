@@ -6,12 +6,11 @@ import { type ReserveInfoSchema } from '../schema/reserveInfoSchema';
 
 type Store = {
  selectedRooms: RoomInventory[];
- roomsInfo: RoomInfo[];
  isLoadingRooms: boolean;
  loadingAddRoom: boolean;
  handleConfirmReserve: (reserveSchema: ReserveInfoSchema) => Promise<void>;
  addRoom: (roomInfo: RoomInfo) => Promise<void>;
- removeRoom: (id: number,i:number) => void;
+ removeRoom: (id: number, i: number) => void;
 };
 
 const confirmReserveContext = createContext<Store | null>(null);
