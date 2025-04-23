@@ -39,7 +39,7 @@ export default function Invoice() {
         <CreditCardIcon sx={{ fontSize: '3rem' }} />
        </div>
        <div>
-        <p className='text-lg font-medium mt-2 flex items-center gap-2'>
+        <p className='text-base font-medium mt-2 flex items-center gap-2'>
          <CheckIcon sx={{ fontSize: '1.5rem' }} color='success' />
          <span>پرداخت آنلاین</span>
         </p>
