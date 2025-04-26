@@ -114,6 +114,17 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
           checked={field.value || false}
           value={field.value || false}
           onChange={(_, newValue) => {
+           const guestInfo = getValues('guestInfo');
+           for (let i = 0; i <= guestInfo.length - 1; i++) {
+            if (guestInfo[i].sameAsReserveInfo) {
+             if (i === itemIndex) break;
+             setValue(`guestInfo.${i}.sameAsReserveInfo`, false);
+             setValue(`guestInfo.${i}.guestFirstName`, '');
+             setValue(`guestInfo.${i}.guestLastName`, '');
+             setValue(`guestInfo.${i}.guestNationalCode`, '');
+             break;
+            }
+           }
            setValue(`guestInfo.${itemIndex}.guestFirstName`, '');
            setValue(`guestInfo.${itemIndex}.guestLastName`, '');
            setValue(`guestInfo.${itemIndex}.guestNationalCode`, '');
