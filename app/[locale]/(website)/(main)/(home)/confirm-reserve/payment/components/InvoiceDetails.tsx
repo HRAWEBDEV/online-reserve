@@ -1,6 +1,9 @@
+'use client';
+import { useEffect } from 'react';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useTimer } from '../hooks/useTimer';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -13,13 +16,21 @@ const timeFormatter = new Intl.DateTimeFormat('fa', {
 });
 
 export default function InvoiceDetails() {
+ const { minutes, seconds, startTimer } = useTimer(200);
+ function copyRefNumber() {}
+ console.log(minutes, seconds);
+
+ useEffect(() => {
+  startTimer();
+ }, [startTimer]);
+
  return (
   <section className='order-1 lg:order-2 lg:w-[25rem] shrink-0'>
    <div className='p-4 bg-neutral-200 border border-neutral-300 rounded-lg mb-4 flex items-center justify-between gap-4 flex-wrap'>
     <span className='font-medium'>شماره پیگیری: </span>
     <div className='flex items-center gap-2'>
      <span className='text-base font-medium'>1022121354</span>
-     <IconButton size='small'>
+     <IconButton size='small' onClick={copyRefNumber}>
       <ContentCopyIcon />
      </IconButton>
     </div>
@@ -28,9 +39,13 @@ export default function InvoiceDetails() {
     <div className='flex items-center justify-between gap-4'>
      <span className='font-medium'>مهلت پرداخت:</span>
      <div className='text-lg font-medium flex items-center text-red-800'>
-      <span className='inline-block min-w-[1.5rem] text-center'>00</span>
+      <span className='inline-block min-w-[1.5rem] text-center'>
+       {seconds.toString().padStart(2, '0')}
+      </span>
       <span>:</span>
-      <span className='inline-block min-w-[1.5rem] text-center'>05</span>
+      <span className='inline-block min-w-[1.5rem] text-center'>
+       {minutes.toString().padStart(2, '0')}
+      </span>
      </div>
     </div>
    </div>

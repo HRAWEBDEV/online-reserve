@@ -50,6 +50,32 @@ export default function Invoice() {
        </div>
       </div>
      </Button>
+     <Button
+      variant='outlined'
+      className='!rounded-lg min-h-[8rem]'
+      sx={{
+       justifyContent: 'unset',
+       alignItems: 'unset',
+       textAlign: 'start',
+       fontSize: 'inherit',
+       color: 'inherit',
+      }}
+     >
+      <div className='flex items-start gap-6'>
+       <div className='text-neutral-500'>
+        <CreditCardIcon sx={{ fontSize: '3rem' }} />
+       </div>
+       <div>
+        <p className='text-base font-medium mt-2 flex items-center gap-2'>
+         <span>پرداخت آنلاین</span>
+        </p>
+        <p className='mt-2 text-neutral-600 text-[0.75rem]'>
+         لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ لورم ایپسوم
+         متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ
+        </p>
+       </div>
+      </div>
+     </Button>
     </div>
    </section>
    <div className='flex justify-end'>
