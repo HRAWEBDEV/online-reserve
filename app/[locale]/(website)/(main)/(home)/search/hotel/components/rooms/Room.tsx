@@ -16,6 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 import { useFormContext } from 'react-hook-form';
 import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
+import ImageWrapper from '@/components/ImageWrapper';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -76,11 +77,16 @@ export default function Room({
      {[1, 2].map((item) => (
       <SwiperSlide key={item}>
        <div className='h-full'>
-        <img
-         loading='lazy'
-         className='w-full h-full'
-         src='/images/hotels/mashhad-almas.jpg'
-         alt='hotel image'
+        <ImageWrapper
+         img={{
+          src: '',
+          alt: 'hotel image',
+          className: 'w-full h-full',
+          loading: 'lazy',
+         }}
+         wrapper={{
+          className: 'h-full w-full',
+         }}
         />
        </div>
       </SwiperSlide>

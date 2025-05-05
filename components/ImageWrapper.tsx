@@ -1,11 +1,16 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
-import { HTMLProps } from 'react';
+import {
+ useState,
+ useRef,
+ ImgHTMLAttributes,
+ DetailedHTMLProps,
+ HTMLProps,
+} from 'react';
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
 
 type Props = {
- img: HTMLProps<HTMLImageElement>;
+ img: DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>;
  wrapper?: HTMLProps<HTMLDivElement>;
  showLoading?: boolean;
  showError?: boolean;
@@ -35,7 +40,7 @@ export default function ImageWrapper({
      <div className='absolute inset-0 z-[2] bg-neutral-200 flex items-center justify-center text-neutral-600'>
       <HideImageOutlinedIcon
        sx={{
-        fontSize: '6rem',
+        fontSize: '5rem',
        }}
       />
      </div>
