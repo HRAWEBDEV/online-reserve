@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { HTMLProps } from 'react';
 import HideImageOutlinedIcon from '@mui/icons-material/HideImageOutlined';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -19,8 +19,9 @@ export default function ImageWrapper({
  showError = true,
  showPlaceholder = true,
 }: Props) {
- const [isLoading, setIsLoading] = useState(false);
+ const [isLoading, setIsLoading] = useState(true);
  const [isError, setIsError] = useState(false);
+ const imageRef = useRef<HTMLImageElement>(null);
 
  return (
   <div {...(wrapper || {})}>
@@ -40,7 +41,13 @@ export default function ImageWrapper({
      </div>
     )}
     <img
-     src={src}
+     ref={(ref) => {
+      if (ref) {
+       imageRef.current = ref;
+       imageRef.current.src = src;
+       setIsLoading(false);
+      }
+     }}
      alt={alt}
      {...imgProps}
      onLoad={() => setIsLoading(true)}

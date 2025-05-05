@@ -60,7 +60,6 @@ export default async function page({
  if (imageResponse.ok) {
   images = await imageResponse.json();
  }
- console.log(images);
 
  const facilityResponse = await fetch(
   `${
@@ -99,7 +98,7 @@ export default async function page({
     {process.env.NEXT_PUBLIC_DEPLOY_MODE !== 'local' && <Booking />}
     <SearchBreadCrumb />
     <InfoSectionMenu />
-    <HotelReview />
+    <HotelReview images={images} />
     <Description facilities={facilities} roomFacilities={roomFacilities} />
     <RoomSection />
     <HouseRules />

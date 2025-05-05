@@ -10,13 +10,14 @@ import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import MapIcon from '@mui/icons-material/Map';
 import ImageWrapper from '@/components/ImageWrapper';
+import { type HotelImage } from '../../services/HotelApiActions';
 
 const HotelLocation = dynamic(() => import('./HotelLocation'), {
  loading: () => <div></div>,
  ssr: false,
 });
 
-export default function HotelReview() {
+export default function HotelReview({ images }: { images: HotelImage[] }) {
  const [showMap, setShowMap] = useState(false);
  return (
   <section className='mb-8' id='overview'>
@@ -88,7 +89,7 @@ export default function HotelReview() {
          <ImageWrapper
           img={{
            className: 'h-full w-full object-cover',
-           src: '/images/hotels/hotel-slider.jpg',
+           src: images[0]?.imageURL,
            alt: 'hotel image',
           }}
           wrapper={{
@@ -102,7 +103,7 @@ export default function HotelReview() {
          <ImageWrapper
           img={{
            className: 'h-full w-full object-cover',
-           src: '/images/hotels/hotel-slider-5.jpg',
+           src: images[1]?.imageURL,
            alt: 'hotel image',
           }}
           wrapper={{
@@ -114,7 +115,7 @@ export default function HotelReview() {
          <ImageWrapper
           img={{
            className: 'h-full w-full object-cover',
-           src: '/images/hotels/hotel-slider-3.jpg',
+           src: images[2]?.imageURL,
            alt: 'hotel image',
           }}
           wrapper={{
