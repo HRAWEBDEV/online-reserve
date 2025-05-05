@@ -49,7 +49,7 @@ export default function ImageWrapper({
      ref={(ref) => {
       if (ref) {
        imageRef.current = ref;
-       imageRef.current.src = src;
+       imageRef.current.src = src || '';
        setIsLoading(false);
       }
      }}
