@@ -10,7 +10,7 @@ const setCookie = ({
  const date = new Date();
  date.setTime(date.getTime() + expireDays * 24 * 60 * 60 * 1000);
  const expireDateUTCString = `expires=${date.toUTCString()}`;
- document.cookie = `${name}=${value};${expireDateUTCString};path=/`;
+ document.cookie = `${name}=${value};${expireDateUTCString};path=/;httpOnly;secure`;
 };
 
 const getCookie = (name: string): string => {

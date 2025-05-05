@@ -13,6 +13,13 @@ import {
 } from '@/app/utils/getDefaultsReuestData';
 import { redirect } from 'next/navigation';
 import * as DateFns from 'date-fns';
+import {
+ type HotelImage,
+ type Facilities,
+ getHotelImagesApi,
+ getHotelFacilitiesApi,
+ getRoomFacilitiesApi,
+} from './services/HotelApiActions';
 
 export default async function page({
  searchParams,
@@ -32,6 +39,60 @@ export default async function page({
   );
   redirect(`/search/hotel?${urlSearchQuries.toString()}`);
  }
+
+ let images: HotelImage[] = [];
+ let facilities: Facilities[] = [];
+ const searchQueries = new URLSearchParams({
+  channelID: requestData.channelID.toString(),
+  hotelID: requestData.hotelID.toString(),
+ });
+ const imageResponse = await fetch(
+  `${
+   process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+  }${getHotelImagesApi}?${searchQueries.toString()}`,
+  {
+   method: 'GET',
+   headers: {
+    'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+   },
+  }
+ );
+ if (imageResponse.ok) {
+  images = await imageResponse.json();
+ }
+ console.log(images);
+
+ const facilityResponse = await fetch(
+  `${
+   process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+  }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
+  {
+   method: 'GET',
+   headers: {
+    'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+   },
+  }
+ );
+ if (facilityResponse.ok) {
+  facilities = await facilityResponse.json();
+ }
+
+ let roomFacilities: Facilities[] = [];
+ const roomFacilityResponse = await fetch(
+  `${
+   process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+  }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
+  {
+   method: 'GET',
+   headers: {
+    'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+   },
+  }
+ );
+ if (roomFacilityResponse.ok) {
+  roomFacilities = await roomFacilityResponse.json();
+ }
+
  return (
   <div>
    <RoomsInfoProvider requestData={requestData}>
@@ -39,7 +100,7 @@ export default async function page({
     <SearchBreadCrumb />
     <InfoSectionMenu />
     <HotelReview />
-    <Description />
+    <Description facilities={facilities} roomFacilities={roomFacilities} />
     <RoomSection />
     <HouseRules />
    </RoomsInfoProvider>

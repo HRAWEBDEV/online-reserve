@@ -10,6 +10,26 @@ const getRoomDailyPriceApi = '/CRS/OnlineReservation/GetMonthyInventory';
 const getRatePlanTypesKey = 'get-rate-plan-types';
 const getRatePlanTypesApi = '/CRS/OnlineReservation/GetRatePlans';
 
+const getHotelImagesKey = 'get-hotel-images';
+const getHotelImagesApi = '/CRS/OnlineReservation/GetHotelImages';
+
+const getHotelFacilitiesKey = 'get-hotel-facilities';
+const getHotelFacilitiesApi = '/CRS/OnlineReservation/GetHotelFacilities';
+
+const getRoomFacilitiesKey = 'get-room-facilities';
+const getRoomFacilitiesApi =
+ '/CRS/OnlineReservation/GetHotelRoomTypeFacilities';
+
+type HotelImage = {
+ hotelID: number;
+ imageURL: string;
+};
+
+type Facilities = {
+ key: string;
+ value: string;
+};
+
 type RatePlanType = {
  fName: string;
  ratePlanID: number;
@@ -134,15 +154,77 @@ const getRatePlanTypes = ({
  );
 };
 
+const getHotelImages = ({
+ signal,
+ ...queries
+}: {
+ signal: AbortSignal;
+ channelID: number;
+ hotelID: number;
+}) => {
+ const searchParams = new URLSearchParams();
+ Object.entries(queries).forEach(([key, val]) => {
+  searchParams.set(key, String(val));
+ });
+ return axios.get(`${getHotelImagesApi}?${searchParams.toString()}`, {
+  signal,
+ });
+};
+
+const getHotelFacilities = ({
+ signal,
+ ...queries
+}: {
+ signal: AbortSignal;
+ channelID: number;
+ hotelID: number;
+}) => {
+ const searchParams = new URLSearchParams();
+ Object.entries(queries).forEach(([key, val]) => {
+  searchParams.set(key, String(val));
+ });
+ return axios.get(`${getHotelFacilitiesApi}?${searchParams.toString()}`, {
+  signal,
+ });
+};
+
+const getRoomFacilities = ({
+ signal,
+ ...queries
+}: {
+ signal: AbortSignal;
+ channelID: number;
+ hotelID: number;
+}) => {
+ const searchParams = new URLSearchParams();
+ Object.entries(queries).forEach(([key, val]) => {
+  searchParams.set(key, String(val));
+ });
+ return axios.get(`${getRoomFacilitiesApi}?${searchParams.toString()}`, {
+  signal,
+ });
+};
+
 export {
  type RatePlanType,
  type RoomInventory,
  type RoomDailyPrice,
  type RoomAccomodationType,
+ type HotelImage,
+ type Facilities,
  getRoomInventoryKey,
  getRoomInventory,
  getRoomDailyPriceKey,
  getRoomPriceDaily,
  getRatePlanTypesKey,
  getRatePlanTypes,
+ getHotelImagesApi,
+ getHotelImagesKey,
+ getHotelImages,
+ getHotelFacilitiesApi,
+ getHotelFacilitiesKey,
+ getHotelFacilities,
+ getRoomFacilitiesKey,
+ getRoomFacilitiesApi,
+ getRoomFacilities,
 };

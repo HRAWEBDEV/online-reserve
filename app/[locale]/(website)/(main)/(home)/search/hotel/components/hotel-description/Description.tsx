@@ -1,7 +1,14 @@
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
+import { type Facilities } from '../../services/HotelApiActions';
+import HotelFacilities from './HotelFacilities';
+import RoomFacilities from './RoomFacilities';
 
-export default function Description() {
+type Props = {
+ facilities: Facilities[];
+ roomFacilities: Facilities[];
+};
+
+export default function Description({ facilities, roomFacilities }: Props) {
  return (
   <section className='container grid md:grid-cols-2 gap-4 mb-6'>
    <article>
@@ -38,74 +45,8 @@ export default function Description() {
     </p>
    </article>
    <article className='grid gap-4 md:grid-cols-2 '>
-    <div>
-     <h4 className='text-lg text-secondary-dark font-medium mb-4 text-center'>
-      امکانات عمومی
-     </h4>
-     <div className='flex flex-wrap items-center gap-2'>
-      {[
-       'استخر',
-       'تخت',
-       'اینترنت',
-       'پارکینگ',
-       'رستوران',
-       'لابی',
-       'لاندری',
-       'ماساژ',
-       'کافی شاپ',
-      ].map((item) => (
-       <Chip
-        key={item}
-        label={item}
-        sx={{
-         paddingInline: '0.5rem',
-        }}
-       />
-      ))}
-      <Button
-       sx={{ borderRadius: '2rem', paddingInline: '0.8rem' }}
-       size='small'
-       color='secondary'
-       variant='outlined'
-      >
-       مشاهده همه
-      </Button>
-     </div>
-    </div>
-    <div>
-     <h4 className='text-lg text-secondary-dark font-medium mb-4 text-center'>
-      امکانات اتاق
-     </h4>
-     <div className='flex flex-wrap gap-2'>
-      {[
-       'استخر',
-       'تخت',
-       'اینترنت',
-       'پارکینگ',
-       'رستوران',
-       'لابی',
-       'لاندری',
-       'ماساژ',
-       'کافی شاپ',
-      ].map((item) => (
-       <Chip
-        key={item}
-        label={item}
-        sx={{
-         paddingInline: '0.5rem',
-        }}
-       />
-      ))}
-      <Button
-       sx={{ borderRadius: '2rem', paddingInline: '0.8rem' }}
-       size='small'
-       color='secondary'
-       variant='outlined'
-      >
-       مشاهده همه
-      </Button>
-     </div>
-    </div>
+    <HotelFacilities facilities={facilities} />
+    <RoomFacilities facilities={roomFacilities} />
    </article>
   </section>
  );
