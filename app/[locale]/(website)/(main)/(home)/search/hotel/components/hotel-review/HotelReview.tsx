@@ -9,6 +9,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import MapIcon from '@mui/icons-material/Map';
+import ImageWrapper from '@/components/ImageWrapper';
 
 const HotelLocation = dynamic(() => import('./HotelLocation'), {
  loading: () => <div></div>,
@@ -79,33 +80,46 @@ export default function HotelReview() {
     </div>
    </div>
    <section className='md:container'>
-    <article className='grid lg:grid-cols-[3fr_1fr] gap-4'>
+    <article className='grid lg:grid-cols-[3fr_1fr] gap-4 '>
      <section>
       <div className='grid gap-3 md:grid-cols-[4fr_2fr] overflow-hidden'>
        <Swiper className='w-full'>
         <SwiperSlide className='md:rounded-lg overflow-hidden'>
-         <div>
-          <img
-           className='h-full w-full object-cover'
-           src='/images/hotels/hotel-slider.jpg'
-           alt='hotel image'
-          />
-         </div>
+         <ImageWrapper
+          img={{
+           className: 'h-full w-full object-cover',
+           src: '/images/hotels/hotel-slider.jpg',
+           alt: 'hotel image',
+          }}
+          wrapper={{
+           className: 'h-[23rem]',
+          }}
+         />
         </SwiperSlide>
        </Swiper>
        <div className='hidden md:flex flex-col gap-4'>
         <div className='rounded-lg overflow-hidden basis-0 flex-grow'>
-         <img
-          className='h-full w-full object-cover'
-          src='/images/hotels/hotel-slider-5.jpg'
-          alt='hotel image'
+         <ImageWrapper
+          img={{
+           className: 'h-full w-full object-cover',
+           src: '/images/hotels/hotel-slider-5.jpg',
+           alt: 'hotel image',
+          }}
+          wrapper={{
+           className: 'h-full w-full',
+          }}
          />
         </div>
         <div className='rounded-lg overflow-hidden basis-0 flex-grow'>
-         <img
-          className='h-full w-full object-cover'
-          src='/images/hotels/hotel-slider-3.jpg'
-          alt='hotel image'
+         <ImageWrapper
+          img={{
+           className: 'h-full w-full object-cover',
+           src: '/images/hotels/hotel-slider-3.jpg',
+           alt: 'hotel image',
+          }}
+          wrapper={{
+           className: 'h-full w-full',
+          }}
          />
         </div>
        </div>
