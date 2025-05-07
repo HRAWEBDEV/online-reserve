@@ -25,6 +25,7 @@ const reserveInfoSchema = z
     guestLastName: z.string(),
     guestNationalCode: z.string(),
     guestType: z.enum(['normal', 'foreign']).default('normal'),
+    gender: z.enum(['male', 'female']).default('male'),
     adultCount: z.literal('').or(z.coerce.number()).default(''),
     childCount: z.literal('').or(z.coerce.number()).default(''),
     babyCount: z.literal('').or(z.coerce.number()).default(''),

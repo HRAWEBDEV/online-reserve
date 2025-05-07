@@ -168,7 +168,23 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
       )}
      />
     </div>
-    <div className='col-span-full'>
+    <div className='col-span-full flex gap-4 flex-wrap'>
+     <Controller
+      control={control}
+      name={`guestInfo.${itemIndex}.gender`}
+      render={({ field }) => (
+       <ToggleButtonGroup
+        {...field}
+        color='error'
+        exclusive
+        value={field.value || 'male'}
+        onChange={(_, value) => field.onChange(value)}
+       >
+        <ToggleButton value='male'>مرد</ToggleButton>
+        <ToggleButton value='female'>زن</ToggleButton>
+       </ToggleButtonGroup>
+      )}
+     />
      <Controller
       control={control}
       name={`guestInfo.${itemIndex}.guestType`}

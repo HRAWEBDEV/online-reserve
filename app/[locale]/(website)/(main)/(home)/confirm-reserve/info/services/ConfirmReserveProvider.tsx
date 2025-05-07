@@ -83,7 +83,7 @@ export default function ConfirmReserveProvider({
       nationalCode: schemaInfo.sameAsReserveInfo
        ? data.reserveNationalCode
        : schemaInfo.guestNationalCode,
-      genderID: 1,
+      genderID: schemaInfo.gender === 'female' ? 2 : 1,
      },
     });
    });
