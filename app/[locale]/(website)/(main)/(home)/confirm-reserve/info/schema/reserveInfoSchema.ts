@@ -32,7 +32,6 @@ const reserveInfoSchema = z
   ),
  })
  .superRefine(({ guestInfo }, ctx) => {
-  console.log('here');
   guestInfo.forEach((guest, i) => {
    if (guest.sameAsReserveInfo) return;
    if (!guest.guestFirstName) {

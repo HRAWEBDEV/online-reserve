@@ -46,7 +46,6 @@ export default function ReserveInfo() {
     <h3 className='font-medium text-base  pb-4 border-b border-neutral-300'>
      هتل الماس
     </h3>
-
     <div className='p-4 mb-2'>
      <div className='flex gap-2 items-center'>
       <div className='flex-grow text-center'>

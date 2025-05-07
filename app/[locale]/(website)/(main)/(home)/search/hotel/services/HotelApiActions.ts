@@ -53,6 +53,7 @@ type RoomAccomodationType = {
  }[];
  accommodationRatePlanModel: {
   ratePlanID: number;
+  rateTypeID: number;
   rateTypePlan: number;
   rateTypeName: string;
   boardID: number;

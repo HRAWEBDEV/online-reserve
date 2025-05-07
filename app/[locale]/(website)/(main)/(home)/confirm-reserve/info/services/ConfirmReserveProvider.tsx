@@ -2,21 +2,26 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { PropsWithChildren } from 'react';
 import { type Store, confirmReserveContext } from './confirmReserveContext';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import {
  type RoomInventory,
  type RoomInfo,
+ type LockRoomInfo,
  getSelectedRoomsKey,
  getSelectedRooms,
  getSelectedRoomAbortController,
  getSelectedRoom,
+ lockReserve,
 } from './addRoomsApiActions';
 import { useRoomsInfoContext } from './roomsInfoContext';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { type ReserveInfoSchema } from '../schema/reserveInfoSchema';
+import { useFormContext } from 'react-hook-form';
 
 export default function ConfirmReserveProvider({
  children,
 }: PropsWithChildren) {
+ const { getValues } = useFormContext<ReserveInfoSchema>();
  const router = useRouter();
  const pathname = usePathname();
  const searchParams = useSearchParams();
@@ -51,6 +56,54 @@ export default function ConfirmReserveProvider({
    return acc;
   }, [] as RoomInfo[]);
  }, [selectedRooms]);
+ //
+ const { mutate, isPending } = useMutation({
+  mutationFn(data: ReserveInfoSchema) {
+   const roomInfo: (LockRoomInfo & { rateTypeID: number })[] = [];
+   selectedRooms.forEach((item, i) => {
+    const accRatePlan = item.accommodationTypePrice.accommodationRatePlanModel;
+    const schemaInfo = data.guestInfo[i];
+    roomInfo.push({
+     adult: 0,
+     baby: 0,
+     child: 0,
+     extraBed: 0,
+     isForeigner: schemaInfo.guestType === 'foreign',
+     earlyCheckin: schemaInfo.halfCheckin,
+     lateCheckout: schemaInfo.halfCheckout,
+     roomTypeID: accRatePlan.rateTypeID,
+     rateTypeID: accRatePlan.rateTypeID,
+     guestLockModel: {
+      firstName: schemaInfo.sameAsReserveInfo
+       ? data.reserveFirstName
+       : schemaInfo.guestFirstName,
+      lastName: schemaInfo.sameAsReserveInfo
+       ? data.reserveLastName
+       : schemaInfo.guestLastName,
+      nationalCode: schemaInfo.sameAsReserveInfo
+       ? data.reserveNationalCode
+       : schemaInfo.guestNationalCode,
+      genderID: 1,
+     },
+    });
+   });
+   return lockReserve({
+    arrivelDate: checkInDate.toISOString(),
+    departureDate: checkOutDate.toISOString(),
+    channelID: requestData.channelID,
+    providerID: requestData.providerID,
+    hotelID: requestData.hotelID,
+    arzID: requestData.arzID,
+    rateTypeID: roomInfo[0].rateTypeID,
+    ratePlanID: ratePlanType,
+    contactNo: data.reservePhoneNumber,
+    lockInfo: roomInfo,
+    firstName: data.reserveFirstName,
+    lastName: data.reserveLastName,
+    email: data.reserveEmail,
+   });
+  },
+ });
 
  const { isLoading, isFetching } = useQuery({
   enabled: !selectedRooms.length,
@@ -102,12 +155,21 @@ export default function ConfirmReserveProvider({
   [checkInDate, checkOutDate, ratePlanType, requestData]
  );
 
- const removeRoom: Store['removeRoom'] = useCallback((id) => {
-  setSelectedRooms((pre) => pre.filter((item) => item.internalID !== id));
- }, []);
+ const removeRoom: Store['removeRoom'] = useCallback(
+  (id) => {
+   const guestInfo = getValues('guestInfo');
+   guestInfo.pop();
+   setSelectedRooms((pre) => pre.filter((item) => item.internalID !== id));
+  },
+  [getValues]
+ );
 
- const handleConfirmReserve: Store['handleConfirmReserve'] =
-  useCallback(async () => {}, []);
+ const handleConfirmReserve: Store['handleConfirmReserve'] = useCallback(
+  async (data) => {
+   mutate(data);
+  },
+  [mutate]
+ );
 
  const ctx: Store = useMemo(
   () => ({
@@ -117,6 +179,7 @@ export default function ConfirmReserveProvider({
    selectedRoomsInfo,
    loadingAddRoom,
    handleConfirmReserve,
+   confirmReserveLoading: isPending,
    isLoadingRooms: isLoading || isFetching,
   }),
   [
@@ -128,6 +191,7 @@ export default function ConfirmReserveProvider({
    isFetching,
    selectedRoomsInfo,
    handleConfirmReserve,
+   isPending,
   ]
  );
 

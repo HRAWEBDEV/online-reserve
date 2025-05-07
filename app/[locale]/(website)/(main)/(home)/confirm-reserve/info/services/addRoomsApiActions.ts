@@ -6,7 +6,26 @@ const getSelectedRoomKey = 'get-selected-room';
 const getSelectedRoomApi = '/CRS/OnlineReservation/AccommodationTypeInfo';
 const getSelectedRoomsKey = 'get-selected-rooms';
 const getSelectedRoomsApi = '/CRS/OnlineReservation/GetAccommodationTypes';
+const lockReserveKey = 'lock-reserve';
+const lockReserveApi = '/CRS/OnlineReservation/AccommodationTypeInfo';
 
+type LockGuestInfo = {
+ firstName: string;
+ lastName: string;
+ nationalCode: string;
+ genderID: number;
+};
+type LockRoomInfo = {
+ roomTypeID: number;
+ adult: number;
+ child: number;
+ baby: number;
+ earlyCheckin: boolean;
+ lateCheckout: boolean;
+ extraBed: number;
+ isForeigner: boolean;
+ guestLockModel: LockGuestInfo;
+};
 type RoomInfo = {
  roomTypeID: number;
  bedCount: number;
@@ -68,13 +87,45 @@ const getSelectedRoom = ({
  );
 };
 
+const lockReserve = ({
+ lockInfo,
+ ...queries
+}: {
+ lockInfo: LockRoomInfo[];
+ channelID: number;
+ providerID: number;
+ arrivelDate: string;
+ departureDate: string;
+ contactNo: string;
+ hotelID: number;
+ arzID: number;
+ ratePlanID: number;
+ rateTypeID: number;
+ firstName: string;
+ lastName: string;
+ email: string;
+}) => {
+ const searchParams = new URLSearchParams();
+ Object.entries(queries).forEach(([key, val]) => {
+  searchParams.set(key, String(val));
+ });
+ return axios.post<unknown>(
+  `${lockReserveApi}?${searchParams.toString()}`,
+  lockInfo
+ );
+};
+
 export {
  type RoomInfo,
  type RoomInventory,
+ type LockRoomInfo,
+ type LockGuestInfo,
  getRoomsInfoKey,
  getSelectedRoomsKey,
  getSelectedRooms,
  getSelectedRoomKey,
  getSelectedRoom,
  getSelectedRoomAbortController,
+ lockReserveKey,
+ lockReserve,
 };

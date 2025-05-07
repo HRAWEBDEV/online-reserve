@@ -7,10 +7,10 @@ import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
-import RemoveIcon from '@mui/icons-material/Remove';
-import AddIcon from '@mui/icons-material/Add';
+// import RemoveIcon from '@mui/icons-material/Remove';
+// import AddIcon from '@mui/icons-material/Add';
 import Chip from '@mui/material/Chip';
 import { useFormContext, Controller } from 'react-hook-form';
 import { ReserveInfoSchema } from '../../schema/reserveInfoSchema';
@@ -18,7 +18,7 @@ import { type RoomInventory } from '../../services/addRoomsApiActions';
 import { useConfirmReserveContext } from '../../services/confirmReserveContext';
 
 const chipStyles = { borderRadius: '0.2rem' };
-const buttonStyles = { paddingInline: '0.5rem', minWidth: 'unset' };
+// const buttonStyles = { paddingInline: '0.5rem', minWidth: 'unset' };
 
 type Props = {
  itemIndex: number;
@@ -45,16 +45,16 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
   ]);
  const guestInfo = guestsInfo[itemIndex];
 
- function handleChangeGuestNumber(
-  name: 'adult' | 'child' | 'baby',
-  action: 'increment' | 'decrement'
- ) {
-  const currentValue =
-   Number(getValues(`guestInfo.${itemIndex}.${name}Count`)) || 0;
-  if (currentValue === 0 && action === 'decrement') return;
-  const newValue = currentValue + (action === 'increment' ? 1 : -1);
-  setValue(`guestInfo.${itemIndex}.${name}Count`, newValue || '');
- }
+ //  function handleChangeGuestNumber(
+ //   name: 'adult' | 'child' | 'baby',
+ //   action: 'increment' | 'decrement'
+ //  ) {
+ //   const currentValue =
+ //    Number(getValues(`guestInfo.${itemIndex}.${name}Count`)) || 0;
+ //   if (currentValue === 0 && action === 'decrement') return;
+ //   const newValue = currentValue + (action === 'increment' ? 1 : -1);
+ //   setValue(`guestInfo.${itemIndex}.${name}Count`, newValue || '');
+ //  }
 
  function handleRemoveRoom() {
   removeRoom(room.internalID!, itemIndex);
@@ -186,94 +186,96 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
       )}
      />
     </div>
-    <div className='grid col-span-full lg:col-auto grid-cols-2 gap-4'>
-     <TextField
-      label='نام'
-      size='small'
-      {...(() => {
-       const rg = register(`guestInfo.${itemIndex}.guestFirstName`);
-       if (!!guestInfo?.sameAsReserveInfo) {
-        return { ...rg, value: reserveFirstName || '' };
-       } else {
-        return { ...rg };
+    {guestInfo?.sameAsReserveInfo ? null : (
+     <div className='grid col-span-full grid-cols-2 lg:grid-cols-3 gap-4'>
+      <TextField
+       label='نام'
+       size='small'
+       {...(() => {
+        const rg = register(`guestInfo.${itemIndex}.guestFirstName`);
+        if (!!guestInfo?.sameAsReserveInfo) {
+         return { ...rg, value: reserveFirstName || '' };
+        } else {
+         return { ...rg };
+        }
+       })()}
+       disabled={!!guestInfo?.sameAsReserveInfo}
+       error={
+        !guestInfo?.sameAsReserveInfo &&
+        !!errors?.guestInfo?.[itemIndex]?.guestFirstName
        }
-      })()}
-      disabled={!!guestInfo?.sameAsReserveInfo}
-      error={
-       !guestInfo?.sameAsReserveInfo &&
-       !!errors?.guestInfo?.[itemIndex]?.guestFirstName
-      }
-      helperText={
-       guestInfo?.sameAsReserveInfo
-        ? ''
-        : errors?.guestInfo?.[itemIndex]?.guestFirstName?.message || ''
-      }
-      slotProps={{
-       inputLabel: {
-        shrink: true,
-       },
-      }}
-      required={!guestInfo?.sameAsReserveInfo}
-     />
-     <TextField
-      label='نام خانوادگی'
-      size='small'
-      {...(() => {
-       const rg = register(`guestInfo.${itemIndex}.guestLastName`);
-       if (!!guestInfo?.sameAsReserveInfo) {
-        return { ...rg, value: reserveLastName || '' };
-       } else {
-        return { ...rg };
+       helperText={
+        guestInfo?.sameAsReserveInfo
+         ? ''
+         : errors?.guestInfo?.[itemIndex]?.guestFirstName?.message || ''
        }
-      })()}
-      disabled={!!guestInfo?.sameAsReserveInfo}
-      error={
-       !guestInfo?.sameAsReserveInfo &&
-       !!errors?.guestInfo?.[itemIndex]?.guestLastName
-      }
-      helperText={
-       guestInfo?.sameAsReserveInfo
-        ? ''
-        : errors?.guestInfo?.[itemIndex]?.guestLastName?.message || ''
-      }
-      slotProps={{
-       inputLabel: {
-        shrink: true,
-       },
-      }}
-      required={!guestInfo?.sameAsReserveInfo}
-     />
-    </div>
-    <TextField
-     label='کدملی'
-     size='small'
-     className='col-span-full lg:col-auto'
-     {...(() => {
-      const rg = register(`guestInfo.${itemIndex}.guestNationalCode`);
-      if (!!guestInfo?.sameAsReserveInfo) {
-       return { ...rg, value: reserveNationalCode || '' };
-      } else {
-       return { ...rg };
-      }
-     })()}
-     disabled={!!guestInfo?.sameAsReserveInfo}
-     error={
-      !guestInfo?.sameAsReserveInfo &&
-      !!errors?.guestInfo?.[itemIndex]?.guestNationalCode
-     }
-     helperText={
-      guestInfo?.sameAsReserveInfo
-       ? ''
-       : errors?.guestInfo?.[itemIndex]?.guestNationalCode?.message || ''
-     }
-     slotProps={{
-      inputLabel: {
-       shrink: true,
-      },
-     }}
-     required={!guestInfo?.sameAsReserveInfo}
-    />
-    <div className='col-span-full flex gap-6 bg-neutral-100 p-3 justify-center rounded-lg  lg:flex-row flex-col flex-wrap'>
+       slotProps={{
+        inputLabel: {
+         shrink: true,
+        },
+       }}
+       required={!guestInfo?.sameAsReserveInfo}
+      />
+      <TextField
+       label='نام خانوادگی'
+       size='small'
+       {...(() => {
+        const rg = register(`guestInfo.${itemIndex}.guestLastName`);
+        if (!!guestInfo?.sameAsReserveInfo) {
+         return { ...rg, value: reserveLastName || '' };
+        } else {
+         return { ...rg };
+        }
+       })()}
+       disabled={!!guestInfo?.sameAsReserveInfo}
+       error={
+        !guestInfo?.sameAsReserveInfo &&
+        !!errors?.guestInfo?.[itemIndex]?.guestLastName
+       }
+       helperText={
+        guestInfo?.sameAsReserveInfo
+         ? ''
+         : errors?.guestInfo?.[itemIndex]?.guestLastName?.message || ''
+       }
+       slotProps={{
+        inputLabel: {
+         shrink: true,
+        },
+       }}
+       required={!guestInfo?.sameAsReserveInfo}
+      />
+      <TextField
+       label='کدملی'
+       className='col-span-full lg:col-auto'
+       size='small'
+       {...(() => {
+        const rg = register(`guestInfo.${itemIndex}.guestNationalCode`);
+        if (!!guestInfo?.sameAsReserveInfo) {
+         return { ...rg, value: reserveNationalCode || '' };
+        } else {
+         return { ...rg };
+        }
+       })()}
+       disabled={!!guestInfo?.sameAsReserveInfo}
+       error={
+        !guestInfo?.sameAsReserveInfo &&
+        !!errors?.guestInfo?.[itemIndex]?.guestNationalCode
+       }
+       helperText={
+        guestInfo?.sameAsReserveInfo
+         ? ''
+         : errors?.guestInfo?.[itemIndex]?.guestNationalCode?.message || ''
+       }
+       slotProps={{
+        inputLabel: {
+         shrink: true,
+        },
+       }}
+       required={!guestInfo?.sameAsReserveInfo}
+      />
+     </div>
+    )}
+    {/* <div className='col-span-full flex gap-6 py-3 rounded-lg lg:flex-row flex-col flex-wrap'>
      <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
       <Button
        sx={buttonStyles}
@@ -358,7 +360,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
        <AddIcon />
       </Button>
      </div>
-    </div>
+    </div> */}
    </div>
   </div>
  );
