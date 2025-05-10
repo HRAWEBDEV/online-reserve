@@ -112,6 +112,11 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
            className: 'h-full w-full object-cover',
            src: images[1]?.imageURL,
            alt: 'hotel image',
+           onClick: () => {
+            showSlideShow({
+             slides: images.map((item) => ({ url: item.imageURL })),
+            });
+           },
           }}
           wrapper={{
            className: 'h-full w-full',
@@ -124,6 +129,11 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
            className: 'h-full w-full object-cover',
            src: images[2]?.imageURL,
            alt: 'hotel image',
+           onClick: () => {
+            showSlideShow({
+             slides: images.map((item) => ({ url: item.imageURL })),
+            });
+           },
           }}
           wrapper={{
            className: 'h-full w-full',

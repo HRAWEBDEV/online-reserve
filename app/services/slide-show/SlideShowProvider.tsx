@@ -1,5 +1,11 @@
 'use client';
-import { useState, useCallback, useMemo, PropsWithChildren } from 'react';
+import {
+ useState,
+ useCallback,
+ useMemo,
+ PropsWithChildren,
+ useEffect,
+} from 'react';
 import { type Slide, slideShowContext } from './slideShowContext';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -29,6 +35,22 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
   }),
   [showSlideShow, cancelSlideShow]
  );
+
+ useEffect(() => {
+  const controller = new AbortController();
+  window.addEventListener(
+   'keydown',
+   (e) => {
+    if (e.key === 'Escape') {
+     cancelSlideShow();
+    }
+   },
+   {
+    signal: controller.signal,
+   }
+  );
+  return () => controller.abort();
+ }, [cancelSlideShow]);
 
  return (
   <slideShowContext.Provider value={ctx}>
