@@ -12,10 +12,12 @@ type LockGuestInfo = {
 type LockInfo = {
  firstName: string;
  lastName: string;
- arrivalDateTimeOffset: string;
- depatureDateTimeOffset: string;
+ arrivelDateTimeOffset: string;
+ departureDateTimeOffset: string;
  totalPrice: number;
+ trackingCode: string;
 };
+
 type LockInfoResult = {
  rooms: RoomInventory[];
  guestInfo: LockGuestInfo[];
@@ -43,9 +45,6 @@ const getLockInfo = ({
  ...queries
 }: {
  signal: AbortSignal;
- channelID: number;
- hotelID: number;
- arzID: number;
  trackingCode: string;
 }) => {
  const searchParams = new URLSearchParams();

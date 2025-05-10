@@ -5,36 +5,44 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTimer } from '../hooks/useTimer';
 import { type LockInfoResult } from '../../services/confirmReserveApiActions';
+import { useSnackbar } from 'notistack';
+import { useInternalID } from '@/hooks/useInternalID';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
  month: 'long',
  day: '2-digit',
 });
-const timeFormatter = new Intl.DateTimeFormat('fa', {
- hour: '2-digit',
- minute: '2-digit',
-});
+// const timeFormatter = new Intl.DateTimeFormat('fa', {
+//  hour: '2-digit',
+//  minute: '2-digit',
+// });
 
 export default function InvoiceDetails({
  lockInfo,
 }: {
  lockInfo: LockInfoResult;
 }) {
+ const { getID } = useInternalID();
+ const snackbar = useSnackbar();
  const { minutes, seconds, startTimer } = useTimer(200);
- function copyRefNumber() {}
- console.log(minutes, seconds);
-
+ function copyRefNumber() {
+  navigator.clipboard.writeText(lockInfo.lockInfo.trackingCode);
+  snackbar.enqueueSnackbar('کد پیگیری کپی شد', {
+   variant: 'success',
+  });
+ }
  useEffect(() => {
   startTimer();
  }, [startTimer]);
-
  return (
   <section className='order-1 lg:order-2 lg:w-[25rem] shrink-0'>
    <div className='p-4 bg-neutral-200 border border-neutral-300 rounded-lg mb-4 flex items-center justify-between gap-4 flex-wrap'>
-    <span className='font-medium'>شماره پیگیری: </span>
+    <span className='font-medium'>کد پیگیری: </span>
     <div className='flex items-center gap-2'>
-     <span className='text-base font-medium'>1022121354</span>
+     <span className='text-base font-medium'>
+      {lockInfo.lockInfo.trackingCode}
+     </span>
      <IconButton size='small' onClick={copyRefNumber}>
       <ContentCopyIcon />
      </IconButton>
@@ -63,9 +71,15 @@ export default function InvoiceDetails({
       <div className='flex-grow text-center'>
        <div className='text-primary font-medium  mb-2'>تاریخ ورود</div>
        <div className='font-medium mb-1'>
-        {dateFormatter.format(new Date())}
+        {dateFormatter.format(
+         new Date(lockInfo.lockInfo.arrivelDateTimeOffset)
+        )}
        </div>
-       <div>{timeFormatter.format(new Date())}</div>
+       {/* <div>
+        {timeFormatter.format(
+         new Date(lockInfo.lockInfo.arrivelDateTimeOffset)
+        )}
+       </div> */}
       </div>
       <div className='flex flex-col items-center text-secondary-dark'>
        <span className='font-medium'>{2} شب</span>
@@ -77,19 +91,30 @@ export default function InvoiceDetails({
       </div>
       <div className='flex-grow text-center'>
        <div className='text-primary font-medium  mb-2'>تاریخ خروج</div>
-       <div className='font-medium'>{dateFormatter.format(new Date())}</div>
-       <div>{timeFormatter.format(new Date())}</div>
+       <div className='font-medium'>
+        {dateFormatter.format(
+         new Date(lockInfo.lockInfo.departureDateTimeOffset)
+        )}
+       </div>
+       {/* <div>
+        {timeFormatter.format(
+         new Date(lockInfo.lockInfo.depatureDateTimeOffset)
+        )}
+       </div> */}
       </div>
      </div>
     </div>
     <div>
      <ul className='grid gap-1'>
-      {[1, 2, 3].map((item) => (
-       <li key={item}>
-        <span className='text-neutral-500'>اتاق ۱: </span>
-        <span className='font-medium'>دوتخته تویین</span>
-       </li>
-      ))}
+      {lockInfo.rooms.map((item, index) => {
+       getID(item);
+       return (
+        <li key={item.internalID}>
+         <span className='text-neutral-500'>اتاق {index + 1}: </span>
+         <span className='font-medium'>{item.fName}</span>
+        </li>
+       );
+      })}
      </ul>
     </div>
    </div>
