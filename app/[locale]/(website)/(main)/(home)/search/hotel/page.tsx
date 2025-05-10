@@ -46,52 +46,58 @@ export default async function page({
   channelID: requestData.channelID.toString(),
   hotelID: requestData.hotelID.toString(),
  });
- const imageResponse = await fetch(
-  `${
-   process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-  }${getHotelImagesApi}?${searchQueries.toString()}`,
-  {
-   method: 'GET',
-   headers: {
-    'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-   },
+ try {
+  const imageResponse = await fetch(
+   `${
+    process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+   }${getHotelImagesApi}?${searchQueries.toString()}`,
+   {
+    method: 'GET',
+    headers: {
+     'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+    },
+   }
+  );
+  if (imageResponse.ok) {
+   images = await imageResponse.json();
   }
- );
- if (imageResponse.ok) {
-  images = await imageResponse.json();
- }
-
- const facilityResponse = await fetch(
-  `${
-   process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-  }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
-  {
-   method: 'GET',
-   headers: {
-    'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-   },
+ } catch {}
+ //
+ try {
+  const facilityResponse = await fetch(
+   `${
+    process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+   }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
+   {
+    method: 'GET',
+    headers: {
+     'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+    },
+   }
+  );
+  if (facilityResponse.ok) {
+   facilities = await facilityResponse.json();
   }
- );
- if (facilityResponse.ok) {
-  facilities = await facilityResponse.json();
- }
-
+ } catch {}
+ //
  let roomFacilities: Facilities[] = [];
- const roomFacilityResponse = await fetch(
-  `${
-   process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-  }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
-  {
-   method: 'GET',
-   headers: {
-    'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-   },
+ try {
+  const roomFacilityResponse = await fetch(
+   `${
+    process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+   }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
+   {
+    method: 'GET',
+    headers: {
+     'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+    },
+   }
+  );
+  if (roomFacilityResponse.ok) {
+   roomFacilities = await roomFacilityResponse.json();
   }
- );
- if (roomFacilityResponse.ok) {
-  roomFacilities = await roomFacilityResponse.json();
- }
-
+ } catch {}
+ //
  return (
   <div>
    <RoomsInfoProvider requestData={requestData}>

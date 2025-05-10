@@ -55,7 +55,6 @@ export default function ImageWrapper({
      }}
      alt={alt}
      {...imgProps}
-     onLoad={() => setIsLoading(true)}
      onError={() => setIsError(true)}
     />
    </div>
