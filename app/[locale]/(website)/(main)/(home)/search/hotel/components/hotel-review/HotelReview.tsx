@@ -11,6 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import MapIcon from '@mui/icons-material/Map';
 import ImageWrapper from '@/components/ImageWrapper';
 import { type HotelImage } from '../../services/HotelApiActions';
+import { useSlideShowContext } from '@/app/services/slide-show/slideShowContext';
 
 const HotelLocation = dynamic(() => import('./HotelLocation'), {
  loading: () => <div></div>,
@@ -19,6 +20,7 @@ const HotelLocation = dynamic(() => import('./HotelLocation'), {
 
 export default function HotelReview({ images }: { images: HotelImage[] }) {
  const [showMap, setShowMap] = useState(false);
+ const { showSlideShow } = useSlideShowContext();
  return (
   <section className='mb-8' id='overview'>
    <div className='container flex flex-wrap gap-4 items-start mb-4'>
@@ -88,9 +90,14 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
         <SwiperSlide className='md:rounded-lg overflow-hidden'>
          <ImageWrapper
           img={{
-           className: 'h-full w-full object-cover',
+           className: 'h-full w-full object-cover cursor-pointer',
            src: images[0]?.imageURL,
            alt: 'hotel image',
+           onClick: () => {
+            showSlideShow({
+             slides: images.map((item) => ({ url: item.imageURL })),
+            });
+           },
           }}
           wrapper={{
            className: 'h-[23rem]',

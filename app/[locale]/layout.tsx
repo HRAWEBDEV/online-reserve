@@ -13,6 +13,7 @@ import ReactQueryProvider from '../services/react-query/ReactQueryProvider';
 import { type AppParams } from '../utils/appParams';
 import { locales } from '../localization/locales';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import SlideShowProvider from '../services/slide-show/SlideShowProvider';
 
 export function generateMetadata(): Metadata {
  return {
@@ -78,7 +79,7 @@ export default async function RootLayout({
        <MuiLocalization>
         <AppMonitorProvider>
          <ReactQueryProvider>
-          {children}
+          <SlideShowProvider>{children}</SlideShowProvider>
           <div style={{ direction: 'ltr' }}>
            <ReactQueryDevtools buttonPosition='bottom-left' />
           </div>

@@ -1,0 +1,75 @@
+'use client';
+import { useState, useCallback, useMemo, PropsWithChildren } from 'react';
+import { type Slide, slideShowContext } from './slideShowContext';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import ImageWrapper from '@/components/ImageWrapper';
+
+export default function SlideShowProvider({ children }: PropsWithChildren) {
+ const [slides, setSlides] = useState<Slide[]>([]);
+ const [isVisible, setIsVisible] = useState(false);
+
+ const showSlideShow = useCallback(({ slides }: { slides: Slide[] }) => {
+  setSlides(slides);
+  setIsVisible(true);
+  document.body.style.overflow = 'hidden';
+ }, []);
+ const cancelSlideShow = useCallback(() => {
+  setSlides([]);
+  setIsVisible(false);
+  document.body.style.overflow = 'auto';
+ }, []);
+
+ const ctx = useMemo(
+  () => ({
+   showSlideShow,
+   cancelSlideShow,
+  }),
+  [showSlideShow, cancelSlideShow]
+ );
+
+ return (
+  <slideShowContext.Provider value={ctx}>
+   {children}
+   {isVisible && (
+    <div
+     aria-describedby='slide show'
+     className='fixed inset-0 bg-black/75 z-[1000]'
+    >
+     <div className='p-4 flex justify-end h-[10vh]'>
+      <IconButton onClick={cancelSlideShow} className='!text-white'>
+       <CloseIcon fontSize='large' />
+      </IconButton>
+     </div>
+     <div>
+      <Swiper
+       className='flex-grow w-full [&]:[--swiper-navigation-color:white] [&]:[--swiper-pagination-color:white] [&]:[--swiper-navigation-sides-offset:2rem]'
+       slidesPerView={1}
+       spaceBetween={14}
+       pagination={{
+        clickable: true,
+       }}
+       modules={[Pagination]}
+      >
+       {slides.map((item) => (
+        <SwiperSlide
+         key={item.url}
+         className='!h-[80vh] w-full !flex items-center justify-center pb-10'
+        >
+         <ImageWrapper
+          img={{
+           src: item.url,
+           className: 'rounded-lg overflow-hidden',
+          }}
+         />
+        </SwiperSlide>
+       ))}
+      </Swiper>
+     </div>
+    </div>
+   )}
+  </slideShowContext.Provider>
+ );
+}
