@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { PropsWithChildren } from 'react';
 import { type Store, confirmReserveContext } from './confirmReserveContext';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import ErrorIcon from '@mui/icons-material/Error';
 import {
  type RoomInventory,
  type RoomInfo,
@@ -63,7 +64,7 @@ export default function ConfirmReserveProvider({
  const { mutate, isPending } = useMutation({
   onSuccess(res: AxiosResponse<LockResult>) {
    router.push(
-    `/confirm-reserve/payment?lockBookID=${res.data.lockBookID}&arzID=${res.data.arzID}&trackingCode=${res.data.trackingCode}`
+    `/confirm-reserve/payment?lockBookID=${res.data.lockBookID}&arzID=${res.data.arzID}&trackingCode=${res.data.trackingCode}&arzID=${requestData.arzID}&hotelID=${requestData.hotelID}&channelID=${requestData.channelID}&providerID=${requestData.providerID}`
    );
   },
   onError() {
@@ -123,7 +124,7 @@ export default function ConfirmReserveProvider({
   },
  });
 
- const { isLoading, isFetching } = useQuery({
+ const { isLoading, isFetching, isError } = useQuery({
   enabled: !selectedRooms.length,
   queryKey: [getSelectedRoomsKey],
   async queryFn({ signal }) {
@@ -234,6 +235,14 @@ export default function ConfirmReserveProvider({
  useEffect(() => {
   return () => getSelectedRoomAbortController?.abort();
  }, []);
+ if (isError) {
+  return (
+   <div className='flex flex-col items-center justify-center gap-2 my-10 rounded-lg p-4 pt-12 pb-16 border border-neutral-300 w-[min(100%,30rem)] mx-auto'>
+    <ErrorIcon className='text-red-500' sx={{ fontSize: '6rem' }} />
+    <span className='text-lg font-bold'>خطایی رخ داده است</span>
+   </div>
+  );
+ }
 
  return (
   <confirmReserveContext.Provider value={ctx}>

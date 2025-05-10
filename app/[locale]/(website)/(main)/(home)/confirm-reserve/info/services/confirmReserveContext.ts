@@ -9,6 +9,7 @@ type Store = {
  selectedRoomsInfo: RoomInfo[];
  isLoadingRooms: boolean;
  loadingAddRoom: boolean;
+ confirmReserveLoading: boolean;
  handleConfirmReserve: (reserveSchema: ReserveInfoSchema) => Promise<void>;
  addRoom: (roomInfo: Omit<RoomInfo, 'count'>) => Promise<void>;
  removeRoom: (id: number, i: number) => void;

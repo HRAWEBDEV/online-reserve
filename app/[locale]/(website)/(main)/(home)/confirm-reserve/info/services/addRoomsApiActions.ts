@@ -1,5 +1,6 @@
 import { axios } from '@/app/services/axios/axiosBaseConfig';
 import { type RoomInventory } from '../../../search/hotel/services/HotelApiActions';
+import { type LockGuestInfo } from '../../services/confirmReserveApiActions';
 
 const getRoomsInfoKey = 'get-rooms-info';
 const getSelectedRoomKey = 'get-selected-room';
@@ -9,13 +10,6 @@ const getSelectedRoomsApi = '/CRS/OnlineReservation/GetAccommodationTypes';
 const lockReserveKey = 'lock-reserve';
 const lockReserveApi = '/CRS/OnlineReservation/LockBook';
 
-type LockGuestInfo = {
- firstName: string;
- lastName: string;
- nationalCode: string | null;
- passport: string | null;
- genderID: number;
-};
 type LockResult = {
  lockBookID: number;
  trackingCode: string;

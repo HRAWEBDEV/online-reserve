@@ -1,6 +1,26 @@
 import { axios } from '@/app/services/axios/axiosBaseConfig';
+import { type RoomInventory } from '../info/services/addRoomsApiActions';
 
-type LockInfo = unknown;
+type LockGuestInfo = {
+ firstName: string;
+ lastName: string;
+ nationalCode: string | null;
+ passport: string | null;
+ genderID: number;
+};
+
+type LockInfo = {
+ firstName: string;
+ lastName: string;
+ arrivalDateTimeOffset: string;
+ depatureDateTimeOffset: string;
+ totalPrice: number;
+};
+type LockInfoResult = {
+ rooms: RoomInventory[];
+ guestInfo: LockGuestInfo[];
+ lockInfo: LockInfo;
+};
 
 const getLockInfoKey = 'get-lock-info';
 const getLockInfoApi = '/CRS/OnlineReservation/getLockInformation';
@@ -32,9 +52,12 @@ const getLockInfo = ({
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.get<LockInfo>(`${getLockInfoApi}?${searchParams.toString()}`, {
-  signal,
- });
+ return axios.get<LockInfoResult>(
+  `${getLockInfoApi}?${searchParams.toString()}`,
+  {
+   signal,
+  }
+ );
 };
 //
 const getPaymentUrl = ({
@@ -131,7 +154,8 @@ const getVoucher = ({
 };
 
 export {
- type LockInfo,
+ type LockInfoResult,
+ type LockGuestInfo,
  getLockInfo,
  getLockInfoKey,
  getPaymentUrlKey,

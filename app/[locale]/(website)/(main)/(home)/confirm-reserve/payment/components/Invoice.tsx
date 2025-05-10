@@ -3,8 +3,9 @@ import Button from '@mui/material/Button';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CheckIcon from '@mui/icons-material/Check';
 import { currencyFormatter } from '@/app/utils/currencyFormatter';
+import { type LockInfoResult } from '../../services/confirmReserveApiActions';
 
-export default function Invoice() {
+export default function Invoice({ lockInfo }: { lockInfo: LockInfoResult }) {
  return (
   <form className='p-4 order-2 lg:order-1 lg:flex-grow rounded-lg border border-neutral-300'>
    <section className='mb-16'>
@@ -14,7 +15,9 @@ export default function Invoice() {
        <p className='font-medium text-lg'>جمع کل:</p>
       </div>
       <div className='text-lg font-medium'>
-       <span className='me-2'>{currencyFormatter.format(120000000)}</span>
+       <span className='me-2'>
+        {currencyFormatter.format(lockInfo.lockInfo.totalPrice)}
+       </span>
        <span>ریال</span>
       </div>
      </div>

@@ -14,8 +14,13 @@ import Skeleton from '@mui/material/Skeleton';
 export default function GuestInfo() {
  const { isQueryTrue, handleToggle } = useQueryToggler('show-add-rooms');
  const { getID } = useInternalID();
- const { selectedRooms, handleConfirmReserve, isLoadingRooms, loadingAddRoom } =
-  useConfirmReserveContext();
+ const {
+  selectedRooms,
+  handleConfirmReserve,
+  isLoadingRooms,
+  loadingAddRoom,
+  confirmReserveLoading,
+ } = useConfirmReserveContext();
  const {
   register,
   handleSubmit,
@@ -30,7 +35,7 @@ export default function GuestInfo() {
      variant='outlined'
      color='error'
      onClick={() => handleToggle()}
-     loading={isLoadingRooms || loadingAddRoom}
+     loading={isLoadingRooms || loadingAddRoom || confirmReserveLoading}
     >
      <div className='flex items-center gap-2'>
       <AddOutlinedIcon />
@@ -104,7 +109,7 @@ export default function GuestInfo() {
      size='large'
      variant='contained'
      onClick={handleSubmit(handleConfirmReserve)}
-     loading={isLoadingRooms || loadingAddRoom}
+     loading={isLoadingRooms || loadingAddRoom || confirmReserveLoading}
     >
      تایید
     </Button>

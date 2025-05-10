@@ -4,6 +4,7 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTimer } from '../hooks/useTimer';
+import { type LockInfoResult } from '../../services/confirmReserveApiActions';
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
  year: 'numeric',
@@ -15,7 +16,11 @@ const timeFormatter = new Intl.DateTimeFormat('fa', {
  minute: '2-digit',
 });
 
-export default function InvoiceDetails() {
+export default function InvoiceDetails({
+ lockInfo,
+}: {
+ lockInfo: LockInfoResult;
+}) {
  const { minutes, seconds, startTimer } = useTimer(200);
  function copyRefNumber() {}
  console.log(minutes, seconds);

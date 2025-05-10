@@ -261,7 +261,7 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
        required={!guestInfo?.sameAsReserveInfo}
       />
       <TextField
-       label='کدملی'
+       label={guestInfo?.guestType === 'foreign' ? 'پاسپورت' : 'کدملی'}
        className='col-span-full lg:col-auto'
        size='small'
        {...(() => {
@@ -291,92 +291,6 @@ export default function SelectedRoom({ itemIndex, room }: Props) {
       />
      </div>
     )}
-    {/* <div className='col-span-full flex gap-6 py-3 rounded-lg lg:flex-row flex-col flex-wrap'>
-     <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
-      <Button
-       sx={buttonStyles}
-       color='error'
-       variant='outlined'
-       className='!bg-background'
-       onClick={() => handleChangeGuestNumber('adult', 'decrement')}
-      >
-       <RemoveIcon />
-      </Button>
-      <TextField
-       fullWidth
-       label='بزرگسال'
-       size='small'
-       className='!bg-background'
-       slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
-       {...register(`guestInfo.${itemIndex}.adultCount`)}
-      />
-      <Button
-       sx={buttonStyles}
-       variant='outlined'
-       color='success'
-       className='!bg-background'
-       onClick={() => handleChangeGuestNumber('adult', 'increment')}
-      >
-       <AddIcon />
-      </Button>
-     </div>
-     <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
-      <Button
-       sx={buttonStyles}
-       color='error'
-       variant='outlined'
-       className='!bg-background'
-       onClick={() => handleChangeGuestNumber('baby', 'decrement')}
-      >
-       <RemoveIcon />
-      </Button>
-      <TextField
-       fullWidth
-       label='کودک'
-       size='small'
-       className='!bg-background'
-       slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
-       {...register(`guestInfo.${itemIndex}.babyCount`)}
-      />
-      <Button
-       sx={buttonStyles}
-       color='success'
-       variant='outlined'
-       className='!bg-background'
-       onClick={() => handleChangeGuestNumber('baby', 'increment')}
-      >
-       <AddIcon />
-      </Button>
-     </div>
-     <div className='grid grid-cols-[max-content_1fr_max-content] lg:grid-cols-[max-content_5rem_max-content] items-center'>
-      <Button
-       sx={buttonStyles}
-       color='error'
-       variant='outlined'
-       className='!bg-background'
-       onClick={() => handleChangeGuestNumber('child', 'decrement')}
-      >
-       <RemoveIcon />
-      </Button>
-      <TextField
-       fullWidth
-       label='نوزاد'
-       size='small'
-       className='!bg-background'
-       slotProps={{ input: { readOnly: true }, inputLabel: { shrink: true } }}
-       {...register(`guestInfo.${itemIndex}.childCount`)}
-      />
-      <Button
-       sx={buttonStyles}
-       color='success'
-       variant='outlined'
-       className='!bg-background'
-       onClick={() => handleChangeGuestNumber('child', 'increment')}
-      >
-       <AddIcon />
-      </Button>
-     </div>
-    </div> */}
    </div>
   </div>
  );
