@@ -12,8 +12,15 @@ const lockReserveApi = '/CRS/OnlineReservation/LockBook';
 type LockGuestInfo = {
  firstName: string;
  lastName: string;
- nationalCode: string;
+ nationalCode: string | null;
+ passport: string | null;
  genderID: number;
+};
+type LockResult = {
+ lockBookID: number;
+ trackingCode: string;
+ totalPrice: number;
+ arzID: number;
 };
 type LockRoomInfo = {
  roomTypeID: number;
@@ -95,7 +102,7 @@ const lockReserve = ({
  channelID: number;
  providerID: number;
  arrivelDate: string;
- departureDate: string;
+ depatureDate: string;
  contactNo: string;
  hotelID: number;
  arzID: number;
@@ -110,7 +117,7 @@ const lockReserve = ({
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.post<unknown>(
+ return axios.post<LockResult>(
   `${lockReserveApi}?${searchParams.toString()}`,
   lockInfo
  );
@@ -121,6 +128,7 @@ export {
  type RoomInventory,
  type LockRoomInfo,
  type LockGuestInfo,
+ type LockResult,
  getRoomsInfoKey,
  getSelectedRoomsKey,
  getSelectedRooms,

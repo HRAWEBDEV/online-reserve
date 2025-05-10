@@ -33,7 +33,7 @@ function getRequestData(searchQueries: TSearchQueries): TRequestData {
   arzID: Number(searchQueries.arzID) || defaultRequest.arzID || 1,
   providerID:
    Number(searchQueries.providerID) || defaultRequest.providerID || 1,
-  channelID: Number(searchQueries.channelID) || defaultRequest.channelID || 1,
+  channelID: Number(searchQueries.channelID) || defaultRequest.channelID || -1,
   hotelID: Number(searchQueries.hotelID) || defaultRequest.hotelID || 1,
  };
  return requestData;

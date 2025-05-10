@@ -12,15 +12,19 @@ import {
  getSelectedRoomAbortController,
  getSelectedRoom,
  lockReserve,
+ LockResult,
 } from './addRoomsApiActions';
 import { useRoomsInfoContext } from './roomsInfoContext';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { type ReserveInfoSchema } from '../schema/reserveInfoSchema';
 import { useFormContext } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+import { AxiosResponse } from 'axios';
 
 export default function ConfirmReserveProvider({
  children,
 }: PropsWithChildren) {
+ const snackbar = useSnackbar();
  const { getValues } = useFormContext<ReserveInfoSchema>();
  const router = useRouter();
  const pathname = usePathname();
@@ -57,13 +61,27 @@ export default function ConfirmReserveProvider({
  }, [selectedRooms]);
  //
  const { mutate, isPending } = useMutation({
+  onSuccess(res: AxiosResponse<LockResult>) {
+   router.push(
+    `/confirm-reserve/payment?lockBookID=${res.data.lockBookID}&arzID=${res.data.arzID}&trackingCode=${res.data.trackingCode}`
+   );
+  },
+  onError() {
+   snackbar.enqueueSnackbar({
+    message: 'خطایی رخ داده است، لطفا مجددا تلاش کنید',
+    variant: 'error',
+   });
+  },
   mutationFn(data: ReserveInfoSchema) {
    const roomInfo: (LockRoomInfo & { rateTypeID: number })[] = [];
    selectedRooms.forEach((item, i) => {
     const accRatePlan = item.accommodationTypePrice.accommodationRatePlanModel;
     const schemaInfo = data.guestInfo[i];
+    const guestNationalCode = schemaInfo.sameAsReserveInfo
+     ? data.reserveNationalCode
+     : schemaInfo.guestNationalCode;
     roomInfo.push({
-     adult: 0,
+     adult: item.accommodationTypePrice.beds,
      baby: 0,
      child: 0,
      extraBed: 0,
@@ -79,9 +97,9 @@ export default function ConfirmReserveProvider({
       lastName: schemaInfo.sameAsReserveInfo
        ? data.reserveLastName
        : schemaInfo.guestLastName,
-      nationalCode: schemaInfo.sameAsReserveInfo
-       ? data.reserveNationalCode
-       : schemaInfo.guestNationalCode,
+      nationalCode:
+       schemaInfo.guestType === 'normal' ? guestNationalCode : null,
+      passport: schemaInfo.guestType === 'foreign' ? guestNationalCode : null,
       genderID: schemaInfo.gender === 'female' ? 2 : 1,
      },
     });
@@ -90,7 +108,7 @@ export default function ConfirmReserveProvider({
     channelID: requestData.channelID,
     providerID: requestData.providerID,
     arrivelDate: checkInDate.toISOString(),
-    departureDate: checkOutDate.toISOString(),
+    depatureDate: checkOutDate.toISOString(),
     hotelID: requestData.hotelID,
     arzID: requestData.arzID,
     rateTypeID: roomInfo[0].rateTypeID,

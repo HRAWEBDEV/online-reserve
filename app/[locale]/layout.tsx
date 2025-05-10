@@ -14,6 +14,7 @@ import { type AppParams } from '../utils/appParams';
 import { locales } from '../localization/locales';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import SlideShowProvider from '../services/slide-show/SlideShowProvider';
+import ToastrProvider from '../services/notifications/ToastrProvider';
 
 export function generateMetadata(): Metadata {
  return {
@@ -79,7 +80,9 @@ export default async function RootLayout({
        <MuiLocalization>
         <AppMonitorProvider>
          <ReactQueryProvider>
-          <SlideShowProvider>{children}</SlideShowProvider>
+          <ToastrProvider>
+           <SlideShowProvider>{children}</SlideShowProvider>
+          </ToastrProvider>
           <div style={{ direction: 'ltr' }}>
            <ReactQueryDevtools buttonPosition='bottom-left' />
           </div>
