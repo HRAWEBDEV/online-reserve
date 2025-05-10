@@ -35,7 +35,6 @@ export default function ConfirmReserveProvider({
  } = useRoomsInfoContext();
  const [loadingAddRoom, setLoadingAddRoom] = useState(false);
  const [selectedRooms, setSelectedRooms] = useState<RoomInventory[]>([]);
-
  // selectedRooms info
  const selectedRoomsInfo = useMemo(() => {
   return selectedRooms.reduce((acc, cur) => {
@@ -88,10 +87,10 @@ export default function ConfirmReserveProvider({
     });
    });
    return lockReserve({
-    arrivelDate: checkInDate.toISOString(),
-    departureDate: checkOutDate.toISOString(),
     channelID: requestData.channelID,
     providerID: requestData.providerID,
+    arrivelDate: checkInDate.toISOString(),
+    departureDate: checkOutDate.toISOString(),
     hotelID: requestData.hotelID,
     arzID: requestData.arzID,
     rateTypeID: roomInfo[0].rateTypeID,
@@ -101,6 +100,7 @@ export default function ConfirmReserveProvider({
     firstName: data.reserveFirstName,
     lastName: data.reserveLastName,
     email: data.reserveEmail,
+    nationalCode: data.reserveNationalCode,
    });
   },
  });

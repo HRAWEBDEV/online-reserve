@@ -13,8 +13,8 @@ const reserveInfoSchema = z
  .object({
   reserveFirstName: z.string().min(1, 'این فیلد الزامی است'),
   reserveLastName: z.string().min(1, 'این فیلد الزامی است'),
-  reserveNationalCode: z.string(),
-  reservePhoneNumber: z.string(),
+  reserveNationalCode: z.string().min(1, 'این فیلد الزامی است'),
+  reservePhoneNumber: z.string().min(1, 'این فیلد الزامی است'),
   reserveEmail: z.string().email('ایمیل معتبر نیست').or(z.literal('')),
   guestInfo: z.array(
    z.object({
@@ -47,6 +47,13 @@ const reserveInfoSchema = z
      code: z.ZodIssueCode.custom,
      message: 'این فیلد الزامی است',
      path: [`guestInfo[${i}].guestLastName`],
+    });
+   }
+   if (!guest.guestNationalCode) {
+    ctx.addIssue({
+     code: z.ZodIssueCode.custom,
+     message: 'این فیلد الزامی است',
+     path: [`guestInfo[${i}].guestNationalCode`],
     });
    }
   });

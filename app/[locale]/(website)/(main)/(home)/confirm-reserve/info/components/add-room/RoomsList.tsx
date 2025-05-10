@@ -72,25 +72,27 @@ export default function RoomsList({
  return (
   <>
    <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-1 relative'>
-    {rooms.map((room) => {
-     getID(room);
-     return (
-      <Fragment key={room.internalID}>
-       {room.accommodationTypePrices.map((roomPlan) => {
-        getID(roomPlan);
-        return (
-         <Room
-          key={roomPlan.internalID}
-          nights={nights}
-          roomPlan={roomPlan}
-          room={room}
-          closeModal={closeModal}
-         />
-        );
-       })}
-      </Fragment>
-     );
-    })}
+    {rooms
+     .filter((item) => item.roomCount)
+     .map((room) => {
+      getID(room);
+      return (
+       <Fragment key={room.internalID}>
+        {room.accommodationTypePrices.map((roomPlan) => {
+         getID(roomPlan);
+         return (
+          <Room
+           key={roomPlan.internalID}
+           nights={nights}
+           roomPlan={roomPlan}
+           room={room}
+           closeModal={closeModal}
+          />
+         );
+        })}
+       </Fragment>
+      );
+     })}
    </section>
    {!isLargeDevice && result && (
     <div className='sticky bottom-10 z-10 flex justify-center start-0 end-0'>

@@ -7,7 +7,7 @@ const getSelectedRoomApi = '/CRS/OnlineReservation/AccommodationTypeInfo';
 const getSelectedRoomsKey = 'get-selected-rooms';
 const getSelectedRoomsApi = '/CRS/OnlineReservation/GetAccommodationTypes';
 const lockReserveKey = 'lock-reserve';
-const lockReserveApi = '/CRS/OnlineReservation/AccommodationTypeInfo';
+const lockReserveApi = '/CRS/OnlineReservation/LockBook';
 
 type LockGuestInfo = {
  firstName: string;
@@ -104,6 +104,7 @@ const lockReserve = ({
  firstName: string;
  lastName: string;
  email: string;
+ nationalCode: string;
 }) => {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {

@@ -27,7 +27,7 @@ export default function Room({
  closeModal: () => void;
 }) {
  // check count later
- const { addRoom } = useConfirmReserveContext();
+ const { addRoom, selectedRoomsInfo } = useConfirmReserveContext();
  const discountPercentage = roomPlan.roomOnlineShowRate
   ? Number(
      (
@@ -36,6 +36,13 @@ export default function Room({
      ).toFixed(0)
     )
   : 0;
+
+ const roomInfo = selectedRoomsInfo.find(
+  (item) =>
+   item.roomTypeID === room.roomTypeID && item.bedCount === roomPlan.beds
+ );
+
+ const remainedRoomCount = room.roomCount - (roomInfo?.count || 0);
 
  function handleReserveRoom() {
   addRoom({
@@ -137,6 +144,7 @@ export default function Room({
        variant='contained'
        className='w-full'
        onClick={handleReserveRoom}
+       disabled={remainedRoomCount === 0}
       >
        ثبت رزرو
       </Button>

@@ -181,7 +181,7 @@ export default function Room({
        variant='contained'
        className='w-full'
        onClick={handleReserveRoom}
-       //  disabled={!room.roomCount}
+       disabled={!room.roomCount}
       >
        ثبت رزرو
       </Button>
