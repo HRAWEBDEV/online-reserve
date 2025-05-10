@@ -1,3 +1,5 @@
+import VoucherWrapper from './components/VoucherWrapper';
+
 export default function page() {
- return <div>voucher</div>;
+ return <VoucherWrapper />;
 }

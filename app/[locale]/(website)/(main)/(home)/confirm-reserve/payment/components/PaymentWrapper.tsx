@@ -35,8 +35,8 @@ export default function PaymentWrapper() {
  });
 
  const { mutate: getPayment, isPending } = useMutation({
-  onSuccess(res: AxiosResponse<{ url: string }>) {
-   console.log(res);
+  onSuccess(res: AxiosResponse<{ gatewayUrl: string }>) {
+   window.location.href = res.data.gatewayUrl;
   },
   onError() {
    snackbar.enqueueSnackbar({
@@ -45,9 +45,17 @@ export default function PaymentWrapper() {
    });
   },
   mutationFn: () => {
+   const searchParams = new URLSearchParams();
+   searchParams.set('trackingCode', trackingCode!);
+   searchParams.set('channelID', lockInfo!.lockInfo.channelID.toString()!);
+   searchParams.set('hotelID', lockInfo!.lockInfo.hotelID.toString()!);
+   searchParams.set('providerID', lockInfo!.lockInfo.providerID.toString()!);
+   searchParams.set('trackID', lockInfo!.lockInfo.id.toString()!);
    return getPaymentUrl({
     gateWayInfo: {
-     callback_url: `${window.location.origin}/confirm-reserve/payment/callback`,
+     callback_url: `${
+      window.location.origin
+     }/confirm-reserve/voucher?${searchParams.toString()}`,
      description: 'پرداخت رزرو آنلاین',
      amount: lockInfo!.lockInfo.totalPrice,
      mobile: lockInfo!.lockInfo.contactNo!,
@@ -55,7 +63,7 @@ export default function PaymentWrapper() {
     },
     iSB: true,
     hotelID: lockInfo!.lockInfo.hotelID,
-   }).then((res) => res.data);
+   });
   },
  });
 

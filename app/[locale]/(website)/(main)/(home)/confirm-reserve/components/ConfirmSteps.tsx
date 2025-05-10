@@ -8,10 +8,10 @@ import { usePathname } from 'next/navigation';
 export default function ConfirmSteps() {
  const pathname = usePathname();
  const [activeStep, setActiveStep] = useState(0);
-
  useEffect(() => {
-  if (pathname.includes('info')) setActiveStep(0);
-  if (pathname.includes('payment')) setActiveStep(1);
+  if (pathname.endsWith('info')) setActiveStep(0);
+  if (pathname.endsWith('payment')) setActiveStep(1);
+  if (pathname.endsWith('voucher')) setActiveStep(2);
  }, [pathname]);
 
  return (

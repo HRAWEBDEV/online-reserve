@@ -86,7 +86,7 @@ const getPaymentUrl = ({
    searchParams.set(key, String(val));
   }
  });
- return axios.post(
+ return axios.post<{ gatewayUrl: string }>(
   `${getPaymentUrlApi}?${searchParams.toString()}`,
   gateWayInfo
  );
