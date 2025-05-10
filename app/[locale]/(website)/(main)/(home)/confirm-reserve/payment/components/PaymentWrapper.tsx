@@ -1,16 +1,20 @@
 'use client';
 import Invoice from './Invoice';
 import InvoiceDetails from './InvoiceDetails';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import {
  getLockInfo,
  getLockInfoKey,
+ getPaymentUrl,
 } from '../../services/confirmReserveApiActions';
 import { useSearchParams } from 'next/navigation';
 import ErrorIcon from '@mui/icons-material/Error';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useSnackbar } from 'notistack';
+import { AxiosResponse } from 'axios';
 
 export default function PaymentWrapper() {
+ const snackbar = useSnackbar();
  const searchParams = useSearchParams();
  const trackingCode = searchParams.get('trackingCode');
 
@@ -26,6 +30,31 @@ export default function PaymentWrapper() {
    return getLockInfo({
     signal,
     trackingCode: trackingCode!,
+   }).then((res) => res.data);
+  },
+ });
+
+ const { mutate: getPayment, isPending } = useMutation({
+  onSuccess(res: AxiosResponse<{ url: string }>) {
+   console.log(res);
+  },
+  onError() {
+   snackbar.enqueueSnackbar({
+    message: 'خطایی رخ داده است، لطفا دوباره تلاش کنید',
+    variant: 'error',
+   });
+  },
+  mutationFn: () => {
+   return getPaymentUrl({
+    gateWayInfo: {
+     callback_url: `${window.location.origin}/confirm-reserve/payment/callback`,
+     description: 'پرداخت رزرو آنلاین',
+     amount: lockInfo!.lockInfo.totalPrice,
+     mobile: lockInfo!.lockInfo.contactNo!,
+     email: lockInfo!.lockInfo.email!,
+    },
+    iSB: true,
+    hotelID: lockInfo!.lockInfo.hotelID,
    }).then((res) => res.data);
   },
  });
@@ -48,7 +77,11 @@ export default function PaymentWrapper() {
 
  return (
   <section className='container flex flex-col lg:flex-row gap-4 mb-10'>
-   <Invoice lockInfo={lockInfo!} />
+   <Invoice
+    lockInfo={lockInfo!}
+    onPayment={getPayment}
+    onPaymentLoading={isPending}
+   />
    <InvoiceDetails lockInfo={lockInfo!} />
   </section>
  );

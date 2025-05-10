@@ -5,7 +5,15 @@ import CheckIcon from '@mui/icons-material/Check';
 import { currencyFormatter } from '@/app/utils/currencyFormatter';
 import { type LockInfoResult } from '../../services/confirmReserveApiActions';
 
-export default function Invoice({ lockInfo }: { lockInfo: LockInfoResult }) {
+export default function Invoice({
+ lockInfo,
+ onPayment,
+ onPaymentLoading,
+}: {
+ lockInfo: LockInfoResult;
+ onPayment: () => void;
+ onPaymentLoading: boolean;
+}) {
  return (
   <form className='p-4 order-2 lg:order-1 lg:flex-grow rounded-lg border border-neutral-300'>
    <section className='mb-16'>
@@ -25,14 +33,30 @@ export default function Invoice({ lockInfo }: { lockInfo: LockInfoResult }) {
    </section>
    <section className='mb-12'>
     <h3 className='font-medium text-base mb-4'>اطلاعات مشتری:</h3>
-    <div className='flex gap-4 flex-wrap'>
+    <div className='flex gap-6 flex-wrap'>
      <div>
       <span>نام: </span>
-      <span>{lockInfo.lockInfo.firstName}</span>
+      <span className='font-medium text-base'>
+       {lockInfo.lockInfo.firstName}
+      </span>
      </div>
      <div>
       <span>نام خانوادگی: </span>
-      <span>{lockInfo.lockInfo.lastName}</span>
+      <span className='font-medium text-base'>
+       {lockInfo.lockInfo.lastName}
+      </span>
+     </div>
+     <div>
+      <span>شماره همراه: </span>
+      <span className='font-medium text-base'>
+       {lockInfo.lockInfo.contactNo}
+      </span>
+     </div>
+     <div>
+      <span>ایمیل: </span>
+      <span className='font-medium text-base'>
+       {lockInfo.lockInfo.email || '----'}
+      </span>
      </div>
     </div>
    </section>
@@ -95,7 +119,13 @@ export default function Invoice({ lockInfo }: { lockInfo: LockInfoResult }) {
     </div>
    </section>
    <div className='flex justify-end'>
-    <Button variant='contained' size='large' className='w-[12rem]'>
+    <Button
+     variant='contained'
+     size='large'
+     className='w-[12rem]'
+     onClick={onPayment}
+     loading={onPaymentLoading}
+    >
      پرداخت
     </Button>
    </div>

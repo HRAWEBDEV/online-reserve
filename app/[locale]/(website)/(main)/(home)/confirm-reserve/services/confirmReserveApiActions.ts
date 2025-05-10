@@ -17,6 +17,8 @@ type LockInfo = {
  providerID: number;
  firstName: string;
  lastName: string;
+ email: string | null;
+ contactNo: string | null;
  arrivelDateTimeOffset: string;
  departureDateTimeOffset: string;
  totalPrice: number;
@@ -33,10 +35,10 @@ const getLockInfoKey = 'get-lock-info';
 const getLockInfoApi = '/CRS/OnlineReservation/getLockInformation';
 //
 const getPaymentUrlKey = 'get-payment-url';
-const getPaymentUrlApi = '/CRS/OnlineReservation/GetPaymentUrl';
+const getPaymentUrlApi = '/CRS/payment/GetGatewayURL';
 //
 const verifyPaymentKey = 'verify-payment';
-const verifyPaymentApi = '/CRS/OnlineReservation/VerifyPayment';
+const verifyPaymentApi = '/CRS/payment/VerifyPayment';
 //
 const bookRoomKey = 'book-room';
 const bookRoomApi = '/CRS/OnlineReservation/Book';
@@ -65,31 +67,28 @@ const getLockInfo = ({
 };
 //
 const getPaymentUrl = ({
- signal,
  gateWayInfo,
  ...queries
 }: {
- signal: AbortSignal;
  gateWayInfo: {
   callback_url: string;
   description: string;
   amount: number;
-  mobile: string;
-  email: string;
+  mobile?: string;
+  email?: string;
  };
  iSB: boolean;
  hotelID: number;
 }) => {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
-  searchParams.set(key, String(val));
+  if (val) {
+   searchParams.set(key, String(val));
+  }
  });
  return axios.post(
   `${getPaymentUrlApi}?${searchParams.toString()}`,
-  gateWayInfo,
-  {
-   signal,
-  }
+  gateWayInfo
  );
 };
 //
