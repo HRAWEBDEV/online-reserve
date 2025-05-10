@@ -10,6 +10,11 @@ type LockGuestInfo = {
 };
 
 type LockInfo = {
+ id: number;
+ arzID: number;
+ hotelID: number;
+ channelID: number;
+ providerID: number;
  firstName: string;
  lastName: string;
  arrivelDateTimeOffset: string;

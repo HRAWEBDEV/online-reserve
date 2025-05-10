@@ -24,6 +24,19 @@ export default function Invoice({ lockInfo }: { lockInfo: LockInfoResult }) {
     </div>
    </section>
    <section className='mb-12'>
+    <h3 className='font-medium text-base mb-4'>اطلاعات مشتری:</h3>
+    <div className='flex gap-4 flex-wrap'>
+     <div>
+      <span>نام: </span>
+      <span>{lockInfo.lockInfo.firstName}</span>
+     </div>
+     <div>
+      <span>نام خانوادگی: </span>
+      <span>{lockInfo.lockInfo.lastName}</span>
+     </div>
+    </div>
+   </section>
+   <section className='mb-12'>
     <h3 className='font-medium text-base mb-10'>روش پرداخت:</h3>
     <div className='grid lg:grid-cols-2 gap-4'>
      <Button

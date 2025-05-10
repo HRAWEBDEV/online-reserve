@@ -64,7 +64,7 @@ export default function ConfirmReserveProvider({
  const { mutate, isPending } = useMutation({
   onSuccess(res: AxiosResponse<LockResult>) {
    router.push(
-    `/confirm-reserve/payment?lockBookID=${res.data.lockBookID}&arzID=${res.data.arzID}&trackingCode=${res.data.trackingCode}&arzID=${requestData.arzID}&hotelID=${requestData.hotelID}&channelID=${requestData.channelID}&providerID=${requestData.providerID}`
+    `/confirm-reserve/payment?&trackingCode=${res.data.trackingCode}`
    );
   },
   onError() {
