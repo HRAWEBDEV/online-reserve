@@ -12,7 +12,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function PaymentWrapper() {
  const searchParams = useSearchParams();
- const lockBookID = searchParams.get('lockBookID');
  const trackingCode = searchParams.get('trackingCode');
 
  const {
@@ -21,8 +20,8 @@ export default function PaymentWrapper() {
   isFetching: fetchingLockInfo,
   isError,
  } = useQuery({
-  queryKey: [getLockInfoKey],
-  enabled: !!lockBookID && !!trackingCode,
+  queryKey: [getLockInfoKey, trackingCode],
+  enabled: !!trackingCode,
   queryFn: ({ signal }) => {
    return getLockInfo({
     signal,
@@ -39,7 +38,7 @@ export default function PaymentWrapper() {
    </div>
   );
  }
- if (loadingLockInfo || fetchingLockInfo) {
+ if (loadingLockInfo || fetchingLockInfo || !lockInfo) {
   return (
    <div className='flex flex-col items-center justify-center gap-2 my-10 rounded-lg p-4 pt-12 pb-16 w-[min(100%,30rem)] mx-auto'>
     <CircularProgress />

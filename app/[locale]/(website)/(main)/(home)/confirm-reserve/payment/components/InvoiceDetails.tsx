@@ -109,9 +109,12 @@ export default function InvoiceDetails({
       {lockInfo.rooms.map((item, index) => {
        getID(item);
        return (
-        <li key={item.internalID}>
+        <li key={item.internalID} className='mb-2'>
          <span className='text-neutral-500'>اتاق {index + 1}: </span>
          <span className='font-medium'>{item.fName}</span>
+         <span className='font-medium ms-4'>
+          {item.accommodationTypePrice.beds} نفر
+         </span>
         </li>
        );
       })}
