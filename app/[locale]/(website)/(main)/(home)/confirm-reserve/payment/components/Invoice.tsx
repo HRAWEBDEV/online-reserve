@@ -4,6 +4,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CheckIcon from '@mui/icons-material/Check';
 import { currencyFormatter } from '@/app/utils/currencyFormatter';
 import { type LockInfoResult } from '../../services/confirmReserveApiActions';
+import Alert from '@mui/material/Alert';
 
 export default function Invoice({
  lockInfo,
@@ -60,12 +61,12 @@ export default function Invoice({
      </div>
     </div>
    </section>
-   <section className='mb-12'>
+   <section className='mb-6'>
     <h3 className='font-medium text-base mb-10'>روش پرداخت:</h3>
     <div className='grid lg:grid-cols-2 gap-4'>
      <Button
       variant='outlined'
-      className='!rounded-lg !border-neutral-400 min-h-[8rem] !bg-neutral-100'
+      className='!rounded-lg !border-neutral-400 !bg-neutral-100'
       sx={{
        justifyContent: 'unset',
        alignItems: 'unset',
@@ -81,18 +82,15 @@ export default function Invoice({
        <div>
         <p className='text-base font-medium mt-2 flex items-center gap-2'>
          <CheckIcon sx={{ fontSize: '1.5rem' }} color='success' />
-         <span>پرداخت آنلاین</span>
-        </p>
-        <p className='mt-2 text-neutral-600 text-[0.75rem]'>
-         لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ لورم ایپسوم
-         متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ
+         <span>پرداخت زرین پال</span>
         </p>
        </div>
       </div>
      </Button>
      <Button
+      disabled
       variant='outlined'
-      className='!rounded-lg min-h-[8rem]'
+      className='!rounded-lg !border-neutral-400'
       sx={{
        justifyContent: 'unset',
        alignItems: 'unset',
@@ -107,17 +105,20 @@ export default function Invoice({
        </div>
        <div>
         <p className='text-base font-medium mt-2 flex items-center gap-2'>
-         <span>پرداخت آنلاین</span>
-        </p>
-        <p className='mt-2 text-neutral-600 text-[0.75rem]'>
-         لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ لورم ایپسوم
-         متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ
+         <span>-------</span>
         </p>
        </div>
       </div>
      </Button>
     </div>
    </section>
+   <div className='mb-4'>
+    <Alert severity='warning'>
+     <ul>
+      <li>در هنگام پرداخت از زدن کلید بازگشت خودداری کنید</li>
+     </ul>
+    </Alert>
+   </div>
    <div className='flex justify-end'>
     <Button
      variant='contained'
