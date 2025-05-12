@@ -14,6 +14,9 @@ export default function Logo() {
  const { navbarIsVisible, toggleNavbar } = useNavigationContext();
  const { localeInfo } = useAppConfig();
 
+ const returnHomeTo =
+  process.env.NEXT_PUBLIC_DEPLOY_MODE === 'local' ? '/search/hotel' : '/';
+
  return (
   <div className='flex gap-2 items-center -ms-2 lg:ms-0'>
    <div className='lg:hidden'>
@@ -27,7 +30,7 @@ export default function Logo() {
      <DehazeIcon />
     </IconButton>
    </div>
-   <Link href='/'>
+   <Link href={returnHomeTo}>
     <AlinLogoShapeIcon fill='currentColor' className='w-[2.4rem] lg:w-[3rem]' />
    </Link>
    <Drawer
