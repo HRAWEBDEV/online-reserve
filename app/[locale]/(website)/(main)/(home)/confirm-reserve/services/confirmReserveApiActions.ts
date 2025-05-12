@@ -115,20 +115,28 @@ const verifyPayment = ({
 //
 const bookRoom = ({
  signal,
+ paymentInfo,
  ...queries
 }: {
  signal: AbortSignal;
+ paymentInfo: {
+  amount: number;
+  authority: string;
+ };
  hotelID: number;
  channelID: number;
  providerID: number;
  lockBookID: number;
  arzID: number;
+ iSB: boolean;
 }) => {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.get(`${bookRoomApi}?${searchParams.toString()}`, { signal });
+ return axios.post(`${bookRoomApi}?${searchParams.toString()}`, paymentInfo, {
+  signal,
+ });
 };
 //
 const getVoucher = ({

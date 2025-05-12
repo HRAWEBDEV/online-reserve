@@ -26,8 +26,8 @@ export default function VoucherWrapper() {
  const providerID = searchParams.get('providerID');
  const tracingID = searchParams.get('trackID');
  const arzID = searchParams.get('arzID');
- // const authority = searchParams.get('Authority');
- // const amount = searchParams.get('amount');
+ const authority = searchParams.get('Authority');
+ const amount = searchParams.get('amount');
 
  const returnToHome =
   process.env.NEXT_PUBLIC_DEPLOY_MODE === 'local' ? '/search/hotel' : '/';
@@ -38,7 +38,7 @@ export default function VoucherWrapper() {
   isFetching: isBookRoomFetching,
   isError: isBookRoomError,
  } = useQuery({
-  queryKey: [bookRoomKey, trackingCode],
+  queryKey: [bookRoomKey, trackingCode, authority, amount],
   queryFn({ signal }) {
    return bookRoom({
     signal,
@@ -47,6 +47,11 @@ export default function VoucherWrapper() {
     providerID: Number(providerID),
     lockBookID: Number(tracingID),
     arzID: Number(arzID),
+    iSB: process.env.NEXT_PUBLIC_MODE === 'development',
+    paymentInfo: {
+     amount: Number(amount!),
+     authority: authority!,
+    },
    });
   },
  });
