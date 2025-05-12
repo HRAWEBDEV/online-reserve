@@ -1,3 +1,4 @@
+import { RefObject } from 'react';
 import Radio from '@mui/material/Radio';
 import Autocomplete from '@mui/material/Autocomplete';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -24,8 +25,9 @@ import TextField from '@mui/material/TextField';
 
 type Props = {
  showFilters: boolean;
- toggleFilters: () => void;
  result: number;
+ headingRef: RefObject<HTMLHeadingElement | null>;
+ toggleFilters: () => void;
 };
 
 const dateFormatter = new Intl.DateTimeFormat('fa', {
@@ -38,6 +40,7 @@ export default function RoomsFilters({
  showFilters,
  toggleFilters,
  result,
+ headingRef,
 }: Props) {
  const { ratePlanTypes, isFetchingRatePlanTypes } = useRoomsInfoContext();
  const { isLargeDevice } = useAppMonitorConfig();
@@ -51,7 +54,14 @@ export default function RoomsFilters({
      name='bedCount'
      control={control}
      render={({ field }) => (
-      <RadioGroup {...field} className='!flex-col lg:!flex-row'>
+      <RadioGroup
+       {...field}
+       onChange={(_, newValue) => {
+        field.onChange(newValue);
+        headingRef.current?.scrollIntoView({ behavior: 'smooth' });
+       }}
+       className='!flex-col lg:!flex-row'
+      >
        <FormControlLabel
         label='همه'
         control={<Radio color='success' value='all' />}
@@ -83,7 +93,10 @@ export default function RoomsFilters({
        size='small'
        disableClearable={false}
        {...field}
-       onChange={(_, newValue) => field.onChange(newValue)}
+       onChange={(_, newValue) => {
+        field.onChange(newValue);
+        headingRef.current?.scrollIntoView({ behavior: 'smooth' });
+       }}
        options={ratePlanTypes}
        getOptionLabel={(option) => option.fName}
        loading={isFetchingRatePlanTypes}
@@ -185,6 +198,7 @@ export default function RoomsFilters({
          onSelect={(selected) => {
           setValue('fromDate', selected.from!);
           setValue('untilDate', selected.to!);
+          headingRef.current?.scrollIntoView({ behavior: 'smooth' });
          }}
          showOutsideDays={false}
          numberOfMonths={2}
