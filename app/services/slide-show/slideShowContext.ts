@@ -1,11 +1,18 @@
 import { useContext, createContext } from 'react';
 import { OutOfContext } from '@/app/utils/OutOfContext';
+import { type SwiperProps } from 'swiper/react';
 
 type Slide = {
  url: string;
 };
 type Store = {
- showSlideShow: ({ slides }: { slides: Slide[] }) => void;
+ showSlideShow: ({
+  slides,
+  swiperProps,
+ }: {
+  slides: Slide[];
+  swiperProps?: SwiperProps;
+ }) => void;
  cancelSlideShow: () => void;
 };
 

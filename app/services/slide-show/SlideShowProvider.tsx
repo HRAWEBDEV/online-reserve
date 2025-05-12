@@ -9,23 +9,28 @@ import {
 import { type Slide, slideShowContext } from './slideShowContext';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide, SwiperProps } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import ImageWrapper from '@/components/ImageWrapper';
 
 export default function SlideShowProvider({ children }: PropsWithChildren) {
  const [slides, setSlides] = useState<Slide[]>([]);
+ const [swiperProps, setSwiperProps] = useState<SwiperProps>({});
  const [isVisible, setIsVisible] = useState(false);
-
- const showSlideShow = useCallback(({ slides }: { slides: Slide[] }) => {
-  setSlides(slides);
-  setIsVisible(true);
-  document.body.style.overflow = 'hidden';
- }, []);
+ const showSlideShow = useCallback(
+  ({ slides, swiperProps }: { slides: Slide[]; swiperProps?: SwiperProps }) => {
+   setSwiperProps(swiperProps || {});
+   setSlides(slides);
+   setIsVisible(true);
+   document.body.style.overflow = 'hidden';
+  },
+  []
+ );
  const cancelSlideShow = useCallback(() => {
   setSlides([]);
   setIsVisible(false);
   document.body.style.overflow = 'auto';
+  setSwiperProps({});
  }, []);
 
  const ctx = useMemo(
@@ -74,6 +79,7 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
         clickable: true,
        }}
        modules={[Pagination]}
+       {...swiperProps}
       >
        {slides.map((item) => (
         <SwiperSlide

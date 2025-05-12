@@ -96,6 +96,9 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
            onClick: () => {
             showSlideShow({
              slides: images.map((item) => ({ url: item.imageURL })),
+             swiperProps: {
+              initialSlide: 0,
+             },
             });
            },
           }}
@@ -109,12 +112,15 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
         <div className='rounded-lg overflow-hidden basis-0 flex-grow'>
          <ImageWrapper
           img={{
-           className: 'h-full w-full object-cover',
+           className: 'h-full w-full object-cover cursor-pointer',
            src: images[1]?.imageURL,
            alt: 'hotel image',
            onClick: () => {
             showSlideShow({
              slides: images.map((item) => ({ url: item.imageURL })),
+             swiperProps: {
+              initialSlide: 1,
+             },
             });
            },
           }}
@@ -126,12 +132,15 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
         <div className='rounded-lg overflow-hidden basis-0 flex-grow'>
          <ImageWrapper
           img={{
-           className: 'h-full w-full object-cover',
+           className: 'h-full w-full object-cover cursor-pointer',
            src: images[2]?.imageURL,
            alt: 'hotel image',
            onClick: () => {
             showSlideShow({
              slides: images.map((item) => ({ url: item.imageURL })),
+             swiperProps: {
+              initialSlide: 2,
+             },
             });
            },
           }}
