@@ -51,6 +51,8 @@ export default function PaymentWrapper() {
    searchParams.set('hotelID', lockInfo!.lockInfo.hotelID.toString()!);
    searchParams.set('providerID', lockInfo!.lockInfo.providerID.toString()!);
    searchParams.set('trackID', lockInfo!.lockInfo.id.toString()!);
+   searchParams.set('amount', lockInfo!.lockInfo.totalPrice.toString()!);
+   searchParams.set('arzID', lockInfo!.lockInfo.arzID.toString()!);
    return getPaymentUrl({
     gateWayInfo: {
      callback_url: `${
@@ -61,24 +63,25 @@ export default function PaymentWrapper() {
      mobile: lockInfo!.lockInfo.contactNo!,
      email: lockInfo!.lockInfo.email!,
     },
-    iSB: true,
+    iSB: process.env.NEXT_PUBLIC_MODE === 'development',
     hotelID: lockInfo!.lockInfo.hotelID,
    });
   },
  });
 
- if (isError) {
+ if (loadingLockInfo || fetchingLockInfo) {
+  return (
+   <div className='flex flex-col items-center justify-center gap-2 my-10 rounded-lg p-4 pt-12 pb-16 w-[min(100%,30rem)] mx-auto'>
+    <CircularProgress />
+   </div>
+  );
+ }
+
+ if (isError || !lockInfo) {
   return (
    <div className='flex flex-col items-center justify-center gap-2 my-10 rounded-lg p-4 pt-12 pb-16 border border-neutral-300 w-[min(100%,30rem)] mx-auto'>
     <ErrorIcon className='text-red-500' sx={{ fontSize: '6rem' }} />
     <span className='text-lg font-bold'>خطایی رخ داده است</span>
-   </div>
-  );
- }
- if (loadingLockInfo || fetchingLockInfo || !lockInfo) {
-  return (
-   <div className='flex flex-col items-center justify-center gap-2 my-10 rounded-lg p-4 pt-12 pb-16 w-[min(100%,30rem)] mx-auto'>
-    <CircularProgress />
    </div>
   );
  }

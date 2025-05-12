@@ -93,11 +93,9 @@ const getPaymentUrl = ({
 };
 //
 const verifyPayment = ({
- signal,
  gateWayInfo,
  ...queries
 }: {
- signal: AbortSignal;
  gateWayInfo: {
   amount: number;
   authority: string;
@@ -109,12 +107,9 @@ const verifyPayment = ({
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.post(
+ return axios.post<{ success: boolean; ref_id: number }>(
   `${verifyPaymentApi}?${searchParams.toString()}`,
-  gateWayInfo,
-  {
-   signal,
-  }
+  gateWayInfo
  );
 };
 //
@@ -124,27 +119,21 @@ const bookRoom = ({
 }: {
  signal: AbortSignal;
  hotelID: number;
+ channelID: number;
  providerID: number;
  lockBookID: number;
  arzID: number;
- payRefNo: string;
- payRefDate: string;
- sValue: number;
 }) => {
  const searchParams = new URLSearchParams();
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.get(`${bookRoomApi}?${searchParams.toString()}`, {
-  signal,
- });
+ return axios.get(`${bookRoomApi}?${searchParams.toString()}`, { signal });
 };
 //
 const getVoucher = ({
- signal,
  ...queries
 }: {
- signal: AbortSignal;
  reserveID: number;
  channelID: number;
  hotelID: number;
@@ -153,7 +142,9 @@ const getVoucher = ({
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.get(`${getVoucherApi}?${searchParams.toString()}`, { signal });
+ return axios.get<Blob>(`${getVoucherApi}?${searchParams.toString()}`, {
+  responseType: 'blob',
+ });
 };
 
 export {
