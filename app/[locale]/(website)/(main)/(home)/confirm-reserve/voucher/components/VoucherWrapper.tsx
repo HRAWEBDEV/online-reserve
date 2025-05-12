@@ -1,5 +1,6 @@
 'use client';
 import { useRef } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Button from '@mui/material/Button';
@@ -27,6 +28,9 @@ export default function VoucherWrapper() {
  const arzID = searchParams.get('arzID');
  // const authority = searchParams.get('Authority');
  // const amount = searchParams.get('amount');
+
+ const returnToHome =
+  process.env.NEXT_PUBLIC_DEPLOY_MODE === 'local' ? '/search/hotel' : '/';
 
  const {
   data: bookRoomData,
@@ -108,7 +112,13 @@ export default function VoucherWrapper() {
       </IconButton>
      </div>
      <div className='text-sm text-neutral-500 flex gap-4 flex-wrap justify-center'>
-      <Button className='w-[12rem]' variant='outlined' size='large'>
+      <Button
+       LinkComponent={Link}
+       href={returnToHome}
+       className='w-[12rem]'
+       variant='outlined'
+       size='large'
+      >
        بازگشت به صفحه اصلی
       </Button>
      </div>
@@ -145,7 +155,13 @@ export default function VoucherWrapper() {
     </div>
     <a href='' ref={downloadVoucher} download className='invisible'></a>
     <div className='text-sm text-neutral-500 flex gap-4 flex-wrap justify-center'>
-     <Button className='w-[12rem]' variant='outlined' size='large'>
+     <Button
+      LinkComponent={Link}
+      href={returnToHome}
+      className='w-[12rem]'
+      variant='outlined'
+      size='large'
+     >
       بازگشت به صفحه اصلی
      </Button>
      <Button
