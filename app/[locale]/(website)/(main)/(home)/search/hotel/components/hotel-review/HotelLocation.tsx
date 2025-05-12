@@ -15,7 +15,7 @@ export default function HotelLocation({ open, close }: Props) {
  const map = (
   <MapContainer
    className='h-full w-full'
-   center={[51.505, -0.09]}
+   center={[32, 53]}
    zoom={13}
    scrollWheelZoom={false}
   >
@@ -23,7 +23,7 @@ export default function HotelLocation({ open, close }: Props) {
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
    />
-   <Marker position={[51.505, -0.09]}>
+   <Marker position={[32, 53]}>
     <Popup>
      A pretty CSS3 popup. <br /> Easily customizable.
     </Popup>

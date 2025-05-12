@@ -134,7 +134,16 @@ const bookRoom = ({
  Object.entries(queries).forEach(([key, val]) => {
   searchParams.set(key, String(val));
  });
- return axios.post(`${bookRoomApi}?${searchParams.toString()}`, paymentInfo, {
+ return axios.post<{
+  success: boolean;
+
+  bookInfo:
+   | ({
+      reserveID: number;
+      reserveNo: number;
+     } & Pick<LockInfoResult, 'lockInfo'>)
+   | null;
+ }>(`${bookRoomApi}?${searchParams.toString()}`, paymentInfo, {
   signal,
  });
 };

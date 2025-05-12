@@ -52,7 +52,7 @@ export default function VoucherWrapper() {
      amount: Number(amount!),
      authority: authority!,
     },
-   });
+   }).then((res) => res.data);
   },
  });
 
@@ -89,7 +89,7 @@ export default function VoucherWrapper() {
   );
  }
 
- if (isBookRoomError || !bookRoomData) {
+ if (isBookRoomError || !bookRoomData || !bookRoomData?.success) {
   return (
    <div className='container'>
     <div
@@ -145,11 +145,16 @@ export default function VoucherWrapper() {
     </div>
     <div className='mb-8 flex items-center gap-2 font-medium'>
      <span>کدپیگیری رزرو: </span>
-     <span>{trackingCode}</span>
+     <span className='font-sans'>
+      {bookRoomData?.bookInfo?.lockInfo.trackingCode}
+     </span>
      <IconButton
       size='small'
       onClick={() => {
-       navigator.clipboard.writeText(trackingCode!);
+       if (!bookRoomData?.bookInfo?.lockInfo.trackingCode) return;
+       navigator.clipboard.writeText(
+        bookRoomData.bookInfo.lockInfo.trackingCode
+       );
        snackbar.enqueueSnackbar('کدپیگیری رزرو کپی شد', {
         variant: 'success',
        });
