@@ -74,8 +74,26 @@ export default function Room({
      modules={[Pagination]}
      className='h-[16rem] lg:w-[12rem] lg:h-[12rem] lg:rounded-lg overflow-hidden [&]:[--swiper-pagination-bullet-inactive-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-bullet-inactive-opacity:0.6]'
     >
-     {[1, 2].map((item) => (
-      <SwiperSlide key={item}>
+     {room.accommodationImages.length ? (
+      room.accommodationImages.map((item) => (
+       <SwiperSlide key={item.imageURL}>
+        <div className='h-full'>
+         <ImageWrapper
+          img={{
+           src: item.imageURL,
+           alt: 'hotel image',
+           className: 'w-full h-full',
+           loading: 'lazy',
+          }}
+          wrapper={{
+           className: 'h-full w-full',
+          }}
+         />
+        </div>
+       </SwiperSlide>
+      ))
+     ) : (
+      <SwiperSlide>
        <div className='h-full'>
         <ImageWrapper
          img={{
@@ -90,7 +108,7 @@ export default function Room({
         />
        </div>
       </SwiperSlide>
-     ))}
+     )}
     </Swiper>
    </div>
    <div className='lg:flex lg:flex-grow'>

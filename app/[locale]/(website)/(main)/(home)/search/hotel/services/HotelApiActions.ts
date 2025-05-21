@@ -61,6 +61,10 @@ type RoomAccomodationType = {
  };
 } & TRowWithInternalID;
 
+type AccomodationImage = {
+ imageURL: string;
+};
+
 type RoomInventory = {
  hoteID: number;
  roomTypeID: number;
@@ -69,6 +73,7 @@ type RoomInventory = {
  roomCount: number;
  accommodationTypePrices: RoomAccomodationType[];
  accommodationTypePrice: RoomAccomodationType;
+ accommodationImages: AccomodationImage[];
 } & TRowWithInternalID;
 
 type RoomDailyPrice = {
@@ -211,6 +216,7 @@ export {
  type RoomInventory,
  type RoomDailyPrice,
  type RoomAccomodationType,
+ type AccomodationImage,
  type HotelImage,
  type Facilities,
  getRoomInventoryKey,

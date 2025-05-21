@@ -24,8 +24,7 @@ export function useQueryToggler(queryName: string) {
    if (newValue) {
     router.push(newPath, { scroll: false });
    } else {
-    router.replace(newPath, { scroll: false });
-    history.go(-1);
+    router.back();
    }
   },
   [isQueryTrue, pathname, queryName, router, searchParams]
