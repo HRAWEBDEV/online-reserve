@@ -8,9 +8,12 @@ type Props = {
  facilities: Facilities[];
 };
 
+const visibleItemsLimit = 5;
 export default function RoomFacilities({ facilities }: Props) {
  const [showMore, setShowMore] = useState(false);
- const visibleFacilities = showMore ? facilities : facilities.slice(0, 10);
+ const visibleFacilities = showMore
+  ? facilities
+  : facilities.slice(0, visibleItemsLimit);
 
  return (
   <div>
@@ -27,7 +30,7 @@ export default function RoomFacilities({ facilities }: Props) {
       }}
      />
     ))}
-    {facilities.length > 10 && (
+    {facilities.length > visibleItemsLimit && (
      <Button
       sx={{ borderRadius: '2rem', paddingInline: '0.8rem' }}
       size='small'
