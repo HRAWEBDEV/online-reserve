@@ -63,7 +63,7 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
    {isVisible && (
     <div
      aria-describedby='slide show'
-     className='fixed inset-0 bg-black/75 z-[1000]'
+     className='fixed inset-0 bg-black/75 z-[4000]'
     >
      <div className='p-4 flex justify-end h-[10vh]'>
       <IconButton onClick={cancelSlideShow} className='!text-white'>

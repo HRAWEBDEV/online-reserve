@@ -13,6 +13,7 @@ import { Pagination } from 'swiper/modules';
 import Alert from '@mui/material/Alert';
 import { useConfirmReserveContext } from '../../services/confirmReserveContext';
 import ImageWrapper from '@/components/ImageWrapper';
+import { useSlideShowContext } from '@/app/services/slide-show/slideShowContext';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -27,6 +28,7 @@ export default function Room({
  nights: number;
  closeModal: () => void;
 }) {
+ const { showSlideShow } = useSlideShowContext();
  // check count later
  const { addRoom, selectedRoomsInfo } = useConfirmReserveContext();
  const discountPercentage = roomPlan.roomOnlineShowRate
@@ -62,15 +64,25 @@ export default function Room({
      className='h-[16rem] lg:w-[12rem] lg:h-[12rem] lg:rounded-lg overflow-hidden [&]:[--swiper-pagination-bullet-inactive-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-bullet-inactive-opacity:0.6]'
     >
      {room.accommodationImages.length ? (
-      room.accommodationImages.map((item) => (
+      room.accommodationImages.map((item, i) => (
        <SwiperSlide key={item.imageURL}>
         <div className='h-full'>
          <ImageWrapper
           img={{
            src: item.imageURL,
            alt: 'hotel image',
-           className: 'w-full h-full',
+           className: 'w-full h-full cursor-pointer',
            loading: 'lazy',
+           onClick() {
+            showSlideShow({
+             slides: room.accommodationImages.map((item) => ({
+              url: item.imageURL,
+             })),
+             swiperProps: {
+              initialSlide: i,
+             },
+            });
+           },
           }}
           wrapper={{
            className: 'h-full w-full',
