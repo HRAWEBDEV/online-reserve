@@ -19,6 +19,7 @@ export function useAdFiltersScrollWatcher({
   let scrollOffset = window.scrollY;
   let timeoutid: NodeJS.Timeout | null = null;
   function scrollWatcher() {
+   console.log('scroll watcher');
    if (timeoutid) {
     clearTimeout(timeoutid);
    }

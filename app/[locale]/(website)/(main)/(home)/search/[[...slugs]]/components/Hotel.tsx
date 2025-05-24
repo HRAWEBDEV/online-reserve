@@ -12,7 +12,6 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import { AnimatePresence, motion } from 'motion/react';
 import ImageWrapper from '@/components/ImageWrapper';
-import { useSlideShowContext } from '@/app/services/slide-show/slideShowContext';
 
 const chipsStyles = {
  borderRadius: '0.3rem',
@@ -32,7 +31,6 @@ type TProps = {
 };
 
 export default function Hotel({ listViewMode }: TProps) {
- const { showSlideShow } = useSlideShowContext();
  const [quickReserveState, setQuickReserveState] = useState<'close' | 'open'>(
   'close'
  );
@@ -66,18 +64,6 @@ export default function Hotel({ listViewMode }: TProps) {
            className: 'w-full h-full cursor-pointer',
            src: '/images/hotels/mashhad-almas.jpg',
            alt: 'hotel image',
-           onClick: () => {
-            showSlideShow({
-             swiperProps: {
-              initialSlide: item,
-             },
-             slides: [
-              {
-               url: '/images/hotels/mashhad-almas.jpg',
-              },
-             ],
-            });
-           },
           }}
           wrapper={{
            className: 'w-full h-full',
