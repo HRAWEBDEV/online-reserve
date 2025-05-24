@@ -17,6 +17,8 @@ import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 import { useFormContext } from 'react-hook-form';
 import { type RoomsFilterSchema } from '../../schema/roomsFilterSchema';
 import ImageWrapper from '@/components/ImageWrapper';
+import { useSlideShowContext } from '@/app/services/slide-show/slideShowContext';
+import { useInternalID } from '@/hooks/useInternalID';
 
 const chipStyles = { borderRadius: '0.2rem' };
 
@@ -31,6 +33,8 @@ export default function Room({
  room: RoomInventory;
  nights: number;
 }) {
+ const { getID } = useInternalID();
+ const { showSlideShow } = useSlideShowContext();
  const { getValues } = useFormContext<RoomsFilterSchema>();
  const router = useRouter();
  const searchParams = useSearchParams();
@@ -75,23 +79,36 @@ export default function Room({
      className='h-[16rem] lg:w-[12rem] lg:h-[12rem] lg:rounded-lg overflow-hidden [&]:[--swiper-pagination-bullet-inactive-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-color:hsl(var(--primary-foreground))] [&]:[--swiper-pagination-bullet-inactive-opacity:0.6]'
     >
      {room.accommodationImages.length ? (
-      room.accommodationImages.map((item) => (
-       <SwiperSlide key={item.imageURL}>
-        <div className='h-full'>
-         <ImageWrapper
-          img={{
-           src: item.imageURL,
-           alt: 'hotel image',
-           className: 'w-full h-full',
-           loading: 'lazy',
-          }}
-          wrapper={{
-           className: 'h-full w-full',
-          }}
-         />
-        </div>
-       </SwiperSlide>
-      ))
+      room.accommodationImages.map((item, i) => {
+       getID(item);
+       return (
+        <SwiperSlide key={item.internalID}>
+         <div className='h-full'>
+          <ImageWrapper
+           img={{
+            src: item.imageURL,
+            alt: 'hotel image',
+            className: 'w-full h-full cursor-pointer',
+            loading: 'lazy',
+            onClick() {
+             showSlideShow({
+              slides: room.accommodationImages.map((item) => ({
+               url: item.imageURL,
+              })),
+              swiperProps: {
+               initialSlide: i,
+              },
+             });
+            },
+           }}
+           wrapper={{
+            className: 'h-full w-full',
+           }}
+          />
+         </div>
+        </SwiperSlide>
+       );
+      })
      ) : (
       <SwiperSlide>
        <div className='h-full'>

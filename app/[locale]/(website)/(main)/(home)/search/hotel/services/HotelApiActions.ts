@@ -63,7 +63,7 @@ type RoomAccomodationType = {
 
 type AccomodationImage = {
  imageURL: string;
-};
+} & TRowWithInternalID;
 
 type RoomInventory = {
  hoteID: number;

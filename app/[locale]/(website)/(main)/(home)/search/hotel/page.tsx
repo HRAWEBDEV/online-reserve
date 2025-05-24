@@ -42,57 +42,54 @@ export default async function page({
 
  let images: HotelImage[] = [];
  let facilities: Facilities[] = [];
+ let roomFacilities: Facilities[] = [];
  const searchQueries = new URLSearchParams({
   channelID: requestData.channelID.toString(),
   hotelID: requestData.hotelID.toString(),
  });
  try {
-  const imageResponse = await fetch(
-   `${
-    process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-   }${getHotelImagesApi}?${searchQueries.toString()}`,
-   {
-    method: 'GET',
-    headers: {
-     'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-    },
-   }
-  );
+  const [imageResponse, facilityResponse, roomFacilityResponse] =
+   await Promise.all([
+    fetch(
+     `${
+      process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+     }${getHotelImagesApi}?${searchQueries.toString()}`,
+     {
+      method: 'GET',
+      headers: {
+       'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+      },
+     }
+    ),
+    fetch(
+     `${
+      process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+     }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
+     {
+      method: 'GET',
+      headers: {
+       'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+      },
+     }
+    ),
+    fetch(
+     `${
+      process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+     }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
+     {
+      method: 'GET',
+      headers: {
+       'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+      },
+     }
+    ),
+   ]);
   if (imageResponse.ok) {
    images = await imageResponse.json();
   }
- } catch {}
- //
- try {
-  const facilityResponse = await fetch(
-   `${
-    process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-   }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
-   {
-    method: 'GET',
-    headers: {
-     'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-    },
-   }
-  );
   if (facilityResponse.ok) {
    facilities = await facilityResponse.json();
   }
- } catch {}
- //
- let roomFacilities: Facilities[] = [];
- try {
-  const roomFacilityResponse = await fetch(
-   `${
-    process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-   }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
-   {
-    method: 'GET',
-    headers: {
-     'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-    },
-   }
-  );
   if (roomFacilityResponse.ok) {
    roomFacilities = await roomFacilityResponse.json();
   }
