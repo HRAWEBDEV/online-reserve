@@ -244,8 +244,8 @@ export default function AdvancesFilters({
     <Button
      variant='outlined'
      color='error'
+     className='!bg-white'
      sx={{
-      backgroundColor: (theme) => alpha(theme.palette.error.main, 0.08),
       minWidth: '10rem',
      }}
      onClick={() => toggleAdvancedSearch(true)}
