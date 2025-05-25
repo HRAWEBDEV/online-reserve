@@ -18,7 +18,7 @@ import {
  getRoomInventoryKey,
  getRatePlanTypes,
  getRatePlanTypesKey,
-} from '../../../../search/hotel/services/HotelApiActions';
+} from '../../../../../../services/HotelApiActions';
 import { useQuery } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import RoomsFilters from './RoomsFilters';

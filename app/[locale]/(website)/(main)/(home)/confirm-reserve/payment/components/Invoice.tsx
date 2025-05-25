@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import CheckIcon from '@mui/icons-material/Check';
 import { currencyFormatter } from '@/app/utils/currencyFormatter';
-import { type LockInfoResult } from '../../services/confirmReserveApiActions';
+import { type LockInfoResult } from '../../../../../services/confirmReserveApiActions';
 import Alert from '@mui/material/Alert';
 
 export default function Invoice({

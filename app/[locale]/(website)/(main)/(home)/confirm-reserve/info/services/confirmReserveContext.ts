@@ -1,6 +1,6 @@
 import { OutOfContext } from '@/app/utils/OutOfContext';
 import { createContext, useContext } from 'react';
-import { type RoomInventory } from '../../../search/hotel/services/HotelApiActions';
+import { type RoomInventory } from '../../../../../services/HotelApiActions';
 import { type RoomInfo } from './addRoomsApiActions';
 import { type ReserveInfoSchema } from '../schema/reserveInfoSchema';
 

@@ -19,7 +19,7 @@ import {
  getHotelImagesApi,
  getHotelFacilitiesApi,
  getRoomFacilitiesApi,
-} from './services/HotelApiActions';
+} from '../../../../services/HotelApiActions';
 
 export default async function page({
  searchParams,

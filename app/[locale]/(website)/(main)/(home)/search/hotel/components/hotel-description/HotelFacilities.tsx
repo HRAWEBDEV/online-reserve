@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import { type Facilities } from '../../services/HotelApiActions';
+import { type Facilities } from '../../../../../../services/HotelApiActions';
 
 type Props = {
  facilities: Facilities[];

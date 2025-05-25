@@ -14,7 +14,7 @@ import {
  getRoomInventoryKey,
  getRatePlanTypesKey,
  getRatePlanTypes,
-} from '../services/HotelApiActions';
+} from '../../../../../services/HotelApiActions';
 import {
  type Store,
  type SelectedRoom,

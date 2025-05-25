@@ -3,7 +3,7 @@ import { useState, Fragment } from 'react';
 import PricingCalendar from '../pricing-calendar/PricingCalendar';
 import Skeleton from '@mui/material/Skeleton';
 import Room from './Room';
-import { type RoomInventory } from '../../services/HotelApiActions';
+import { type RoomInventory } from '../../../../../../services/HotelApiActions';
 import { useInternalID } from '@/hooks/useInternalID';
 import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';

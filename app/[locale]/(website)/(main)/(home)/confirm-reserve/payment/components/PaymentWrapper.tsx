@@ -6,7 +6,7 @@ import {
  getLockInfo,
  getLockInfoKey,
  getPaymentUrl,
-} from '../../services/confirmReserveApiActions';
+} from '../../../../../services/confirmReserveApiActions';
 import { useSearchParams } from 'next/navigation';
 import ErrorIcon from '@mui/icons-material/Error';
 import CircularProgress from '@mui/material/CircularProgress';

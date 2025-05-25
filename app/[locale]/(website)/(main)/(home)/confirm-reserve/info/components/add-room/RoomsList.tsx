@@ -6,7 +6,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Badge from '@mui/material/Badge';
 import TuneIcon from '@mui/icons-material/Tune';
 import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
-import { type RoomInventory } from '../../../../search/hotel/services/HotelApiActions';
+import { type RoomInventory } from '../../../../../../services/HotelApiActions';
 import { useInternalID } from '@/hooks/useInternalID';
 import { type RoomsFilterSchema } from '../../../../search/hotel/schema/roomsFilterSchema';
 import { useFormContext } from 'react-hook-form';

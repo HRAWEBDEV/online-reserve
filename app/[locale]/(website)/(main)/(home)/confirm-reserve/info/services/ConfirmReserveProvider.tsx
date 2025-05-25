@@ -21,6 +21,7 @@ import { type ReserveInfoSchema } from '../schema/reserveInfoSchema';
 import { useFormContext } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 import { AxiosResponse } from 'axios';
+import Button from '@mui/material/Button';
 
 export default function ConfirmReserveProvider({
  children,
@@ -239,7 +240,15 @@ export default function ConfirmReserveProvider({
   return (
    <div className='flex flex-col items-center justify-center gap-2 my-10 rounded-lg p-4 pt-12 pb-16 border border-neutral-300 w-[min(100%,30rem)] mx-auto'>
     <ErrorIcon className='text-red-500' sx={{ fontSize: '6rem' }} />
-    <span className='text-lg font-bold'>خطایی رخ داده است</span>
+    <p className='text-lg font-bold mb-8'>اطلاعاتی یافت نشد</p>
+    <Button
+     className='w-[10rem]'
+     variant='outlined'
+     color='error'
+     onClick={() => router.back()}
+    >
+     بازگشت
+    </Button>
    </div>
   );
  }

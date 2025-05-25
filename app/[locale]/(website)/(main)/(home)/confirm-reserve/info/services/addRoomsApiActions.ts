@@ -1,6 +1,6 @@
 import { axios } from '@/app/services/axios/axiosBaseConfig';
-import { type RoomInventory } from '../../../search/hotel/services/HotelApiActions';
-import { type LockGuestInfo } from '../../services/confirmReserveApiActions';
+import { type RoomInventory } from '../../../../../services/HotelApiActions';
+import { type LockGuestInfo } from '../../../../../services/confirmReserveApiActions';
 
 const getRoomsInfoKey = 'get-rooms-info';
 const getSelectedRoomKey = 'get-selected-room';

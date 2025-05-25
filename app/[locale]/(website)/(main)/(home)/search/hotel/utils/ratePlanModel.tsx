@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { type RoomAccomodationType } from '../services/HotelApiActions';
+import { type RoomAccomodationType } from '../../../../../services/HotelApiActions';
 import KebabDiningIcon from '@mui/icons-material/KebabDining';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import CoffeeMakerIcon from '@mui/icons-material/CoffeeMaker';

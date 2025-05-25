@@ -19,7 +19,7 @@ import {
 import Drawer from '@mui/material/Drawer';
 import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import * as dateFns from 'date-fns';
-import { type RatePlanType } from '../../../../search/hotel/services/HotelApiActions';
+import { type RatePlanType } from '../../../../../../services/HotelApiActions';
 
 type Props = {
  showFilters: boolean;

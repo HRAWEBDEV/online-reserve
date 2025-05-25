@@ -13,7 +13,7 @@ import {
  bookRoomKey,
  bookRoom,
  getVoucher,
-} from '../../services/confirmReserveApiActions';
+} from '../../../../../services/confirmReserveApiActions';
 import { useSnackbar } from 'notistack';
 
 export default function VoucherWrapper() {
@@ -181,7 +181,7 @@ export default function VoucherWrapper() {
       color='success'
       size='large'
      >
-      دانلود واچر رزرو
+      دانلود اطلاعات رزرو
      </Button>
     </div>
    </div>

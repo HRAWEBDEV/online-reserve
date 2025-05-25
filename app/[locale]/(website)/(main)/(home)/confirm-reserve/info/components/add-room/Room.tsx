@@ -4,7 +4,7 @@ import { currencyFormatter } from '@/app/utils/currencyFormatter';
 import {
  type RoomInventory,
  type RoomAccomodationType,
-} from '../../../../search/hotel/services/HotelApiActions';
+} from '../../../../../../services/HotelApiActions';
 import Chip from '@mui/material/Chip';
 import { addClass } from '@/utils/addClass';
 import { ratePlanModel } from '../../../../search/hotel/utils/ratePlanModel';

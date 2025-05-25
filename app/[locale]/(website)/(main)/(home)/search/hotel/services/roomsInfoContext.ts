@@ -5,7 +5,7 @@ import {
  type RoomInventory,
  type RoomAccomodationType,
  type RatePlanType,
-} from '../services/HotelApiActions';
+} from '../../../../../services/HotelApiActions';
 
 type SelectedRoom = RoomAccomodationType &
  Pick<RoomInventory, 'fName' | 'hoteID' | 'roomTypeID' | 'roomCount'> & {

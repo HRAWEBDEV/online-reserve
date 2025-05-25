@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import MapIcon from '@mui/icons-material/Map';
 import ImageWrapper from '@/components/ImageWrapper';
-import { type HotelImage } from '../../services/HotelApiActions';
+import { type HotelImage } from '../../../../../../services/HotelApiActions';
 import { useSlideShowContext } from '@/app/services/slide-show/slideShowContext';
 
 const HotelLocation = dynamic(() => import('./HotelLocation'), {

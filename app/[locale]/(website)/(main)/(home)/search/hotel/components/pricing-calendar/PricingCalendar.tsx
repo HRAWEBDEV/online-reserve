@@ -14,7 +14,7 @@ import {
  type RoomDailyPrice,
  getRoomDailyPriceKey,
  getRoomPriceDaily,
-} from '../../services/HotelApiActions';
+} from '../../../../../../services/HotelApiActions';
 import { useRoomsInfoContext } from '../../services/roomsInfoContext';
 import { calendarStates } from '../../utils/calendarStates';
 import Skeleton from '@mui/material/Skeleton';

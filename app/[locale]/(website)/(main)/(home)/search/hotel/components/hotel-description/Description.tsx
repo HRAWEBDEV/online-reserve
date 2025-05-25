@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button';
-import { type Facilities } from '../../services/HotelApiActions';
+import { type Facilities } from '../../../../../../services/HotelApiActions';
 import HotelFacilities from './HotelFacilities';
 import RoomFacilities from './RoomFacilities';
 

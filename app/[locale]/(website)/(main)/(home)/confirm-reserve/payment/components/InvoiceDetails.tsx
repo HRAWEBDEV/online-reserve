@@ -4,7 +4,7 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useTimer } from '../hooks/useTimer';
-import { type LockInfoResult } from '../../services/confirmReserveApiActions';
+import { type LockInfoResult } from '../../../../../services/confirmReserveApiActions';
 import { useSnackbar } from 'notistack';
 import { useInternalID } from '@/hooks/useInternalID';
 

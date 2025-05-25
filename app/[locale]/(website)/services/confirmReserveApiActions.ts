@@ -1,5 +1,5 @@
 import { axios } from '@/app/services/axios/axiosBaseConfig';
-import { type RoomInventory } from '../info/services/addRoomsApiActions';
+import { type RoomInventory } from '../(main)/(home)/confirm-reserve/info/services/addRoomsApiActions';
 
 type LockGuestInfo = {
  firstName: string;
@@ -23,12 +23,14 @@ type LockInfo = {
  departureDateTimeOffset: string;
  totalPrice: number;
  trackingCode: string;
+ nationalCode: string;
 };
 
 type LockInfoResult = {
  rooms: RoomInventory[];
  guestInfo: LockGuestInfo[];
  lockInfo: LockInfo;
+ isBooked: boolean;
 };
 
 const getLockInfoKey = 'get-lock-info';
