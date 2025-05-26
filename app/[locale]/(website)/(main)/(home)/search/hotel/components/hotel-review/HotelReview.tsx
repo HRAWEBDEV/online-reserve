@@ -10,7 +10,10 @@ import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import MapIcon from '@mui/icons-material/Map';
 import ImageWrapper from '@/components/ImageWrapper';
-import { type HotelImage } from '../../../../../../services/HotelApiActions';
+import {
+ type HotelImage,
+ type HotelInfo,
+} from '../../../../../../services/HotelApiActions';
 import { useSlideShowContext } from '@/app/services/slide-show/slideShowContext';
 
 const HotelLocation = dynamic(() => import('./HotelLocation'), {
@@ -18,7 +21,13 @@ const HotelLocation = dynamic(() => import('./HotelLocation'), {
  ssr: false,
 });
 
-export default function HotelReview({ images }: { images: HotelImage[] }) {
+export default function HotelReview({
+ images,
+ hotelInfo,
+}: {
+ images: HotelImage[];
+ hotelInfo: HotelInfo | null;
+}) {
  const [showMap, setShowMap] = useState(false);
  const { showSlideShow } = useSlideShowContext();
  return (
@@ -26,11 +35,13 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
    <div className='container flex flex-wrap gap-4 items-start mb-4'>
     <div>
      <div className='flex flex-wrap items-center gap-2 mb-3'>
-      <h2 className='font-bold text-2xl lg:text-3xl'>هتل الماس</h2>
+      <h2 className='font-bold text-2xl lg:text-3xl'>{hotelInfo?.fName}</h2>
       <div>
-       {Array.from({ length: 5 }, (_, i) => i).map((item) => (
-        <StarIcon key={item} color='warning' />
-       ))}
+       {Array.from({ length: hotelInfo?.hotelGradeID || 0 }, (_, i) => i).map(
+        (item) => (
+         <StarIcon key={item} color='warning' />
+        )
+       )}
       </div>
      </div>
      <div className='flex flex-wrap gap-2 items-center max=lg:text-base text-neutral-600'>
@@ -152,7 +163,11 @@ export default function HotelReview({ images }: { images: HotelImage[] }) {
        </div>
       </div>
      </section>
-     <HotelLocation open={showMap} close={() => setShowMap(false)} />
+     <HotelLocation
+      open={showMap}
+      close={() => setShowMap(false)}
+      hotelInfo={hotelInfo}
+     />
     </article>
    </section>
   </section>

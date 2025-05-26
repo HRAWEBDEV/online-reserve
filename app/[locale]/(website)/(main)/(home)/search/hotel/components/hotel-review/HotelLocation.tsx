@@ -4,18 +4,25 @@ import { useAppMonitorConfig } from '@/app/services/app-monitor/appMonitor';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { type HotelInfo } from '@/app/[locale]/(website)/services/HotelApiActions';
+import { LatLngTuple, Icon } from 'leaflet';
 
 type Props = {
  open: boolean;
  close: () => void;
+ hotelInfo: HotelInfo | null;
 };
 
-export default function HotelLocation({ open, close }: Props) {
+export default function HotelLocation({ open, close, hotelInfo }: Props) {
  const { isLargeDevice } = useAppMonitorConfig();
+ const position = [
+  hotelInfo?.latitude || 32,
+  hotelInfo?.longitude || 53,
+ ] as LatLngTuple;
  const map = (
   <MapContainer
    className='h-full w-full'
-   center={[32, 53]}
+   center={position}
    zoom={13}
    scrollWheelZoom={false}
   >
@@ -23,7 +30,15 @@ export default function HotelLocation({ open, close }: Props) {
     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
    />
-   <Marker position={[32, 53]}>
+   <Marker
+    position={position}
+    icon={
+     new Icon({
+      iconUrl: '/images/map-marker.png',
+      iconSize: [25, 40],
+     })
+    }
+   >
     <Popup>
      A pretty CSS3 popup. <br /> Easily customizable.
     </Popup>

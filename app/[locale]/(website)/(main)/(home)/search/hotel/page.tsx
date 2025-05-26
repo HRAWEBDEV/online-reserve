@@ -16,9 +16,11 @@ import * as DateFns from 'date-fns';
 import {
  type HotelImage,
  type Facilities,
+ type HotelInfo,
  getHotelImagesApi,
  getHotelFacilitiesApi,
  getRoomFacilitiesApi,
+ hotelInfoApi,
 } from '../../../../services/HotelApiActions';
 
 export default async function page({
@@ -43,47 +45,63 @@ export default async function page({
  let images: HotelImage[] = [];
  let facilities: Facilities[] = [];
  let roomFacilities: Facilities[] = [];
+ let hotelInfo: HotelInfo | null = null;
  const searchQueries = new URLSearchParams({
   channelID: requestData.channelID.toString(),
   hotelID: requestData.hotelID.toString(),
  });
  try {
-  const [imageResponse, facilityResponse, roomFacilityResponse] =
-   await Promise.all([
-    fetch(
-     `${
-      process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-     }${getHotelImagesApi}?${searchQueries.toString()}`,
-     {
-      method: 'GET',
-      headers: {
-       'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-      },
-     }
-    ),
-    fetch(
-     `${
-      process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-     }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
-     {
-      method: 'GET',
-      headers: {
-       'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-      },
-     }
-    ),
-    fetch(
-     `${
-      process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
-     }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
-     {
-      method: 'GET',
-      headers: {
-       'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
-      },
-     }
-    ),
-   ]);
+  const [
+   imageResponse,
+   facilityResponse,
+   roomFacilityResponse,
+   hotelInfoResponse,
+  ] = await Promise.all([
+   fetch(
+    `${
+     process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+    }${getHotelImagesApi}?${searchQueries.toString()}`,
+    {
+     method: 'GET',
+     headers: {
+      'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+     },
+    }
+   ),
+   fetch(
+    `${
+     process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+    }${getHotelFacilitiesApi}?${searchQueries.toString()}`,
+    {
+     method: 'GET',
+     headers: {
+      'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+     },
+    }
+   ),
+   fetch(
+    `${
+     process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+    }${getRoomFacilitiesApi}?${searchQueries.toString()}`,
+    {
+     method: 'GET',
+     headers: {
+      'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+     },
+    }
+   ),
+   fetch(
+    `${
+     process.env.NEXT_PUBLIC_ONLINE_RESERVE_API_URI
+    }${hotelInfoApi}?${searchQueries.toString()}`,
+    {
+     method: 'GET',
+     headers: {
+      'x-token': process.env.NEXT_PUBLIC_X_AUTH!,
+     },
+    }
+   ),
+  ]);
   if (imageResponse.ok) {
    images = await imageResponse.json();
   }
@@ -93,6 +111,9 @@ export default async function page({
   if (roomFacilityResponse.ok) {
    roomFacilities = await roomFacilityResponse.json();
   }
+  if (hotelInfoResponse.ok) {
+   hotelInfo = await hotelInfoResponse.json();
+  }
  } catch {}
  //
  return (
@@ -101,8 +122,12 @@ export default async function page({
     {process.env.NEXT_PUBLIC_DEPLOY_MODE !== 'local' && <Booking />}
     <SearchBreadCrumb />
     <InfoSectionMenu />
-    <HotelReview images={images} />
-    <Description facilities={facilities} roomFacilities={roomFacilities} />
+    <HotelReview images={images} hotelInfo={hotelInfo} />
+    <Description
+     hotelInfo={hotelInfo}
+     facilities={facilities}
+     roomFacilities={roomFacilities}
+    />
     <RoomSection />
     <HouseRules />
    </RoomsInfoProvider>

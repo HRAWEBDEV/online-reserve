@@ -1,14 +1,27 @@
+'use client';
 import Button from '@mui/material/Button';
-import { type Facilities } from '../../../../../../services/HotelApiActions';
+import {
+ type HotelInfo,
+ type Facilities,
+} from '../../../../../../services/HotelApiActions';
 import HotelFacilities from './HotelFacilities';
 import RoomFacilities from './RoomFacilities';
+import { useState } from 'react';
 
 type Props = {
  facilities: Facilities[];
  roomFacilities: Facilities[];
+ hotelInfo: HotelInfo | null;
 };
 
-export default function Description({ facilities, roomFacilities }: Props) {
+const descriptionMaxLength = 100;
+
+export default function Description({
+ facilities,
+ roomFacilities,
+ hotelInfo,
+}: Props) {
+ const [showMore, setShowMore] = useState(false);
  return (
   <section className='container grid md:grid-cols-2 gap-4 mb-6'>
    <article>
@@ -31,17 +44,19 @@ export default function Description({ facilities, roomFacilities }: Props) {
      </div>
     </div>
     <p className='leading-7 text-neutral-500 text-justify'>
-     هتل مدینه الرضا نزدیک ترین هتل پنچ ستاره مشهد از ورودی خیابان شیرازی به
-     بارگاه ملکوتی امام رضا(علیه السلام) با محیطی فوق العاده زیبا، معماری اصیل
-     ایرانی و نمای عالی در سال 1392 افتتاح گردید. این هتل با 18 طبقه بنا و 325
-     باب سوئیت و اتاق های مدرن از امکانات رفاهی ویژه ای برخوردار می‌باشد که قطعا
-     موجب کسب رضایت‌مندی شما از اقامت در این هتل می‌گردد. همچنین موقعیت مکانی
-     هتل و نزدیکی به حرم مطهر لذت زیارت را برای شما میهمانان گرامی دو چندان
-     می‌کند. هتل مدینه الرضا با کادری مجرب و آموزش دیده با افتخار آماده میزبانی
-     از شما زائرین و مسافران عزیز می‌باشد.
-     <Button color='secondary' className='!font-medium'>
-      موارد بیشتر...
-     </Button>
+     {showMore
+      ? hotelInfo?.description || ''
+      : hotelInfo?.description?.slice(0, descriptionMaxLength) || '' + '...'}
+     {hotelInfo?.description?.length &&
+      hotelInfo?.description?.length > descriptionMaxLength && (
+       <Button
+        color='secondary'
+        className='!font-medium'
+        onClick={() => setShowMore(!showMore)}
+       >
+        {showMore ? 'موارد کمتر' : 'موارد بیشتر'}
+       </Button>
+      )}
     </p>
    </article>
    <article className='grid gap-4 md:grid-cols-2 '>

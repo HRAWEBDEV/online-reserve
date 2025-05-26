@@ -20,9 +20,32 @@ const getRoomFacilitiesKey = 'get-room-facilities';
 const getRoomFacilitiesApi =
  '/CRS/OnlineReservation/GetHotelRoomTypeFacilities';
 
+const hotelInfoKey = 'get-hotel-info';
+const hotelInfoApi = '/CRS/OnlineReservation/GetHotelInfo';
+
 type HotelImage = {
  hotelID: number;
  imageURL: string;
+};
+
+type HotelInfo = {
+ id: number;
+ address: string | null;
+ cityName: string | null;
+ description: string | null;
+ fName: string | null;
+ faxNo: string | null;
+ floors: number | null;
+ hotelGradeID: number | null;
+ hoteID: number;
+ latitude: number | null;
+ longitude: number | null;
+ logo: string | null;
+ roomsCount: number;
+ stateName: string | null;
+ telNo1: string | null;
+ telNo2: string | null;
+ telNo3: string | null;
 };
 
 type Facilities = {
@@ -211,6 +234,23 @@ const getRoomFacilities = ({
  });
 };
 
+const getHotelInfo = ({
+ signal,
+ ...queries
+}: {
+ signal: AbortSignal;
+ channelID: number;
+ hotelID: number;
+}) => {
+ const searchParams = new URLSearchParams();
+ Object.entries(queries).forEach(([key, val]) => {
+  searchParams.set(key, String(val));
+ });
+ return axios.get(`${hotelInfoApi}?${searchParams.toString()}`, {
+  signal,
+ });
+};
+
 export {
  type RatePlanType,
  type RoomInventory,
@@ -219,6 +259,7 @@ export {
  type AccomodationImage,
  type HotelImage,
  type Facilities,
+ type HotelInfo,
  getRoomInventoryKey,
  getRoomInventory,
  getRoomDailyPriceKey,
@@ -234,4 +275,7 @@ export {
  getRoomFacilitiesKey,
  getRoomFacilitiesApi,
  getRoomFacilities,
+ hotelInfoApi,
+ hotelInfoKey,
+ getHotelInfo,
 };
