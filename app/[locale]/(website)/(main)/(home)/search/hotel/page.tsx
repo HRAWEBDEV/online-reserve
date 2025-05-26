@@ -120,7 +120,7 @@ export default async function page({
   <div>
    <RoomsInfoProvider requestData={requestData}>
     {process.env.NEXT_PUBLIC_DEPLOY_MODE !== 'local' && <Booking />}
-    <SearchBreadCrumb />
+    <SearchBreadCrumb hotelInfo={hotelInfo} />
     <InfoSectionMenu />
     <HotelReview images={images} hotelInfo={hotelInfo} />
     <Description
