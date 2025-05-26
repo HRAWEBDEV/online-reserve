@@ -46,7 +46,7 @@ export default function HotelReview({
      </div>
      <div className='flex flex-wrap gap-2 items-center max=lg:text-base text-neutral-600'>
       <LocationOnIcon color='error' />
-      <p>آدرس مشهد ، خیابان جمهوری ، کوچه احمدی</p>
+      <p>{hotelInfo?.address}</p>
      </div>
     </div>
     <div className='flex gap-4 items-center flex-grow justify-end'>
