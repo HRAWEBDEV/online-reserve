@@ -22,6 +22,7 @@ import {
  getRoomFacilitiesApi,
  hotelInfoApi,
 } from '../../../../services/HotelApiActions';
+import NotFound from '@/app/[locale]/[...not-found]/components/NotFound';
 
 export default async function page({
  searchParams,
@@ -117,20 +118,26 @@ export default async function page({
  } catch {}
  //
  return (
-  <div>
-   <RoomsInfoProvider requestData={requestData}>
-    {process.env.NEXT_PUBLIC_DEPLOY_MODE !== 'local' && <Booking />}
-    <SearchBreadCrumb hotelInfo={hotelInfo} />
-    <InfoSectionMenu />
-    <HotelReview images={images} hotelInfo={hotelInfo} />
-    <Description
-     hotelInfo={hotelInfo}
-     facilities={facilities}
-     roomFacilities={roomFacilities}
-    />
-    <RoomSection />
-    <HouseRules />
-   </RoomsInfoProvider>
-  </div>
+  <>
+   {!hotelInfo ? (
+    <NotFound />
+   ) : (
+    <div>
+     <RoomsInfoProvider requestData={requestData}>
+      {process.env.NEXT_PUBLIC_DEPLOY_MODE !== 'local' && <Booking />}
+      <SearchBreadCrumb hotelInfo={hotelInfo} />
+      <InfoSectionMenu />
+      <HotelReview images={images} hotelInfo={hotelInfo} />
+      <Description
+       hotelInfo={hotelInfo}
+       facilities={facilities}
+       roomFacilities={roomFacilities}
+      />
+      <RoomSection />
+      <HouseRules />
+     </RoomsInfoProvider>
+    </div>
+   )}
+  </>
  );
 }
