@@ -28,7 +28,7 @@ export default function RoomsList({
  toggleFilters,
 }: Props) {
  const { getValues, watch } = useFormContext<RoomsFilterSchema>();
- const [] = watch(['bedCount', 'noBreakfast', 'noPenalty', 'fullBoard']);
+ const [fromDateValue, untilDateValue] = watch(['fromDate', 'untilDate']);
  const { isLargeDevice } = useAppMonitorConfig();
  const { getID } = useInternalID();
  const [showPricingCalendar, setShowPricingCalendar] = useState(false);
@@ -87,6 +87,13 @@ export default function RoomsList({
      />
     ))}
    </section>
+  );
+ }
+ if (fromDateValue.getTime() === untilDateValue.getTime()) {
+  return (
+   <div className='grid place-content-center font-medium text-base'>
+    تاریخ رزرو را وارد کنید.
+   </div>
   );
  }
  if (!rooms.length) {

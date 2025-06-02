@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import { RefObject, useState } from 'react';
 import Radio from '@mui/material/Radio';
 import Autocomplete from '@mui/material/Autocomplete';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -42,6 +42,7 @@ export default function RoomsFilters({
  result,
  headingRef,
 }: Props) {
+ const [showCalendar, setShowCalendar] = useState(false);
  const { ratePlanTypes, isFetchingRatePlanTypes } = useRoomsInfoContext();
  const { isLargeDevice } = useAppMonitorConfig();
  const { watch, setValue, control } = useFormContext<RoomsFilterSchema>();
@@ -167,7 +168,7 @@ export default function RoomsFilters({
    <div className='bg-neutral-50 p-4 border-y border-100 mb-6 sticky top-0 z-10'>
     <div className='container grid gap-2 lg:gap-0 lg:grid-cols-[minmax(15rem,20rem)_1fr]'>
      <div className='lg:pe-3 lg:me-3 lg:border-e border-e-neutral-300'>
-      <Popover>
+      <Popover open={showCalendar} onOpenChange={setShowCalendar}>
        <PopoverTrigger asChild>
         <Button
          variant={'outline'}
@@ -196,8 +197,20 @@ export default function RoomsFilters({
           to: untilDateValue || null,
          }}
          onSelect={(selected) => {
-          setValue('fromDate', selected.from!);
-          setValue('untilDate', selected.to!);
+          let newFromDate = selected.from;
+          let newUntilDate = selected.to;
+          if (fromDateValue.getTime() !== untilDateValue.getTime()) {
+           if (newFromDate!.getTime() < fromDateValue.getTime()) {
+            newUntilDate = newFromDate;
+           } else {
+            newFromDate = newUntilDate;
+           }
+          }
+          setValue('fromDate', newFromDate!);
+          setValue('untilDate', newUntilDate!);
+          if (newFromDate?.getTime() !== newUntilDate?.getTime()) {
+           setShowCalendar(false);
+          }
           headingRef.current?.scrollIntoView({ behavior: 'smooth' });
          }}
          showOutsideDays={false}
