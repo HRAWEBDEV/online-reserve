@@ -210,8 +210,8 @@ export default function RoomsFilters({
           setValue('untilDate', newUntilDate!);
           if (newFromDate?.getTime() !== newUntilDate?.getTime()) {
            setShowCalendar(false);
+           headingRef.current?.scrollIntoView({ behavior: 'smooth' });
           }
-          headingRef.current?.scrollIntoView({ behavior: 'smooth' });
          }}
          showOutsideDays={false}
          numberOfMonths={2}

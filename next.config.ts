@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
  /* config options here */
  // for docker build, we need to enable standalone mode
- // output: 'standalone',
+ output: 'standalone',
  eslint: {
   ignoreDuringBuilds: true,
  },
