@@ -65,7 +65,7 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
      aria-describedby='slide show'
      className='fixed inset-0 bg-black/75 z-[4000]'
     >
-     <div className='p-4 flex justify-end h-[10vh]'>
+     <div className='p-4 flex justify-end items-center'>
       <IconButton onClick={cancelSlideShow} className='!text-white'>
        <CloseIcon fontSize='large' />
       </IconButton>
