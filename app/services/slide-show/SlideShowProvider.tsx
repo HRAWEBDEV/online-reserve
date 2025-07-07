@@ -64,7 +64,6 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
     <div
      aria-describedby='slide show'
      className='fixed inset-0 bg-black/75 z-[4000]'
-     onClick={cancelSlideShow}
     >
      <div className='p-4 flex justify-end h-[10vh]'>
       <IconButton onClick={cancelSlideShow} className='!text-white'>
@@ -86,9 +85,6 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
         <SwiperSlide
          key={item.url}
          className='!h-[80vh] w-full !flex items-center justify-center pb-10'
-         onClick={(e) => {
-          e.stopPropagation();
-         }}
         >
          <ImageWrapper
           img={{
