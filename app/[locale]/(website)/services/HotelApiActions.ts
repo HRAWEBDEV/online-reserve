@@ -46,6 +46,7 @@ type HotelInfo = {
  telNo1: string | null;
  telNo2: string | null;
  telNo3: string | null;
+ publicRules: string | null;
 };
 
 type Facilities = {

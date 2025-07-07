@@ -5,13 +5,13 @@ export const infoSectionMenu = [
   href: '#overview',
  },
  {
-  type: 'rooms',
-  title: 'اتاق ها',
-  href: '#rooms',
- },
- {
   type: 'houseRules',
   title: 'قوانین و مقررات',
   href: '#rules',
+ },
+ {
+  type: 'rooms',
+  title: 'اتاق ها',
+  href: '#rooms',
  },
 ] as const;

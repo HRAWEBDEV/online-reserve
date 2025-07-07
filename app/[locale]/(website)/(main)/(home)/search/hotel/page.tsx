@@ -134,7 +134,7 @@ export default async function page({
        roomFacilities={roomFacilities}
       />
       <RoomSection />
-      <HouseRules />
+      <HouseRules hotelInfo={hotelInfo} />
      </RoomsInfoProvider>
     </div>
    )}
