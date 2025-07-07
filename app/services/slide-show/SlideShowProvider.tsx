@@ -12,26 +12,29 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Swiper, SwiperSlide, SwiperProps } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import ImageWrapper from '@/components/ImageWrapper';
+import { useQueryToggler } from '@/hooks/useQueryToggler';
 
 export default function SlideShowProvider({ children }: PropsWithChildren) {
+ const { handleToggle, isQueryTrue: isVisible } = useQueryToggler(
+  'show-gallery-slides'
+ );
  const [slides, setSlides] = useState<Slide[]>([]);
  const [swiperProps, setSwiperProps] = useState<SwiperProps>({});
- const [isVisible, setIsVisible] = useState(false);
  const showSlideShow = useCallback(
   ({ slides, swiperProps }: { slides: Slide[]; swiperProps?: SwiperProps }) => {
    setSwiperProps(swiperProps || {});
    setSlides(slides);
-   setIsVisible(true);
+   handleToggle();
    document.body.style.overflow = 'hidden';
   },
-  []
+  [handleToggle]
  );
  const cancelSlideShow = useCallback(() => {
   setSlides([]);
-  setIsVisible(false);
+  handleToggle();
   document.body.style.overflow = 'auto';
   setSwiperProps({});
- }, []);
+ }, [handleToggle]);
 
  const ctx = useMemo(
   () => ({
