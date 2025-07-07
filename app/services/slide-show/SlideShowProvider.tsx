@@ -84,12 +84,15 @@ export default function SlideShowProvider({ children }: PropsWithChildren) {
        {slides.map((item) => (
         <SwiperSlide
          key={item.url}
-         className='!h-[80vh] w-full !flex items-center justify-center pb-10'
+         className='!h-[75vh] w-full !flex flex-col items-center justify-center pb-8'
         >
          <ImageWrapper
           img={{
            src: item.url,
-           className: 'rounded-lg overflow-hidden',
+           className: 'rounded-lg object-contain max-h-[100%]',
+          }}
+          wrapper={{
+           className: 'max-h-[100%]',
           }}
          />
         </SwiperSlide>
